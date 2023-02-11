@@ -1,2 +1,7 @@
-# Proj_integrador_I
-Repositório destinado a postagem de atividades, projetos, entre outros materiais da disciplina: Projeto Integrador I
+### Repo to Proj_integrador_I
+
+Repositório destinado a postagem de:
+
+- [x] atividades
+- [x] projetos
+- [x] materiais relacionados á disciplina.
