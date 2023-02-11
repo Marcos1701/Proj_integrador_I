@@ -1,7 +1,14 @@
-### Repo to Proj_integrador_I
+## **Repositório destinado á postagem de atividades/projetos da disciplina: Projeto Integrador.**
 
-Repositório destinado a postagem de:
+- **Membros da equipe:**
 
-- [x] atividades
-- [x] projetos
-- [x] materiais relacionados á disciplina.
+  - [x] *Marcos Eduardo*
+  - [x] *Gabriel Morais*
+  - [x] *Daniel Luca*
+  
+- **Tema Principal**
+
+
+- **Tema Secundário**
+ 
+ 
