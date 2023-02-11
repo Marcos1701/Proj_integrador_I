@@ -1,14 +1,15 @@
-## **Repositório destinado á postagem de atividades/projetos da disciplina: Projeto Integrador.**
+### **:sparkles: Repositório destinado á postagem de atividades/projetos da disciplina: Projeto Integrador. :sparkles:**
 
 - **Membros da equipe:**
-
-  - [x] *Marcos Eduardo*
-  - [x] *Gabriel Morais*
-  - [x] *Daniel Luca*
+    - *Marcos Eduardo*
+    - *Gabriel Morais*
+    - *Daniel Luca*
+    
+    
   
-- **Tema Principal**
+:heavy_check_mark: **Tema Principal**
 
 
-- **Tema Secundário**
+:heavy_check_mark: **Tema Secundário**
  
  
