@@ -22,7 +22,7 @@
     
 :construction_worker: Área na qual pode ser utilizado:
     
-    - Em todas das áreas (ou, em pelo menos na maioria).
+    - Em todas das áreas (ou, pelo menos na maioria).
     
     
 :dart: Principais problemas que poderão ser resolvidos:  :dart:
@@ -47,7 +47,7 @@
     
 :construction_worker: Área na qual pode ser utilizado:
     
-    - Em todas das áreas (ou, em pelo menos na maioria).
+    - Em todas das áreas (ou, pelo menos na maioria).
     
     
 :dart: Principais problemas que poderão ser resolvidos:  :dart:
