@@ -17,7 +17,7 @@
     
 :pushpin: Nome provisório:  :pushpin:
     
-    Sei lá....
+    Compmax
     
     
 :construction_worker: Área na qual pode ser utilizado:
@@ -42,7 +42,7 @@
     
 :pushpin: Nome provisório:  :pushpin:
     
-    Sei lá....
+    TaskNow
     
     
 :construction_worker: Área na qual pode ser utilizado:
