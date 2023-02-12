@@ -56,5 +56,6 @@
     
 :dart:*. Principais problemas que poderão ser resolvidos:  .*:dart:
     
-      - De organização de lembretes e/ou ocupações, além de auxiliar na diferenciação de tarefas concluídas e pendentes..
+      - De organização de lembretes e/ou ocupações, além de auxiliar na diferenciação 
+          de tarefas concluídas e pendentes..
       - entre outros..
