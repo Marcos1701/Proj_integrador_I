@@ -17,7 +17,7 @@
     
 :pushpin: Nome provisório:  :pushpin:
     
-    Compmax
+    MyPlanner
     
     
 :construction_worker: Área na qual pode ser utilizado:
