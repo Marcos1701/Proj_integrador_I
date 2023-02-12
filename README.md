@@ -42,7 +42,7 @@
     
 :pushpin: Nome provisório:  :pushpin:
     
-    TaskNow
+    TimeTasker
     
     
 :construction_worker: Área na qual pode ser utilizado:
