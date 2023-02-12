@@ -5,7 +5,10 @@
     - *Gabriel Morais*
     - *Daniel Luca*
     
-    
+
+
+- **Ferramenta de Gerenciamento de Projeto que será utilizada:**
+   Trello (mas pode ser alterado..) 
   
 :heavy_check_mark: **Informações quanto ao Tema Principal:**
  
