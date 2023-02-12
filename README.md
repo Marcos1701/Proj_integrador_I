@@ -7,7 +7,7 @@
     
     
   
-:heavy_check_mark: **Tema Principal**
+:heavy_check_mark: **Informações quanto ao Tema Principal:**
  
   :speech_balloon: Descrição:
   
@@ -32,7 +32,7 @@
       - entre outros..
     
 
-:heavy_check_mark: **Tema Secundário**
+:heavy_check_mark: **Informações quanto ao Tema Secundário:**
 
   :speech_balloon: Descrição:
   
