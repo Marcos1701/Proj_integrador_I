@@ -17,7 +17,7 @@
     
 :pushpin: Nome provisório:  :pushpin:
     
-    MyPlanner
+    Appointment_planner
     
     
 :construction_worker: Área na qual pode ser utilizado:
