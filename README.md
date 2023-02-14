@@ -10,7 +10,8 @@
 - **Ferramenta de Gerenciamento de Projeto que será utilizada:**
 
       Trello (mas pode ser alterado..) 
-  
+         Link: https://trello.com/b/8YdHDsXC/projeto-integrador-appointmentplanner
+
 :heavy_check_mark: **. Informações quanto ao Tema Principal:**
  
   :speech_balloon:*. Descrição:*
