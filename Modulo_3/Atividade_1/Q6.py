@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import requests_cache
 
-requests_cache.install_cache()
+requests_cache.install_cache('banco')
 
 print('Digite a url da página que deseja retirar a tabela: ')
 url_pag = input('=> ')
