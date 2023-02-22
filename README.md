@@ -22,7 +22,7 @@
     
 :pushpin:*. Nome provisório: .*:pushpin:
     
-    Appointment_Planner
+    Appointment_Planner ou Planr
     
     
 :construction_worker:*. Área na qual pode ser utilizado: .*
@@ -47,7 +47,7 @@
     
 :pushpin:*. Nome provisório:  .*:pushpin:
     
-    TimeTasker
+    TimeTasker ou Timely
     
     
 :construction_worker:*. Área na qual pode ser utilizado:*
