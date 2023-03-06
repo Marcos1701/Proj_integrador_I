@@ -28,6 +28,16 @@
 
        💬 Permite que o usuario visualise, por meio de um calendário semanal,
       todas as tarefas em suas respectivas datas.
+      
+✔️ Adicionar comentário/detalhes á Tarefa:
+
+       💬 Permite que o usuario acrescente detalhes ou apenas
+       adicione um comentário qualquer a suas tarefas. 
+       
+✔️ Definir Prioridades:
+
+       💬 Permite ao usuário definir prioridades ás Tarefas.
+
 
 ✔️ Categoria de Tarefas:
 
@@ -39,7 +49,7 @@
        💬 Caso habilitado, o usuario passa a receber notificações alertando-o e lembrando-o
        de compromissos agendados e/ou pendentes.
  
-✔️ Pesquisa:
+✔️ Pesquisa/Filtro:
        
        💬 Permite que o usuario realize uma busca por compromissos a partir de uma palavra-chave,
        data ou categoria, podendo assim encontrar informações específicas de uma maneira mais ágil.
