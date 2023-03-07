@@ -1,6 +1,6 @@
 ### Nome provisório da aplicação: Planr
 
-- ** Descrição **
+- Descrição
 
           Aplicação de agendamento de compromissos, com opções para adicionar, editar e
       excluir compromissos, além de opções para visualizar o calendário mensal ou semanal.
