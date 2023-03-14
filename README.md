@@ -1,5 +1,3 @@
-<a href="https://www.google.com" target="_blank">Google</a>
-
 ### **:sparkles: Repositório destinado á postagem de atividades/projetos da disciplina: Projeto Integrador. :sparkles:**
 
 - **Membros da equipe:**
