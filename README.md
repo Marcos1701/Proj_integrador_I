@@ -37,6 +37,8 @@
       - entre outros..
     
 
+ - <a href = "https://github.com/Marcos1701/Proj_integrador_I/blob/main/Funcionalidades.md">**Funcionalidades**</a>
+
 :heavy_check_mark: **. Informações quanto ao Tema Secundário:**
 
   :speech_balloon:*. Descrição:*
