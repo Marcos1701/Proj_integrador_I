@@ -3,7 +3,7 @@ function checkInputs(inputs){
     let preenchidos = true
     inputs.forEach(function(input) {
   	
-        if(input.value === "") {
+        if(input.value === "" || input.value === null) {
             preenchidos = false;
         }
       
@@ -12,16 +12,18 @@ function checkInputs(inputs){
 }
 
 function main(){
-    let inputs = document.querySelectorAll("input")
-    let button = document.querySelector("submit")
+    document.getElementById("login").disabled = true
 
-    inputs.forEach(function(input){
-        input.addEventListener("keyup",function(){
-            if(checkInputs(inputs)){
-                button.removeAttribute("disabled")
-            }
-        })
+    let email = document.getElementById("input-email")
+    let senha = document.getElementById("input-senha")
+    document.getElementById("login").addEventListener("input",function(){
+        if(checkInputs([email,senha])){
+            document.getElementById("login").disabled = false
+        }else{
+            document.getElementById("login").disabled = true
+        }
     })
+    
 }
 
 main()
