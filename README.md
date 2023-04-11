@@ -41,7 +41,7 @@
 
 ## <a href = "https://ifpiedubr-my.sharepoint.com/:x:/g/personal/catce_2022111tads0428_aluno_ifpi_edu_br/EWdZNDE8oVRKhiSZjUcZG6cB-M7VjwDO6n74P8v439pXIw?e=mYKIQ6"  target="_blank" rel="noopener noreferrer">**:clubs: -  Product Backlog  :clubs:**</a>
 
-## <a href = "https://www.figma.com/file/emngSCZfWKm8kZEtBpj8lG/prototipo-planr?node-id=0%3A1&t=kayqIkwwGc5UPdam-1" target="_blank" rel="noopener noreferrer">**-  Protótipo..**</a>
+## <a href = "Prototipo.md" target="_blank" rel="noopener noreferrer">**.Protótipo**</a>
 
 :heavy_check_mark: **. Informações quanto ao Tema Secundário:**
 
