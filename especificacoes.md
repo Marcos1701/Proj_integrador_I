@@ -1,6 +1,6 @@
 # Especificações de requisitos
 
-## **Histórias de usuários**
+## **Histórias de usuário**
 
 
 **1 ) Criar nova tarefa:**
