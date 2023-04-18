@@ -10,7 +10,5 @@
          organizar meus compromissos, atividades ou tarefas do cotidiano.
   
 **Critérios de aceitação:**
- -  Deve ser possível inserir uma descrição e uma data prevista para a conclusão da tarefa;
- -  As tarefas devem ser visíveis na tela inicial;
+ -  As tarefas devem estar visíveis na tela inicial;
  -  As tarefas devem ser exibidas de acordo com os critérios definidos pelo filtro.
-
