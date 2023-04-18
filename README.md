@@ -43,6 +43,8 @@
 
 ## <a href = "Prototipo.md" target="_blank" rel="noopener noreferrer">**.Protótipo**</a>
 
+### <a href = "especificacoes.md" >**Especificações das Funcionalidades Principais**</a>
+
 :heavy_check_mark: **. Informações quanto ao Tema Secundário:**
 
   :speech_balloon:*. Descrição:*
