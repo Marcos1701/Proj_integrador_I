@@ -43,7 +43,7 @@
 
 ## <a href = "Prototipo.md" target="_blank" rel="noopener noreferrer">**.Protótipo**</a>
 
-### <a href = "especificacoes.md" >**:sparkles: Especificações das Funcionalidades Principais**</a>
+### <a href = "Especificacoes.md" >**:sparkles: Especificações das Funcionalidades Principais**</a>
 
 :heavy_check_mark: **. Informações quanto ao Tema Secundário:**
 
