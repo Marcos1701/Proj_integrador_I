@@ -72,7 +72,8 @@
 <br/>
 
 - *Fluxo Alternativo:*
-- Nenhuma tarefa é encontrada: A lista de tarefas fica vazia.
+- Nenhuma tarefa é encontrada: no inicio da lista é inserida a mensagem: 
+    "Nenhuma tarefa inserida até o momento..".
 
 
 <br/>
@@ -92,3 +93,35 @@
 - *Fluxo Alternativo:*
     - A tarefa é inválida ou não foi encontrada no banco: O sistema exibe uma mensagem informando que
         a tarefa é inválida e retorna á tela principal da aplicação.
+
+<br/>
+
+**6 ) Visualizar Lista de Usuarios** <br/>
+
+- *Fluxo Principal:*
+   - pré-condições: o usuário deve estar autenticado como adiministrador no sistema e deve estar na 
+       tela de visualização da lista de usuários.
+   - Pos-condições: A lista de todos os usuários da aplicação é exibida.
+       
+<br/>
+
+- *Fluxo Alternativo:*
+    - Nenhum usuário é encontrado: o sistema exibe a mensagem "Nenhum usuário encontrado".
+
+<br/>
+
+**3 )Relação de tarefas criadas, pendentes e concluídas de um usuário específico:** <br/>
+
+- *Fluxo Principal:*
+   - pré-condições: o usuário deve estar autenticado como adiministrador no sistema e deve estar na 
+       tela de visualização da lista de usuários.
+   - O usuário clica no usuário em que deseja visualizar a relação.
+   - Pos-condições: O sistema abre uma aba com as relações de tarefas criadas, pendentes e concluídas
+        deste usuário.
+       
+<br/>
+
+- *Fluxo Alternativo:*
+    - Sei lá...
+
+<br/>
