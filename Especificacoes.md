@@ -42,8 +42,7 @@
 **3 ) Alterar tarefa:** <br/>
 
 - *Fluxo Principal:*
-   - pré-condições: o usuário deve estar autenticado no sistema e deve estar na tela 
-       de alteração.
+   - pré-condições: o usuário deve estar autenticado no sistema e deve estar na tela principal.
    - O usuario insere o novo titulo e/ ou uma nova descrição e uma nova data prevista para conclusão.
    - O sistema verifica se algum campo está vazio.
    - O sistema verifica se algum campo não excede o limite de caracteres previstos para
@@ -58,4 +57,38 @@
     - Algum campo vazio: O sistema não altera o valor do campo.
     - Algum campo excede o limite de caracteres: O sistema informa ao usuario que o campo em especí-
          fico excedeu o limite de caracteres e impossibilita a alteração da tarefa.
-    - Usuário cancela alteraçãoação: O sistema retorna á tela principal da aplicação.
+    - Usuário cancela alteração: O sistema retorna á tela principal da aplicação.
+
+<br/>
+
+**4 ) Exibir Lista de tarefas:** <br/>
+
+- *Fluxo Principal:*
+   - pré-condições: o usuário deve estar autenticado no sistema e deve estar na tela 
+       de alteração.
+   - Pos-condições: Todas as tarefas criadas pelo usuário são exibidas seguindo a
+       ordem estabelecida pelo filtro aplicado pelo usuário.
+       
+<br/>
+
+- *Fluxo Alternativo:*
+- Nenhuma tarefa é encontrada: A lista de tarefas fica vazia.
+
+
+<br/>
+
+**5 ) Marcar Tarefa como concluída:** <br/>
+
+- *Fluxo Principal:*
+   - pré-condições: o usuário deve estar autenticado no sistema e deve estar na tela principal ou 
+       de visualização de tarefa.
+   - O usuário clica no botão "Marcar como concluída" ou clica no checkbox presente ao lado da 
+       tarefa na tela principal.
+   - Pos-condições: O status da tarefa é alterado para "concluída" no banco de dados e as tarefas
+       são reordenadas seguindo o filtro aplicado pelo usuário.
+       
+<br/>
+
+- *Fluxo Alternativo:*
+    - A tarefa é inválida ou não foi encontrada no banco: O sistema exibe uma mensagem informando que
+        a tarefa é inválida e retorna á tela principal da aplicação.
