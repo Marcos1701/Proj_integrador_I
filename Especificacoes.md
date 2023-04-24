@@ -122,6 +122,22 @@
 <br/>
 
 - *Fluxo Alternativo:*
-    - Sei lá...
+    - Nenhum dado do usuário é encontrado: o sistema exibe a mensagem "Nenhum dado do usuário foi encontrado".
+
+<br/>
+
+**8 )Relação de tarefas criadas, pendentes e concluídas de todos os usuários:** <br/>
+
+- *Fluxo Principal:*
+   - pré-condições: o usuário deve estar autenticado como adiministrador no sistema e deve estar na 
+       tela de visualização da lista de usuários.
+   - O usuário clica no botao "Visualizar Relação de usuarios".
+   - Pos-condições: O sistema abre uma aba com as relações de tarefas criadas, pendentes e concluídas
+        de todos os usuários.
+       
+<br/>
+
+- *Fluxo Alternativo:*
+    - Nenhum dado encontrado: o sistema exibe a mensagem "Nenhum dado foi encontrado".
 
 <br/>
