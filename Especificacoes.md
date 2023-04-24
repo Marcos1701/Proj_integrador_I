@@ -18,7 +18,7 @@
 
 - *Fluxo Alternativo:*
     - Campo "Titulo" vazio: O sistema cria uma nova tarefa, com o título padrão: "Nova Tarefa".
-    - Algum campo excede o limite de caracteres: O sistema informa ao usuario que o campo em especí-
+    - Algum campo excede o limite de caracteres: O sistema informa ao usuario que o campo em especí
          fico excedeu o limite de caracteres e impossibilita a criação da nova tarefa.
     - Usuário cancela criação: O sistema não salva os dados inseridos nos campos no banco de dados e
         retorna á tela principal da aplicação.
