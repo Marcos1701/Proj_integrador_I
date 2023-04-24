@@ -110,7 +110,7 @@
 
 <br/>
 
-**3 )Relação de tarefas criadas, pendentes e concluídas de um usuário específico:** <br/>
+**7 )Relação de tarefas criadas, pendentes e concluídas de um usuário específico:** <br/>
 
 - *Fluxo Principal:*
    - pré-condições: o usuário deve estar autenticado como adiministrador no sistema e deve estar na 
