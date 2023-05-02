@@ -37,13 +37,13 @@
       - entre outros..
     
 
-### <a href = "https://github.com/Marcos1701/Proj_integrador_I/blob/main/Funcionalidades.md" target="_blank" rel="noopener noreferrer">**:gem:. Funcionalidades**</a>
+### <a href = "Documentos_relacionados/Funcionalidades.md" target="_blank" rel="noopener noreferrer">**:gem:. Funcionalidades**</a>
 
 ## <a href = "https://ifpiedubr-my.sharepoint.com/:x:/g/personal/catce_2022111tads0428_aluno_ifpi_edu_br/EWdZNDE8oVRKhiSZjUcZG6cB-M7VjwDO6n74P8v439pXIw?e=mYKIQ6"  target="_blank" rel="noopener noreferrer">**:clubs: -  Product Backlog  :clubs:**</a>
 
-## <a href = "Prototipo.md" target="_blank" rel="noopener noreferrer">**.Protótipo**</a>
+## <a href = "Documentos_relacionados/Prototipo.md" target="_blank" rel="noopener noreferrer">**.Protótipo**</a>
 
-### <a href = "Especificacoes.md" >**:sparkles: Especificações das Funcionalidades Principais**</a>
+### <a href = "Documentos_relacionados/Especificacoes.md" >**:sparkles: Especificações das Funcionalidades Principais**</a>
 
 :heavy_check_mark: **. Informações quanto ao Tema Secundário:**
 
