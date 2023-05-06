@@ -1,6 +1,5 @@
 body {
     display: grid;
-    grid-template-columns: 200px 200px 200px;
     background: linear-gradient(240.56deg, #9AF8E7 5.07%, rgba(58, 158, 201, 0.75) 94.79%);
 }
 
@@ -137,7 +136,7 @@ body {
     z-index: 3;
 }
 
-#cv {
+#criar_conta_btn {
     box-sizing: border-box;
 
     /* Auto layout */
