@@ -1,0 +1,188 @@
+body {
+    position: relative;
+
+
+    background: linear-gradient(240.56deg, #9AF8E7 5.07%, rgba(58, 158, 201, 0.75) 94.79%);
+}
+
+#login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 62px;
+    isolation: isolate;
+
+    position: absolute;
+    width: 1150px;
+    height: 645px;
+    left: 161px;
+    top: 261px;
+
+    background: url(.png), rgba(21, 1, 255, 0.1);
+    backdrop-filter: blur(40px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    border-radius: 30px;
+}
+
+#criar_conta {
+    position: absolute;
+    width: 399px;
+    height: 645px;
+    left: 0px;
+    top: 0px;
+
+    background: linear-gradient(197.39deg, rgba(221, 219, 242, 0.61) 0%, rgba(8, 243, 32, 0.5185) 100%);
+    border-radius: 30px 0px 0px 30px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    z-index: 0;
+}
+
+#realiza_login {
+    position: absolute;
+    width: 751px;
+    height: 645px;
+    left: 399px;
+    top: 0px;
+
+    background: rgba(21, 1, 255, 0.02);
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    z-index: 1;
+}
+
+#circulo1 {
+    position: absolute;
+    width: 1200px;
+    height: 1200px;
+    left: -611px;
+    top: -87px;
+
+    background: linear-gradient(206.45deg, #A272E0 17.54%, rgba(62, 191, 114, 0.91) 74.46%);
+
+    border-radius: 50%;
+}
+
+#circulo2 {
+    position: absolute;
+    width: 1200px;
+    height: 1200px;
+    left: -138px;
+    top: -95.65px;
+
+    background: linear-gradient(216.97deg, rgba(255, 7, 201, 0.81) 18.99%, rgba(135, 62, 169, 0.54) 43.5%, rgba(207, 253, 23, 0.74) 72.5%);
+
+    border-radius: 50%;
+}
+
+#bv {
+    position: absolute;
+    width: 347px;
+    height: 58px;
+    left: 26px;
+    top: 70px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 58px;
+    /* identical to box height */
+
+    letter-spacing: 0.15em;
+
+    color: #313056;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+    z-index: 2;
+}
+
+#nv {
+    position: absolute;
+    width: 347px;
+    height: 44px;
+    left: 26px;
+    top: 222px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 44px;
+    /* identical to box height */
+
+    letter-spacing: 0.065em;
+
+    color: #313056;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 3;
+    flex-grow: 0;
+    z-index: 3;
+}
+
+#cv {
+    box-sizing: border-box;
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 13px 10px 22px;
+    gap: 20px;
+
+    position: absolute;
+    width: 255px;
+    height: 65px;
+    left: 48px;
+    top: 408px;
+
+    background: linear-gradient(90deg, rgba(212, 38, 255, 0.5) 0%, rgba(183, 223, 69, 0.415) 95.83%);
+    border: 0.5px solid #000000;
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 60px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 4;
+    flex-grow: 0;
+    z-index: 4;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+
+    color: #313056;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
