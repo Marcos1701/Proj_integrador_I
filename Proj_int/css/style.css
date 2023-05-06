@@ -1,7 +1,6 @@
 body {
-    position: relative;
-
-
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
     background: linear-gradient(240.56deg, #9AF8E7 5.07%, rgba(58, 158, 201, 0.75) 94.79%);
 }
 
@@ -15,8 +14,8 @@ body {
     isolation: isolate;
 
     position: absolute;
-    width: 1150px;
-    height: 645px;
+    width: 70%;
+    height: 86.6%;
     left: 161px;
     top: 261px;
 
@@ -29,7 +28,7 @@ body {
 
 #criar_conta {
     position: absolute;
-    width: 399px;
+    width: 37.4%;
     height: 645px;
     left: 0px;
     top: 0px;
@@ -62,22 +61,20 @@ body {
     z-index: 1;
 }
 
-#circulo1 {
+.circulos * {
     position: absolute;
     width: 1200px;
     height: 1200px;
+}
+
+#circulo1 {
     left: -611px;
     top: -87px;
-
     background: linear-gradient(206.45deg, #A272E0 17.54%, rgba(62, 191, 114, 0.91) 74.46%);
-
     border-radius: 50%;
 }
 
 #circulo2 {
-    position: absolute;
-    width: 1200px;
-    height: 1200px;
     left: -138px;
     top: -95.65px;
 
@@ -173,7 +170,7 @@ body {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 24px;
+    font-size: 26px;
     line-height: 28px;
 
     color: #313056;
