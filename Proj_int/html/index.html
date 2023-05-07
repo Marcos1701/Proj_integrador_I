@@ -19,22 +19,35 @@
         </div>
         <div id="login">
             <div id="criar_conta">
-                <p id="bv">Bem Vindo</p>
-                <p id="nv">NOVO LOGIN</p>
+                <p id="msg_bem_vindo">Bem Vindo</p>
+                <p id="msg_novo_login">NOVO LOGIN</p>
                 <div id="linha_novo_login"></div>
                 <button id="criar_conta_btn">Criar Conta</button>
             </div>
             <div id="alterar_tela">
-                <img src="../imagens/fi-br-arrow-right.jpg" alt="seta_para_a_direita">
-                <img src="../imagens/fi-br-arrow-right.jpg" alt="seta_para_a_esquerda" id="seta_esquerda">
+                <img src="../imagens/Vector.png" alt="seta_para_a_direita" id="seta_direita">
+                <img src="../imagens/Vector.png" alt="seta_para_a_esquerda" id="seta_esquerda">
             </div>
             <div id="realiza_login">
                 <p id="realiza_login_msg">Realizar Login</p>
-                <input type="email" id="email_login">
-                <input type="password" id="senha_login">
-                <input type="checkbox" id="lembrar_senha">
-                <label for="lembrar_senha">Lembrar Senha</label>
-                <p id="esqueceu_senha">Esqueceu a senha?</p>
+                <div id="inputs_login">
+                    <div id="email">
+                        <input type="email" id="email_login">
+                    </div>
+                    <div id="senha">
+                        <input type="password" id="senha_login">
+                        <!-- <img src="../imagens/fi-br-eye.jpg" alt="olho" id="olho">-->
+                    </div>
+
+                </div>
+                <p id="msg_erro_login"></p>
+                <div id="checkboxes">
+                    <div id="checkbox">
+                        <input type="checkbox" id="lembrar_senha">
+                        <label for="lembrar_senha">Lembrar Senha</label>
+                    </div>
+                    <p id="esqueceu_senha">Esqueceu a senha?</p>
+                </div>
 
                 <button id="realiza_login_btn">Login</button>
 
