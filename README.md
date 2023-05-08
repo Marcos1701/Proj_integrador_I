@@ -44,9 +44,9 @@
 ### <a href = "Documentos_relacionados/Prototipo.md" target="_blank" rel="noopener noreferrer">**:moyai::wine_glass:- Protótipo**</a>
 
 ### <a href = "Documentos_relacionados/Especificacoes.md" >**:sparkles:- Especificações das Funcionalidades Principais**</a>
-</br>
 
 ### <a href="https://marcos1701.github.io/Proj_integrador_I/Proj_int/html/index">**- Site (em andamento, mas já é possivel visualizar o andamento por aqui..**</a>
+</br>
 
 :heavy_check_mark: **. Informações quanto ao Tema Secundário:**
 
