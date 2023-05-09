@@ -19,8 +19,10 @@
         </div>
         <div id="login">
             <div id="criar_conta">
-                <p id="msg_bem_vindo">Bem Vindo</p>
-                <p id="msg_novo_login">NOVO LOGIN</p>
+                <p id="msg_novo_login">Novo por aqui?</p>
+                <p id="criar_conta_msg">
+                    Crie sua conta agora mesmo e tenha acesso a todas as funcionalidades do Planr.
+                </p>
                 <div id="linha_novo_login"></div>
                 <button id="criar_conta_btn">Criar Conta</button>
             </div>
@@ -30,28 +32,43 @@
             </div>
             <div id="realiza_login">
                 <p id="realiza_login_msg">Realizar Login</p>
-                <div id="inputs_login">
-                    <div id="email">
-                        <img src="../imagens/icons-to-email.png" alt="icone_cadeado">
-                        <input type="email" id="email_login" placeholder="E-MAIL">
+                <div class="entradas">
+                    <div id="inputs">
+                        <div id="email">
+                            <img src="../imagens/icons-to-email.png" alt="icone_cadeado">
+                            <input type="email" id="email_login" placeholder="E-MAIL">
+                        </div>
+                        <div id="senha">
+                            <img src="../imagens/icons-to-password.png" alt="icone_cadeado">
+                            <input type="password" id="senha_login" placeholder="SENHA">
+                            <!-- <img src="../imagens/olho.png" alt="olho" id="olho">-->
+                        </div>
                     </div>
-                    <div id="senha">
-                        <img src="../imagens/icons-to-password.png" alt="icone_cadeado">
-                        <input type="password" id="senha_login" placeholder="SENHA">
-                        <!-- <img src="../imagens/olho.png" alt="olho" id="olho">-->
-                    </div>
-
                 </div>
                 <p id="msg_erro_login"></p>
-                <div id="checkboxes">
-                    <div id="checkbox">
-                        <input type="checkbox" id="lembrar_senha">
-                        <label for="lembrar_senha">Lembrar Senha</label>
+
+                <div id="botoes">
+                    <div class="referentes_a_senha">
+                        <div id="botao_lembrar_senha">
+                            <input type="radio" id="lembrar_senha">
+                            <label for="lembrar_senha">Lembrar Senha</label>
+                        </div>
+                        <p id="esqueceu_senha">Esqueceu a senha?</p>
                     </div>
-                    <p id="esqueceu_senha">Esqueceu a senha?</p>
+                    <button id="realiza_login_btn">ENTRAR</button>
                 </div>
 
-                <button id="realiza_login_btn">Login</button>
+                <div id="login_via_google">
+                    <div id="linha_divisoria">
+                        <div id="linha_esquerda"></div>
+                        <p id="ou">ou acesse via</p>
+                        <div id="linha_direita"></div>
+                    </div>
+                    <button id="logo_google">
+                        <img src="../imagens/logo_google.png" alt="icone_google" id="icon_google">
+                    </button>
+
+                </div>
 
             </div>
         </div>

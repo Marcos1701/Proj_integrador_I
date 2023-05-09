@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 .container {
@@ -8,38 +12,29 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0px;
-    gap: 62px;
-    isolation: isolate;
-
     position: absolute;
     width: 100%;
     height: 100%;
-    left: 0px;
-    top: 0px;
-
     background: linear-gradient(240.56deg, #9AF8E7 5.07%, rgba(58, 158, 201, 0.75) 94.79%);
 }
 
 #login {
     display: flex;
-    padding: 0px;
-    margin: 0px;
+    flex-direction: column;
 
     width: 1000px;
-    height: 600px;
+    height: 550px;
 
     background: url(.png), rgba(21, 1, 255, 0.1);
     backdrop-filter: blur(40px);
     /* Note: backdrop-filter has minimal browser support */
-
     border-radius: 30px;
 }
 
 #criar_conta {
     position: absolute;
     width: 400px;
-    height: 600px;
+    height: 550px;
 
     background: linear-gradient(197.39deg, rgba(221, 219, 242, 0.61) 0%, rgba(8, 243, 32, 0.5185) 100%);
     border-radius: 30px 0px 0px 30px;
@@ -51,15 +46,17 @@ body {
     height: 600px;
     left: 399px;
     top: 0px;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background: rgba(21, 1, 255, 0.02);
     border-radius: 0px 30px 30px 0px;
 }
 
 .circulos * {
     position: absolute;
-    width: 1400px;
-    height: 1400px;
+    width: 1300px;
+    height: 1300px;
 }
 
 #circulo1 {
@@ -72,9 +69,7 @@ body {
 #circulo2 {
     left: -138px;
     top: -95.65px;
-
     background: linear-gradient(216.97deg, rgba(255, 7, 201, 0.81) 18.99%, rgba(135, 62, 169, 0.54) 43.5%, rgba(207, 253, 23, 0.74) 72.5%);
-
     border-radius: 50%;
 }
 
@@ -86,18 +81,18 @@ body {
     padding: 0px;
 
     position: absolute;
-    width: 87px;
-    height: 87px;
-    left: 354px;
-    top: 277px;
+    width: 77px;
+    height: 77px;
+    left: 360px;
+    top: 240px;
 
     background: rgba(255, 255, 255, 0.90);
     border-radius: 60px;
 }
 
 #alterar_tela img {
-    width: 45px;
-    height: 25px;
+    width: 40px;
+    height: 22px;
 }
 
 #alterar_tela {
@@ -126,83 +121,50 @@ body {
 }
 
 
-#msg_bem_vindo {
+#criar_conta_msg {
     position: absolute;
     width: 347px;
     height: 58px;
-    left: 26px;
-    top: 70px;
+    left: 33px;
+    top: 155px;
 
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 48px;
-    line-height: 48px;
-    /* identical to box height */
-
-    letter-spacing: 0.09em;
-
+    font-size: 14px;
+    letter-spacing: 0.02em;
     color: #313056;
-
-
-    /* Inside auto layout */
-
-    flex: none;
-    order: 2;
-    flex-grow: 0;
-    z-index: 2;
 }
 
 #msg_novo_login {
     position: absolute;
     width: 347px;
     height: 44px;
-    left: 26px;
-    top: 222px;
+    left: 38px;
+    top: 80px;
 
     font-family: 'Inter';
     font-style: bold;
     font-weight: 700;
-    font-size: 36px;
+    font-size: 34px;
     line-height: 44px;
-    /* identical to box height */
-
     letter-spacing: 0.065em;
-
     color: #313056;
-
-
-    /* Inside auto layout */
-
-    flex: none;
-    order: 3;
-    flex-grow: 0;
-    z-index: 3;
 }
 
 #linha_novo_login {
     position: absolute;
     width: 95.13px;
     height: 0px;
-    left: 23px;
-    top: 293.5px;
+    left: 25px;
+    top: 152.5px;
 
     border: 1.5px solid #000000;
     transform: rotate(180deg);
-
-    /* Inside auto layout */
-
-    flex: none;
-    order: 6;
-    flex-grow: 0;
-    z-index: 6;
 }
 
 #criar_conta_btn {
     box-sizing: border-box;
-
-    /* Auto layout */
-
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -211,58 +173,71 @@ body {
     gap: 20px;
 
     position: absolute;
-    width: 255px;
-    height: 65px;
-    left: 80px;
-    top: 430px;
+    width: 230px;
+    height: 55px;
+    left: 85px;
+    top: 340px;
 
     background: linear-gradient(90deg, rgba(212, 38, 255, 0.5) 0%, rgba(183, 223, 69, 0.415) 95.83%);
     border: 0.5px solid #000000;
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.4);
     border-radius: 60px;
 
-    /* Inside auto layout */
-
-    flex: none;
-    order: 4;
-    flex-grow: 0;
-    z-index: 4;
-
     font-family: 'Roboto';
     font-style: normal;
-    font-weight: 400;
-    font-size: 26px;
+    font-weight: 900;
+    font-size: 24px;
     line-height: 28px;
-
     color: #313056;
 
-
-    /* Inside auto layout */
-
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-
 }
 
-#realiza_login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
+#criar_conta_btn:hover {
+    background: linear-gradient(90deg, rgba(212, 38, 255, 0.5) 0%, rgba(183, 223, 69, 0.415) 95.83%);
+    border: 0.5px solid #000000;
+    box-shadow: -1px 1px 15px rgba(0, 0, 0, 0.4);
+    border-radius: 60px;
 }
 
-#checkboxes {
+.referentes_a_senha {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 100px;
+
+}
+
+#botao_lembrar_senha {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#botao_lembrar_senha input {
+    width: 20px;
+    height: 20px;
+
+    border: 1px solid #3A00E5;
+}
+
+#botao_lembrar_senha label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18px;
+    letter-spacing: 0.02em;
+
+    color: #313056;
 }
 
 #realiza_login_msg {
     width: 411px;
     height: 58px;
+    padding-top: 5px;
 
     font-family: 'Inter';
     font-style: normal;
@@ -273,10 +248,18 @@ body {
     color: #313056;
 }
 
-#inputs_login {
+.entradas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#inputs {
     display: flex;
     flex-direction: column;
     gap: 20px;
+
 }
 
 #email,
@@ -285,11 +268,10 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 10px;
 
     width: 350px;
     height: 55px;
-
 
     background: rgba(255, 255, 255, 0.655);
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
@@ -352,4 +334,117 @@ body {
 #email img {
     width: 30px;
     height: 22px;
+}
+
+#botoes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+#realiza_login_btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 13px 10px 22px;
+    gap: 20px;
+
+    width: 230px;
+    height: 55px;
+
+    background: #313056;
+    box-shadow: 1px 1px 15px rgba(255, 255, 255, 0.649);
+    border-radius: 60px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+
+    color: #FFFFFF;
+
+    letter-spacing: 0.4rem;
+}
+
+#realiza_login_btn:hover {
+    background: #313056;
+    box-shadow: 2px 2px 25px rgba(255, 255, 255, 0.896);
+    border-radius: 60px;
+}
+
+#esqueceu_senha {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+
+    color: #211e80;
+}
+
+#esqueceu_senha:hover {
+    color: #211e80;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#login_via_google {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+}
+
+#linha_divisoria {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#linha_esquerda {
+    width: 150px;
+    height: 0px;
+
+    border: 2px solid #000000;
+    transform: rotate(180deg);
+}
+
+#linha_direita {
+    width: 150px;
+    height: 0px;
+
+    border: 2px solid #000000;
+    transform: rotate(180deg);
+
+}
+
+#icon_google {
+    width: 25px;
+    height: 25px;
+}
+
+#logo_google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+
+    background: rgba(255, 255, 255, 0.34);
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 60px;
+}
+
+#logo_google:hover {
+    background: rgba(255, 255, 255, 0.34);
+    box-shadow: -1px 1px 5px rgba(224, 206, 206, 0.548);
+    border-radius: 60px;
+    cursor: pointer;
 }
