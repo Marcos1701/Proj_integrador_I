@@ -285,10 +285,10 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 126px;
+    gap: 15px;
 
     width: 350px;
-    height: 45px;
+    height: 55px;
 
 
     background: rgba(255, 255, 255, 0.655);
@@ -298,8 +298,8 @@ body {
 
 #email input,
 #senha input {
-    width: 330px;
-    height: 45px;
+    width: 260px;
+    height: 55px;
 
     background: rgba(255, 255, 255, 0);
     border-radius: 60px;
@@ -316,4 +316,40 @@ body {
     color: #313056;
 
     left: 10px;
+}
+
+
+#senha input::placeholder,
+#email input::placeholder {
+    width: 130px;
+    height: 20px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 23px;
+
+    letter-spacing: 0.25em;
+
+    color: #313056;
+}
+
+#senha input::-ms-reveal {
+
+    border: 1px solid transparent;
+    border-radius: 50%;
+    box-shadow: 0 0 3px currentColor;
+}
+
+#senha input::hover,
+#email input,
+#senha input::-ms-reveal::hover {
+    cursor: pointer;
+}
+
+#senha img,
+#email img {
+    width: 30px;
+    height: 22px;
 }
