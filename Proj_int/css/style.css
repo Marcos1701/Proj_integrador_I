@@ -9,12 +9,12 @@ body {
 
 .container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    gap: 0px;
+    width: 100vw;
+    height: 100vh;
     background: linear-gradient(240.56deg, #9AF8E7 5.07%, rgba(58, 158, 201, 0.75) 94.79%);
 }
 
@@ -32,7 +32,6 @@ body {
 }
 
 #criar_conta {
-    position: absolute;
     width: 400px;
     height: 550px;
 
@@ -55,8 +54,8 @@ body {
 
 .circulos * {
     position: absolute;
-    width: 1300px;
-    height: 1300px;
+    width: 1000px;
+    height: 1000px;
 }
 
 #circulo1 {
@@ -67,10 +66,20 @@ body {
 }
 
 #circulo2 {
-    left: -138px;
+    left: -168px;
     top: -95.65px;
     background: linear-gradient(216.97deg, rgba(255, 7, 201, 0.81) 18.99%, rgba(135, 62, 169, 0.54) 43.5%, rgba(207, 253, 23, 0.74) 72.5%);
     border-radius: 50%;
+}
+
+button,
+input {
+    cursor: pointer;
+}
+
+button {
+    border: none;
+    outline: none;
 }
 
 #alterar_tela {
@@ -78,13 +87,14 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0px;
+    gap: 7px;
+    cursor: pointer;
 
     position: absolute;
     width: 77px;
     height: 77px;
-    left: 360px;
-    top: 240px;
+    left: 36.1%;
+    top: 50%;
 
     background: rgba(255, 255, 255, 0.90);
     border-radius: 60px;
@@ -95,16 +105,14 @@ body {
     height: 22px;
 }
 
-#alterar_tela {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+#seta_esquerda {
+    transform: scaleX(-1);
 }
 
 #alterar_tela:hover {
-    background: rgb(255, 234, 234);
+    background: rgba(255, 255, 255, 0.90);
     border-radius: 60px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.586);
 
 
     #seta_esquerda {
@@ -116,9 +124,6 @@ body {
     }
 }
 
-#seta_esquerda {
-    transform: scaleX(-1);
-}
 
 
 #criar_conta_msg {
@@ -179,7 +184,7 @@ body {
     top: 340px;
 
     background: linear-gradient(90deg, rgba(212, 38, 255, 0.5) 0%, rgba(183, 223, 69, 0.415) 95.83%);
-    border: 0.5px solid #000000;
+    border: 0.0001px solid #000000;
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.4);
     border-radius: 60px;
 
@@ -189,6 +194,7 @@ body {
     font-size: 24px;
     line-height: 28px;
     color: #313056;
+    cursor: pointer;
 
 }
 
@@ -214,6 +220,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
+
 }
 
 #botao_lembrar_senha input {
@@ -278,8 +285,7 @@ body {
     border-radius: 60px;
 }
 
-#email input,
-#senha input {
+:is(#email, #senha) input {
     width: 260px;
     height: 55px;
 
@@ -301,8 +307,7 @@ body {
 }
 
 
-#senha input::placeholder,
-#email input::placeholder {
+:is(#senha, #email) input::placeholder {
     width: 130px;
     height: 20px;
 
@@ -324,14 +329,12 @@ body {
     box-shadow: 0 0 3px currentColor;
 }
 
-#senha input::hover,
 #email input,
-#senha input::-ms-reveal::hover {
+:is(#senha input::-ms-reveal, #senha input)::hover {
     cursor: pointer;
 }
 
-#senha img,
-#email img {
+:is(#email, #senha) img {
     width: 30px;
     height: 22px;
 }
@@ -368,6 +371,7 @@ body {
     color: #FFFFFF;
 
     letter-spacing: 0.4rem;
+    cursor: pointer;
 }
 
 #realiza_login_btn:hover {
