@@ -88,7 +88,6 @@ button {
     justify-content: center;
     align-items: center;
     gap: 7px;
-    cursor: pointer;
 
     position: absolute;
     width: 77px;
@@ -194,7 +193,6 @@ button {
     font-size: 24px;
     line-height: 28px;
     color: #313056;
-    cursor: pointer;
 
 }
 
@@ -323,15 +321,7 @@ button {
 }
 
 #senha input::-ms-reveal {
-
-    border: 1px solid transparent;
-    border-radius: 50%;
-    box-shadow: 0 0 3px currentColor;
-}
-
-#email input,
-:is(#senha input::-ms-reveal, #senha input)::hover {
-    cursor: pointer;
+    filter: drop-shadow(1px 1px 1px currentColor);
 }
 
 :is(#email, #senha) img {
@@ -371,7 +361,6 @@ button {
     color: #FFFFFF;
 
     letter-spacing: 0.4rem;
-    cursor: pointer;
 }
 
 #realiza_login_btn:hover {
@@ -391,9 +380,9 @@ button {
 }
 
 #esqueceu_senha:hover {
-    color: #211e80;
-    text-decoration: underline;
+    color: #8a1a99;
     cursor: pointer;
+    filter: drop-shadow(0px 0px 0.5px #211e80);
 }
 
 #login_via_google {
@@ -448,7 +437,6 @@ button {
 
 #logo_google:hover {
     background: rgba(255, 255, 255, 0.34);
-    box-shadow: -1px 1px 5px rgba(224, 206, 206, 0.548);
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.407);
     border-radius: 60px;
-    cursor: pointer;
 }
