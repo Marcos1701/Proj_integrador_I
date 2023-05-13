@@ -133,7 +133,6 @@ button {
     border-radius: 60px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.586);
 
-
     #seta_esquerda {
         margin-right: 2px;
     }
@@ -241,15 +240,15 @@ button {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 5px;
 
 }
 
 #botao_lembrar_senha input {
     width: 20px;
     height: 20px;
+    margin-bottom: 2px;
 
-    border: 1px solid #3A00E5;
 }
 
 #botao_lembrar_senha label {
@@ -478,8 +477,12 @@ button {
         line-height: 30px;
     }
 
+    .referentes_a_senha {
+        gap: 50px;
+    }
+
     #inputs {
-        gap: 10px;
+        gap: 15px;
     }
 
     #email,
@@ -508,7 +511,7 @@ button {
     }
 
     #botoes {
-        gap: 10px;
+        gap: 15px;
     }
 
     #realiza_login_btn {
@@ -523,8 +526,18 @@ button {
     }
 
     #esqueceu_senha {
-        font-size: 16px;
+        font-size: 15px;
         line-height: 20px;
+    }
+
+    #botao_lembrar_senha label {
+        font-size: 15px;
+    }
+
+    #botao_lembrar_senha input {
+        width: 15px;
+        height: 15px;
+        margin-bottom: 3px;
     }
 
     #login_via_google {
@@ -540,7 +553,6 @@ button {
         height: 0px;
 
         border: 1px solid #000000;
-        transform: rotate(180deg);
     }
 
     #linha_direita {
@@ -548,7 +560,6 @@ button {
         height: 0px;
 
         border: 1px solid #000000;
-        transform: rotate(180deg);
     }
 
     #icon_google {
@@ -610,12 +621,19 @@ button {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 450px;
+        width: 400px;
         height: 550px;
     }
 
+    #realiza_login_msg {
+        padding-top: 50px;
+        padding-bottom: 15px;
+        font-size: 25px;
+        line-height: 30px;
+    }
+
     #inputs {
-        gap: 20px;
+        gap: 22px;
     }
 
     #realiza_login {
@@ -624,15 +642,17 @@ button {
 
     #esqueceu_senha,
     #botao_lembrar_senha label {
-        font-size: 14px;
+        font-size: 13.5px;
+        margin: 5px;
     }
 
     .referentes_a_senha {
-        gap: 105px;
+        gap: 50px;
     }
 
     #botoes {
-        padding-bottom: 25px;
+        padding-top: 5px;
+        padding-bottom: 15px;
     }
 
     #ou {
@@ -640,14 +660,14 @@ button {
     }
 
     #realiza_login_btn {
-        width: 150px;
-        height: 45px;
+        width: 130px;
+        height: 40px;
 
-        font-size: 14px;
+        font-size: 13px;
     }
 
     #linha_divisoria {
-        gap: 15px;
+        gap: 17px;
     }
 
     #criar_conta,
@@ -659,15 +679,16 @@ button {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 150px;
-        height: 45px;
+        width: 130px;
+        height: 40px;
         font-size: 16px;
     }
 
     #botoes_entrar_e_cria_conta {
         display: flex;
         flex-direction: row;
-        gap: 35px;
+        gap: 25px;
+        padding-top: 20px;
     }
 
     .circulos * {
@@ -710,7 +731,123 @@ button {
         left: 5%;
         top: 75%;
     }
+}
 
+@media (max-width: 450px) {
+    #login {
+        width: 240px;
+        height: 500px;
+    }
 
+    #realiza_login {
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 40px;
+    }
 
+    #realiza_login_msg {
+        font-size: 20px;
+        line-height: 25px;
+    }
+
+    #inputs {
+        gap: 14px;
+    }
+
+    #esqueceu_senha,
+    #botao_lembrar_senha label {
+        font-size: 10px;
+    }
+
+    #botao_lembrar_senha {
+        gap: 0px;
+    }
+
+    #botao_lembrar_senha input {
+        width: 12px;
+        margin: 0px;
+        margin-bottom: 3px;
+    }
+
+    .referentes_a_senha {
+        gap: 13px;
+    }
+
+    #ou {
+        font-size: 12px;
+    }
+
+    #linha_esquerda,
+    #linha_direita {
+        width: 60px;
+    }
+
+    #realiza_login_btn {
+        width: 100px;
+        height: 30px;
+
+        font-size: 10px;
+        font-weight: 1000;
+    }
+
+    #linha_divisoria {
+        gap: 10px;
+    }
+
+    #criar_conta,
+    #alterar_tela {
+        display: none;
+    }
+
+    #criar_conta_btn_to_840px {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90px;
+        height: 30px;
+        font-size: 10px;
+        font-weight: 1000;
+    }
+
+    #botoes_entrar_e_cria_conta {
+        gap: 10px;
+    }
+
+    #circulo1 {
+        width: 100px;
+        height: 100px;
+        left: 73%;
+        top: 18%;
+    }
+
+    #circulo2 {
+        width: 200px;
+        height: 200px;
+    }
+
+    #email,
+    #senha {
+        width: 190px;
+        height: 30px;
+        gap: 8px;
+    }
+
+    :is(#email, #senha) img {
+        width: 18px;
+        height: 12px;
+    }
+
+    :is(#email, #senha) input {
+        font-size: 12px;
+    }
+
+    :is(#email, #senha) input::placeholder {
+        font-size: 12px;
+    }
+
+    #login_via_google {
+        padding: 0px;
+        margin: 0px;
+    }
 }
