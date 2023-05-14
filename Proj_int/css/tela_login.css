@@ -1,37 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(240.56deg, #9AF8E7 5.07%, rgba(58, 158, 201, 0.75) 94.79%);
-}
-
-#login {
-    max-width: 100vw;
-    max-height: 100vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    width: 1000px;
-    height: 550px;
-
-    background: url(.png), rgba(21, 1, 255, 0.1);
-    backdrop-filter: blur(40px);
-    /* Note: backdrop-filter has minimal browser support */
-    border-radius: 30px;
-}
 
 #criar_conta {
     display: flex;
@@ -53,54 +22,6 @@ body {
     border-radius: 0px 30px 30px 0px;
 }
 
-.circulos * {
-    width: calc(100vw - 35%);
-    height: calc(100vh + 30%);
-    position: absolute;
-}
-
-#circulo1 {
-    left: -461px;
-    top: -87px;
-    background: linear-gradient(206.45deg, #A272E0 17.54%, rgba(62, 191, 114, 0.91) 74.46%);
-    border-radius: 50%;
-}
-
-#circulo2 {
-    left: -138px;
-    top: -95.65px;
-    background: linear-gradient(216.97deg, rgba(255, 7, 201, 0.81) 18.99%, rgba(135, 62, 169, 0.54) 43.5%, rgba(207, 253, 23, 0.74) 72.5%);
-    border-radius: 50%;
-}
-
-#circulo3 {
-    background-image: linear-gradient(195deg, #ff7fec 0, #ff72ef 16.67%, #ff60ec 33.33%, #e148e5 50%, #b933de 66.67%, #912adb 83.33%, #652cdd 100%);
-    /* usei um gerador de gradiente..*/
-    border-radius: 50%;
-    width: 250px;
-    height: 250px;
-    left: 83%;
-    top: 65%;
-}
-
-#circulo4 {
-    background: linear-gradient(206.45deg, #d2a51d 17.54%, rgba(23, 213, 55, 0.978) 74.46%);
-    border-radius: 50%;
-    width: 180px;
-    height: 180px;
-    left: 64%;
-    top: 8%;
-}
-
-button,
-input {
-    cursor: pointer;
-}
-
-button {
-    border: none;
-    outline: none;
-}
 
 #alterar_tela {
     display: flex;
@@ -466,11 +387,6 @@ button {
 
 @media (max-width: 1060px) {
 
-    #login {
-        width: 800px;
-        height: 500px;
-    }
-
     #realiza_login_msg {
         padding-top: 38px;
         font-size: 25px;
@@ -614,16 +530,10 @@ button {
         width: 30px;
         height: 17px;
     }
+
 }
 
 @media (max-width: 840px) {
-    #login {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 400px;
-        height: 550px;
-    }
 
     #realiza_login_msg {
         padding-top: 50px;
@@ -690,54 +600,10 @@ button {
         gap: 25px;
         padding-top: 20px;
     }
-
-    .circulos * {
-        position: absolute;
-    }
-
-    #circulo1 {
-        width: 150px;
-        height: 150px;
-        left: 73%;
-        top: 18%;
-    }
-
-    #circulo2 {
-        width: 300px;
-        height: 300px;
-
-        left: 0%;
-        top: 0%;
-    }
-
-    #circulo3,
-    #circulo4 {
-        display: flex;
-    }
-
-    #circulo3 {
-
-        width: 300px;
-        height: 300px;
-
-        /* left: 390px; */
-        left: 58%;
-        top: 53%;
-    }
-
-    #circulo4 {
-        width: 150px;
-        height: 150px;
-        left: 5%;
-        top: 75%;
-    }
 }
 
 @media (max-width: 450px) {
-    #login {
-        width: 240px;
-        height: 500px;
-    }
+
 
     #realiza_login {
         width: 100%;
@@ -814,17 +680,6 @@ button {
         gap: 10px;
     }
 
-    #circulo1 {
-        width: 100px;
-        height: 100px;
-        left: 73%;
-        top: 18%;
-    }
-
-    #circulo2 {
-        width: 200px;
-        height: 200px;
-    }
 
     #email,
     #senha {

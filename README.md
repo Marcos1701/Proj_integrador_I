@@ -45,7 +45,7 @@
 
 ### <a href = "Documentos_relacionados/Especificacoes.md" >**:sparkles:- Especificações das Funcionalidades Principais**</a>
 
-### <a href="https://marcos1701.github.io/Proj_integrador_I/Proj_int/html/index">**:trident:- Site (em andamento :wrench:, mas já é possivel visualizá-lo por aqui..)**</a>
+### <a href="https://marcos1701.github.io/Proj_integrador_I/Proj_int/html/tela_login">**:trident:- Site (em andamento :wrench:, mas já é possivel visualizá-lo por aqui..)**</a>
 </br>
 
 :heavy_check_mark: **. Informações quanto ao Tema Secundário:**
