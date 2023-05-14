@@ -81,14 +81,14 @@ button {
 
 @media (max-width: 1060px) {
 
-    #login {
+    #conteiner_dados {
         width: 800px;
         height: 500px;
     }
 }
 
 @media (max-width: 840px) {
-    #login {
+    #conteiner_dados {
         flex-direction: column;
         width: 400px;
         height: 550px;
@@ -131,7 +131,7 @@ button {
 }
 
 @media (max-width: 450px) {
-    #login {
+    #conteiner_dados {
         width: 240px;
         height: 500px;
     }

@@ -3,11 +3,11 @@
 
 
 #circulo1 {
-    left: 770px;
+    left: 48%;
 }
 
 #circulo2 {
-    left: 650px;
+    left: 68%;
     top: -87px;
 }
 
@@ -129,8 +129,6 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px 13px 10px 22px;
-    gap: 20px;
 
     background: linear-gradient(90deg, rgba(212, 38, 255, 0.5) 0%, rgba(183, 223, 69, 0.415) 95.83%);
     border: 0.0001px solid #000000;
@@ -140,14 +138,14 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 900;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 28px;
     color: #313056;
 }
 
 #realizar_login_bnt {
     position: absolute;
-    width: 8em;
+    width: 10em;
     height: 55px;
     left: 85px;
     top: 340px;
@@ -168,8 +166,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
     gap: 5px;
+
+    padding-right: 215px;
 
 }
 
@@ -191,9 +190,8 @@
     color: #313056;
 }
 
-#realiza_login_msg {
+#msg_cadastro {
     display: flex;
-    padding-top: 5px;
 
     font-family: 'Inter';
     font-style: normal;
@@ -214,33 +212,34 @@
 #inputs {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 
 }
 
-#nome_de_usuario,
+#nome,
+#sobrenome,
 #email,
 #senha {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 50px;
+    gap: 20px;
     padding-left: 15px;
 
     width: 350px;
-    height: 55px;
+    height: 50px;
 
     background: rgba(255, 255, 255, 0.655);
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border-radius: 60px;
 }
 
-:is(#nome_de_usuario, #email, #senha) input {
+:is(#sobrenome, #nome, #email, #senha) input {
 
     display: grid;
     place-items: center;
 
-    height: 55px;
+    height: 50px;
 
     background: rgba(255, 255, 255, 0);
     border-radius: 60px;
@@ -258,8 +257,7 @@
 }
 
 
-:is(#nome_de_usuario, #senha, #email) input::placeholder {
-    width: 130px;
+:is(#nome, #sobrenome, #senha, #email) input::placeholder {
     height: 20px;
 
     font-family: 'Inter';
@@ -273,11 +271,28 @@
     color: #313056;
 }
 
+#usuario {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+#nome {
+    padding-left: 25px;
+    width: 115px;
+}
+
+#sobrenome {
+    padding-left: 25px;
+    width: 190px;
+}
+
 #senha input::-ms-reveal {
     filter: drop-shadow(1px 1px 1px currentColor);
 }
 
-:is(#nome_de_usuario, #email, #senha) img {
+:is(#email, #senha) img {
     width: 30px;
     height: 22px;
 }
@@ -288,9 +303,10 @@
     align-items: center;
     justify-content: center;
     gap: 15px;
+    padding-top: 20px;
 }
 
-#realiza_login_btn {
+#realiza_cadastro_btn {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -298,7 +314,7 @@
     padding: 10px 13px 10px 22px;
     gap: 20px;
 
-    width: 230px;
+    width: 200px;
     height: 55px;
 
     background: #313056;
@@ -308,12 +324,11 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 28px;
-
     color: #FFFFFF;
 
-    letter-spacing: 0.4rem;
+    letter-spacing: 0.3rem;
 }
 
 #realiza_login_btn:hover {
@@ -322,28 +337,12 @@
     border-radius: 60px;
 }
 
-#esqueceu_senha {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 28px;
-
-    color: #211e80;
-}
-
-#esqueceu_senha:hover {
-    color: #8a1a99;
-    cursor: pointer;
-    filter: drop-shadow(0px 0px 0.5px #211e80);
-}
 
 #login_via_google {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0px;
 }
 
 #linha_divisoria {
@@ -396,9 +395,9 @@
 
 @media (max-width: 1060px) {
 
-    #realiza_login_msg {
-        padding-top: 38px;
-        font-size: 25px;
+    #msg_cadastro {
+        padding-top: 28px;
+        font-size: 24px;
         line-height: 30px;
     }
 
@@ -410,7 +409,8 @@
         gap: 15px;
     }
 
-    #nome_de_usuario,
+    #nome,
+    #sobrenome,
     #email,
     #senha {
         gap: 20px;
@@ -420,12 +420,11 @@
         height: 45px;
     }
 
-    :is(#nome_de_usuario, #email, #senha) input {
+    :is(#nome, #sobrenome, #email, #senha) input {
         height: 45px;
     }
 
-    :is(#nome_de_usuario, #email, #senha) input::placeholder {
-        width: 100px;
+    :is(#nome, #sobrenome, #email, #senha) input::placeholder {
         height: 20px;
 
         font-size: 16px;
@@ -436,18 +435,28 @@
         filter: drop-shadow(1px 1px 1px currentColor);
     }
 
+    #nome {
+        padding-left: 15px;
+        width: 90px;
+    }
+
+    #sobrenome {
+        padding-left: 15px;
+        width: 190px;
+    }
+
     #botoes {
         gap: 15px;
     }
 
-    #realiza_login_btn {
+    #realiza_cadastro_btn {
         padding: 10px 13px 10px 22px;
         gap: 10px;
 
         width: 200px;
         height: 45px;
 
-        font-size: 18px;
+        font-size: 16px;
         line-height: 25px;
     }
 
@@ -459,6 +468,10 @@
         width: 15px;
         height: 15px;
         margin-bottom: 3px;
+    }
+
+    #botao_lembrar_senha {
+        padding-right: 180px;
     }
 
     #login_via_google {
@@ -500,13 +513,13 @@
     }
 
     #msg_login {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     #linha_realizar_login {
         width: 50.13px;
-        left: 34px;
-        top: 136.9px;
+        left: 17px;
+        top: 134.3px;
     }
 
     #realizar_login_msg {
@@ -519,7 +532,7 @@
         top: 340px;
         width: 160px;
         height: 45px;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 25px;
     }
 
@@ -540,7 +553,7 @@
 
 @media (max-width: 840px) {
 
-    #realiza_login_msg {
+    #msg_cadastro {
         padding-top: 50px;
         padding-bottom: 15px;
         font-size: 25px;
@@ -569,11 +582,11 @@
         font-size: 14px;
     }
 
-    #realiza_login_btn {
+    #realiza_cadastro_btn {
         width: 130px;
         height: 40px;
 
-        font-size: 13px;
+        font-size: 10px;
     }
 
     #linha_divisoria {
@@ -612,7 +625,7 @@
         padding-bottom: 40px;
     }
 
-    #realiza_login_msg {
+    #msg_cadastro {
         font-size: 20px;
         line-height: 25px;
     }
@@ -676,7 +689,7 @@
     }
 
 
-    #nome_de_usuario,
+
     #email,
     #senha {
         width: 190px;
