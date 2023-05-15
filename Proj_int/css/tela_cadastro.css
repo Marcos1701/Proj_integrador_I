@@ -553,6 +553,21 @@
 
 @media (max-width: 840px) {
 
+    #circulo4 {
+        left: 65%;
+        top: auto;
+    }
+
+    #circulo1 {
+        top: 3%;
+        left: 28%;
+    }
+
+    #circulo3 {
+        top: 70%;
+        left: -20%;
+    }
+
     #msg_cadastro {
         padding-top: 50px;
         padding-bottom: 15px;
@@ -618,6 +633,16 @@
 @media (max-width: 450px) {
 
 
+    #circulo1 {
+        top: 10%;
+        left: 8%;
+    }
+
+    #circulo3 {
+        top: 60%;
+        left: -55%;
+    }
+
     #realiza_cadastro {
         width: 100%;
         align-items: center;
@@ -626,12 +651,11 @@
     }
 
     #msg_cadastro {
-        font-size: 20px;
-        line-height: 25px;
+        font-size: 24px;
     }
 
     #inputs {
-        gap: 14px;
+        gap: 10px;
     }
 
     #botao_lembrar_senha label {
@@ -657,12 +681,12 @@
         width: 60px;
     }
 
-    #realiza_login_btn {
-        width: 100px;
+    #realiza_cadastro_btn {
+        width: 110px;
         height: 30px;
 
-        font-size: 10px;
-        font-weight: 1000;
+        font-size: 9px;
+        font-weight: 550;
     }
 
     #linha_divisoria {
@@ -675,21 +699,23 @@
     }
 
     #login_btn_to_840px {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 90px;
+        width: 75px;
         height: 30px;
         font-size: 10px;
         font-weight: 1000;
     }
 
     #botoes_entrar_e_cria_conta {
-        gap: 10px;
+        gap: 5px;
+    }
+
+    #botao_lembrar_senha {
+        padding-right: 95px;
     }
 
 
-
+    #nome,
+    #sobrenome,
     #email,
     #senha {
         width: 190px;
@@ -697,17 +723,25 @@
         gap: 8px;
     }
 
-    :is(#nome_de_usuario, #email, #senha) img {
+    :is(#nome, #sobrenome, #email, #senha) img {
         width: 18px;
         height: 12px;
     }
 
-    :is(#nome_de_usuario, #email, #senha) input {
+    :is(#nome, #sobrenome, #email, #senha) input {
         font-size: 12px;
     }
 
-    :is(#nome_de_usuario, #email, #senha) input::placeholder {
-        font-size: 12px;
+    :is(#nome, #sobrenome, #email, #senha) input::placeholder {
+        font-size: 10px;
+    }
+
+    #nome {
+        width: 60px;
+    }
+
+    #sobrenome {
+        width: 100px;
     }
 
     #login_via_google {

@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div class="container">
+    <main class="container">
         <div class="circulos">
             <div id="circulo4"></div>
             <div id="circulo3"></div>
@@ -29,7 +29,8 @@
                     Crie sua conta agora mesmo e tenha acesso a todas as funcionalidades do Planr.
                 </p>
                 <div id="linha_novo_login"></div>
-                <button id="criar_conta_btn">Criar Conta</button>
+                <button id="criar_contas_btn" onclick="window.location.href = './tela_cadastro.html'">Criar
+                    Conta</button>
             </div>
             <div id="realiza_login">
                 <p id="realiza_login_msg">Realizar Login</p>
@@ -56,8 +57,9 @@
                         <p id="esqueceu_senha">Esqueceu a senha?</p>
                     </div>
                     <div id="botoes_entrar_e_cria_conta">
-                        <button id="realiza_login_btn">ENTRAR</button>
-                        <button id="criar_conta_btn_to_840px">Criar Conta</button>
+                        <button id="realiza_login_btn" onclick="window.location.href = './home.html'">ENTRAR</button>
+                        <button id="criar_conta_btn_to_840px"
+                            onclick="window.location.href = './tela_cadastro.html'">Criar Conta</button>
                     </div>
                 </div>
 
@@ -74,14 +76,14 @@
                 </div>
 
             </div>
-            <button id="alterar_tela">
+            <button id="alterar_tela" onclick="window.location.href = './tela_cadastro.html'">
                 <img src="../imagens/Vector.png" alt="seta_para_a_direita" id="seta_direita">
                 <img src="../imagens/Vector.png" alt="seta_para_a_esquerda" id="seta_esquerda">
             </button>
         </div>
 
 
-    </div>
+    </main>
 </body>
 
 </html>
