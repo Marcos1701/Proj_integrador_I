@@ -2,6 +2,13 @@
     height: calc(100vh - 80px);
     width: calc(100vw - 80px);
     flex-direction: column;
+    gap: 20px;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    gap: 400px;
 }
 
 #nova_tarefa_bnt {
@@ -33,6 +40,66 @@
     cursor: pointer;
 }
 
+#barra_pesquisa_e_conf_usuario {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+#op_usuario {
+    display: flex;
+    background: none;
+    padding: 0px;
+    border: #313056 3px solid;
+    border-radius: 50%;
+}
+
+#avatar {
+    width: 55px;
+    height: 55px;
+}
+
+#search {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 275px;
+    height: 50px;
+
+    background: #F2AB7C;
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 69px;
+}
+
+#search_input {
+    background: rgba(247, 246, 249, 0.43);
+    border-radius: 60px 0px 0px 60px;
+    border: none;
+    outline: none;
+    padding: 7px;
+
+}
+
+#search_bnt {
+    background: none;
+    padding: 0px;
+}
+
+#lupa {
+    width: 33px;
+    height: 33px;
+}
+
+#linha {
+    width: 28px;
+    height: 0px;
+    border: 1px solid #313056;
+    transform: rotate(90deg);
+}
+
 #linha_esq,
 #linha_dir {
     width: 416px;
@@ -59,9 +126,18 @@
     padding-left: 10px;
     padding-bottom: 10px;
     gap: 0px;
+    background: #F2AB7C;
+}
 
-    background: linear-gradient(90deg, rgba(89, 242, 75, 0.95) 0%, rgba(129, 62, 215, 0.798) 52.6%, rgba(46, 198, 232, 0.95) 100%);
-    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+.tarefa::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 0 40px 40px;
+    border-color: transparent transparent #F2AB7C transparent;
 }
 
 #descricao_tarefa {
@@ -73,17 +149,4 @@
     #botoes_tarefa {
         display: flex;
     }
-}
-
-#barra_pesquisa_e_conf_usuario {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-}
-
-#avatar {
-    width: 40px;
-    height: 40px;
 }
