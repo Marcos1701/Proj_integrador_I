@@ -1,0 +1,89 @@
+#conteiner_dados {
+    height: calc(100vh - 80px);
+    width: calc(100vw - 80px);
+    flex-direction: column;
+}
+
+#nova_tarefa_bnt {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 250px;
+    height: 55px;
+    gap: 40px;
+    padding: 10px;
+
+    background: linear-gradient(90deg, rgba(89, 242, 75, 0.95) 0%, rgba(129, 62, 215, 0.798) 52.6%, rgba(46, 198, 232, 0.95) 100%);
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 69px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#botoes_tarefa {
+    display: none;
+}
+
+#nova_tarefa_bnt img {
+    width: 30px;
+    height: 30px;
+}
+
+#nova_tarefa_bnt:hover {
+    cursor: pointer;
+}
+
+#linha_esq,
+#linha_dir {
+    width: 416px;
+    height: 0px;
+
+    border: 2px solid #313056;
+    transform: rotate(180deg)
+}
+
+#Todo_list_msg {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.tarefa {
+    /*simbolo balão*/
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 80px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    gap: 0px;
+
+    background: linear-gradient(90deg, rgba(89, 242, 75, 0.95) 0%, rgba(129, 62, 215, 0.798) 52.6%, rgba(46, 198, 232, 0.95) 100%);
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+#descricao_tarefa {
+    overflow: hidden;
+
+}
+
+.tarefa:hover {
+    #botoes_tarefa {
+        display: flex;
+    }
+}
+
+#barra_pesquisa_e_conf_usuario {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+#avatar {
+    width: 40px;
+    height: 40px;
+}
