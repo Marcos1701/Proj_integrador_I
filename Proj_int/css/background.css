@@ -36,6 +36,17 @@ body {
     position: absolute;
 }
 
+@keyframes float {
+    0%{
+        transform: translateY(0px);
+    }
+    50%{
+        transform: translateY(-60px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+
 #circulo1 {
     left: -461px;
     top: -87px;
@@ -58,6 +69,7 @@ body {
     height: 250px;
     left: 83%;
     top: 65%;
+    animation: float 6s ease-out infinite;
 }
 
 #circulo4 {
@@ -67,6 +79,7 @@ body {
     height: 180px;
     left: 64%;
     top: 8%;
+    animation: float 6s ease-out infinite;
 }
 
 button,
@@ -99,6 +112,7 @@ button {
         height: 150px;
         left: 73%;
         top: 18%;
+        animation: float 6s ease-out infinite;
     }
 
     #circulo2 {
@@ -107,11 +121,7 @@ button {
 
         left: 0%;
         top: 0%;
-    }
-
-    #circulo3,
-    #circulo4 {
-        display: flex;
+        animation: float 6s ease-out infinite;
     }
 
     #circulo3 {
@@ -141,10 +151,12 @@ button {
         height: 100px;
         left: 73%;
         top: 18%;
+        animation: float 6s ease-out infinite;
     }
 
     #circulo2 {
         width: 200px;
         height: 200px;
+        animation: float 6s ease-out infinite;
     }
 }
