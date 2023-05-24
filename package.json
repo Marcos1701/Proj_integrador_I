@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "postgres": "^3.3.4"
+  },
+  "name": "projeto_integrador_i",
+  "description": "- **Membros da equipe:**\r     - *Marcos Eduardo*\r     - *Gabriel Morais*\r     - *Daniel Luca*",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/express": "^4.17.17"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
