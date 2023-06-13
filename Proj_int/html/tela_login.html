@@ -63,24 +63,82 @@
                     </div>
                 </div>
 
-                <div id="login_via_google">
-                    <div id="linha_divisoria">
-                        <div id="linha_esquerda"></div>
-                        <p id="ou">ou acesse via</p>
-                        <div id="linha_direita"></div>
+                <div class="container">
+                    <div class="circulos">
+                        <div id="circulo4"></div>
+                        <div id="circulo3"></div>
+                        <div id="circulo1"></div>
+                        <div id="circulo2"></div>
                     </div>
-                    <button id="logo_google">
-                        <img src="../imagens/Icones/logo_google.png" alt="icone_google" id="icon_google">
-                    </button>
 
-                </div>
+                    <div id="conteiner_dados" hidden>
+                        <div id="realizar_login">
+                            <p id="msg_login">
+                                Já possui uma conta?
+                            </p>
+                            <p id="realizar_login_msg">
+                                Realize seu login e tenha acesso a todas as funcionalidades do Planr.
+                            </p>
+                            <div id="linha_realizar_login"></div>
+                            <button id="realizar_login_bnt"
+                                onclick="window.location.href = './tela_login.html'">REALIZAR
+                                LOGIN</button>
+                        </div>
+                        <div id="realiza_cadastro">
+                            <p id="msg_cadastro">Cadastro</p>
+                            <div class="entradas">
+                                <div id="inputs">
+                                    <div id="usuario">
+                                        <div id="nome">
+                                            <input type="text" id="nome_de_usuario_login" placeholder="NOME">
+                                        </div>
+                                        <div id="sobrenome">
+                                            <input type="text" id="nome_de_usuario_login" placeholder="SOBRENOME">
+                                        </div>
+                                    </div>
+                                    <div id="email">
+                                        <img src="../imagens/Icones/icons-to-email.png" alt="icone_cadeado">
+                                        <input type="email" id="email_login" placeholder="E-MAIL">
+                                    </div>
+                                    <div id="senha">
+                                        <img src="../imagens/Icones/icons-to-password.png" alt="icone_cadeado">
+                                        <input type="password" id="senha_login" placeholder="SENHA">
+                                        <!-- <img src="../imagens/olho.png" alt="olho" id="olho">-->
+                                    </div>
+                                </div>
+                            </div>
 
-            </div>
-            <button id="alterar_tela" onclick="window.location.href = './tela_cadastro.html'">
-                <img src="../imagens/Icones/Vector.png" alt="seta_para_a_direita" id="seta_direita">
-                <img src="../imagens/Icones/Vector.png" alt="seta_para_a_esquerda" id="seta_esquerda">
-            </button>
-        </div>
+                            <div id="botoes">
+                                <div id="botao_lembrar_senha">
+                                    <input type="radio" id="lembrar_senha">
+                                    <label for="lembrar_senha">Lembrar Senha</label>
+                                </div>
+                                <div id="botoes_entrar_e_cria_conta">
+                                    <button id="realiza_cadastro_btn"
+                                        onclick="window.location.href = './home.html'">CADASTRAR</button>
+                                    <button id="login_btn_to_840px"
+                                        onclick="window.location.href = './tela_login.html'">ENTRAR</button>
+                                </div>
+                            </div>
+
+                            <div id="login_via_google">
+                                <div id="linha_divisoria">
+                                    <div id="linha_esquerda"></div>
+                                    <p id="ou">ou acesse via</p>
+                                    <div id="linha_direita"></div>
+                                </div>
+                                <button id="logo_google">
+                                    <img src="../imagens/Icones/logo_google.png" alt="icone_google" id="icon_google">
+                                </button>
+
+                            </div>
+
+                        </div>
+                        <button id="alterar_tela" onclick="window.location.href = './tela_cadastro.html'">
+                            <img src="../imagens/Icones/Vector.png" alt="seta_para_a_direita" id="seta_direita">
+                            <img src="../imagens/Icones/Vector.png" alt="seta_para_a_esquerda" id="seta_esquerda">
+                        </button>
+                    </div>
 
 
     </main>
