@@ -2,29 +2,29 @@
     height: calc(100vh - 80px);
     width: calc(100vw - 80px);
     flex-direction: column;
-    gap: 20px;
+    gap: 5vh
 }
 
 header {
     display: flex;
     flex-direction: row;
-    gap: 400px;
+    gap: 25vw;
 }
 
 #nova_tarefa_bnt {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 250px;
-    height: 55px;
-    gap: 40px;
-    padding: 10px;
+    width: 16vw;
+    height: 3.69vw;
+    gap: 1.7vw;
+    padding: 1vw;
 
     background: linear-gradient(90deg, rgba(89, 242, 75, 0.95) 0%, rgba(129, 62, 215, 0.798) 52.6%, rgba(46, 198, 232, 0.95) 100%);
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border-radius: 69px;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 1.5vw;
+    font-weight: 550;
 }
 
 #botoes_tarefa {
@@ -32,8 +32,8 @@ header {
 }
 
 #nova_tarefa_bnt img {
-    width: 30px;
-    height: 30px;
+    width: 2vw;
+    height: 2vw;
 }
 
 #nova_tarefa_bnt:hover {
@@ -45,7 +45,7 @@ header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 15px;
+    gap: 2.3vw;
 }
 
 #op_usuario {
@@ -57,8 +57,8 @@ header {
 }
 
 #avatar {
-    width: 55px;
-    height: 55px;
+    width: 3.69vw;
+    height: 3.69vw;
 }
 
 #search {
@@ -66,8 +66,8 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 275px;
-    height: 50px;
+    width: 18.5vw;
+    height: 3.69vw;
 
     background: #F2AB7C;
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
@@ -79,8 +79,9 @@ header {
     border-radius: 60px 0px 0px 60px;
     border: none;
     outline: none;
-    padding: 7px;
-
+    padding: 1vh;
+    width: 11vw;
+    height: 1.3vw;
 }
 
 #search_bnt {
@@ -89,12 +90,12 @@ header {
 }
 
 #lupa {
-    width: 33px;
-    height: 33px;
+    width: 2.2vw;
+    height: 2vw;
 }
 
 #linha {
-    width: 28px;
+    width: 1.8vw;
     height: 0px;
     border: 1px solid #313056;
     transform: rotate(90deg);
@@ -102,7 +103,7 @@ header {
 
 #linha_esq,
 #linha_dir {
-    width: 416px;
+    width: 28vw;
     height: 0px;
 
     border: 2px solid #313056;
@@ -114,13 +115,13 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 2.5vw;
 }
 
 #tarefas-conteiner {
     display: flex;
     flex-direction: column;
-    gap: 35px;
+    gap: 2vw;
 }
 
 .tarefa {
@@ -130,9 +131,9 @@ header {
     justify-content: center;
     gap: 6px;
     width: 36vw;
-    height: 10vh;
+    height: 5vw;
     padding: 0 15px 10px;
-    background: #6c676366;
+    background: #c43df62d;
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border-radius: 15px;
 }
@@ -150,7 +151,7 @@ header {
 
 #titulo_tarefa {
     margin-top: 5px;
-    font-size: 17px;
+    font-size: 1.3vw;
     font-weight: bold;
     width: 50%;
     border: 1px solid #313056a1;
@@ -160,8 +161,8 @@ header {
 }
 
 #descricao_tarefa {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: .9vw;
+    font-weight: 600;
     width: 98%;
     border: 1px solid #3130564e;
     border-radius: 10px;
@@ -172,7 +173,7 @@ header {
 .tarefa:hover {
     cursor: pointer;
 
-    height: 13vh;
+    height: 6vw;
 
     #botoes_tarefa {
         display: flex;
@@ -184,10 +185,20 @@ header {
 }
 
 #navegacao_tarefas {
+    position: absolute;
+    top: 83vh;
+    left: 75vw;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    gap: 10px;
+}
+
+#navegacao_tarefas #paginas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
 a {
@@ -196,7 +207,7 @@ a {
 }
 
 #navegacao_tarefas a {
-    margin: 0 5px;
+    margin: 0;
     font-size: 10px;
     font-weight: bold;
 
@@ -215,4 +226,23 @@ a {
     background-color: rgba(41, 42, 44, 0.696);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.97);
+}
+
+#navegacao_tarefas img {
+    padding: 0;
+    margin: 0;
+}
+
+#navegacao_tarefas a:hover img {
+    width: 12px;
+    height: 12px;
+}
+
+#navegacao_tarefas :is(#anterior_bnt,
+    #proximo_bnt) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6px;
+    height: 12px;
 }
