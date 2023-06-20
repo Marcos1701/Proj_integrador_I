@@ -124,19 +124,33 @@ header {
     gap: 2vw;
 }
 
-.tarefa {
+.tarefa{
+    display: flex;
+    align-items: flex-start;
+    margin-left: 4rem;
+    gap: 1.5vw;
+}
+
+#concluir_tarefa_checkbox{
+    width: 1.3vw;
+    height: 1.3vw;
+
+}
+
+.tarefa-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     width: 36vw;
-    height: 5vw;
+    height: 5.2vw;
     padding: 0 15px 10px;
     background: #c43df62d;
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border-radius: 15px;
 }
+
 
 #titulo_tarefa,
 #descricao_tarefa {
@@ -170,10 +184,10 @@ header {
     text-align: center;
 }
 
-.tarefa:hover {
+.tarefa-content:hover {
     cursor: pointer;
 
-    height: 6vw;
+    height: 6.5vw;
 
     #botoes_tarefa {
         display: flex;

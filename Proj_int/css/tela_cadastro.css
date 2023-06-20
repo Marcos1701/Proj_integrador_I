@@ -1,22 +1,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-
-#circulo1 {
-    left: 48%;
+@keyframes circle1 {
+    100% {
+        left: 48%;
+    }
 }
 
-#circulo2 {
-    left: 68%;
-    top: -87px;
+@keyframes circle2 {
+    100% {
+        left: 68%;
+        top: -87px;
+    }
 }
 
-#circulo3 {
-    left: 5%;
+@keyframes circle3 {
+    100% {
+        left: 5%;
+    }
 }
 
-#circulo4 {
-    left: 25%;
+@keyframes circle4 {
+    100% {
+        left: 25%;
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+.circulos#circulos-cadastro #circulo1 {
+    animation: circle1 3s ease-in-out forwards;
+}
+
+.circulos#circulos-cadastro #circulo2 {
+    animation: circle2 3s ease-in-out forwards;
+}
+
+.circulos#circulos-cadastro #circulo3 {
+    animation-name: float, circle3;
+    animation-duration: 3s, 5s;
+    animation-iteration-count: infinite, 1;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.circulos#circulos-cadastro #circulo4 {
+    animation-name: float, circle4;
+    animation-duration: 3s, 5s;
+    animation-iteration-count: infinite, 1;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
 }
 
 #realizar_login {
@@ -553,19 +599,43 @@
 
 @media (max-width: 840px) {
 
-    #circulo4 {
+    .circulos#circulos-cadastro #circulo2 {
+
+        animation-name: float;
+        animation-duration: 5s;
+        animation-iteration-count: infinite, 1;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+    }
+
+    .circulos#circulos-cadastro #circulo4 {
         left: 65%;
         top: auto;
+        animation-name: float;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
     }
 
-    #circulo1 {
+    .circulos#circulos-cadastro #circulo1 {
         top: 3%;
-        left: 28%;
+        left: 68%;
+        animation-name: float;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
     }
 
-    #circulo3 {
+    .circulos#circulos-cadastro #circulo3 {
         top: 70%;
-        left: -20%;
+        left: 10%;
+        animation-name: float;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
     }
 
     #msg_cadastro {
@@ -633,33 +703,48 @@
 @media (max-width: 450px) {
 
 
-    #circulo1 {
+    .circulos#circulos-cadastro #circulo1 {
         top: 10%;
         left: 8%;
     }
 
-    #circulo3 {
-        top: 60%;
-        left: -55%;
+    .circulos#circulos-cadastro #circulo2 {
+        top: 10%;
+        left: 65%;
+    }
+
+    .circulos#circulos-cadastro #circulo4 {
+        top: 70%;
+        left: 65%;
+    }
+
+    .circulos#circulos-cadastro #circulo3 {
+        top: 75%;
+        left: -30%;
+    }
+
+    .conteiner_dados#habilitado {
+        width: 85vw;
+        height: 80vh;
     }
 
     #realiza_cadastro {
-        width: 100%;
+        width: 80vw;
         align-items: center;
         justify-content: center;
-        padding-bottom: 40px;
+        padding-bottom: 15vw;
     }
 
     #msg_cadastro {
-        font-size: 24px;
+        font-size: 9vw;
     }
 
     #inputs {
-        gap: 10px;
+        gap: 3vw;
     }
 
     #botao_lembrar_senha label {
-        font-size: 10px;
+        font-size: 3.5vw
     }
 
     #botao_lembrar_senha {
@@ -667,30 +752,30 @@
     }
 
     #botao_lembrar_senha input {
-        width: 12px;
+        width: 4vw;
         margin: 0px;
         margin-bottom: 3px;
     }
 
     #ou {
-        font-size: 12px;
+        font-size: 4vw;
     }
 
     #linha_esquerda,
     #linha_direita {
-        width: 60px;
+        width: 20vw;
     }
 
     #realiza_cadastro_btn {
-        width: 110px;
-        height: 30px;
+        width: 38vw;
+        height: 10vw;
 
-        font-size: 9px;
+        font-size: 3.3vw;
         font-weight: 550;
     }
 
     #linha_divisoria {
-        gap: 10px;
+        gap: 3vw;
     }
 
     #realizar_login,
@@ -699,9 +784,9 @@
     }
 
     #login_btn_to_840px {
-        width: 75px;
-        height: 30px;
-        font-size: 10px;
+        width: 25vw;
+        height: 10vw;
+        font-size: 3.7vw;
         font-weight: 1000;
     }
 
@@ -710,7 +795,7 @@
     }
 
     #botao_lembrar_senha {
-        padding-right: 95px;
+        padding-right: 28vw
     }
 
 
@@ -718,30 +803,30 @@
     #sobrenome,
     #email,
     #senha {
-        width: 190px;
-        height: 30px;
+        width: 55vw;
+        height: 10.1vw;
         gap: 8px;
     }
 
     :is(#nome, #sobrenome, #email, #senha) img {
-        width: 18px;
-        height: 12px;
+        width: 6vw;
+        height: 5vw;
     }
 
     :is(#nome, #sobrenome, #email, #senha) input {
-        font-size: 12px;
+        font-size: 4vw;
     }
 
     :is(#nome, #sobrenome, #email, #senha) input::placeholder {
-        font-size: 10px;
+        font-size: 3.5vw;
     }
 
     #nome {
-        width: 60px;
+        width: 24vw;
     }
 
     #sobrenome {
-        width: 100px;
+        width: 35vw;
     }
 
     #login_via_google {
