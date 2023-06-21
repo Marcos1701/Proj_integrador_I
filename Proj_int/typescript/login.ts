@@ -111,7 +111,10 @@ window.onload = function () {
 
 
 
-    if (!bntLogin || !bnt_login_to_cadastro || !bnt_login_to_cadastro2) {
+
+    if (!bntLogin || !bnt_login_to_cadastro || !bnt_login_to_cadastro2
+        || !bnt_alterar_tela || !bnt_cadastro_to_login || !bnt_cadastro_to_login2
+        || !realiza_cadastro || !login_via_google || !bnt_lembrar_senha) {
         console.log("Elemento não encontrado");
         return;
     }
@@ -156,4 +159,7 @@ window.onload = function () {
     bnt_login_to_cadastro.addEventListener("click", Alterar_Tela);
     bnt_login_to_cadastro2.addEventListener("click", Alterar_Tela)
     bnt_alterar_tela.addEventListener("click", Alterar_Tela);
+    bnt_cadastro_to_login.addEventListener("click", Alterar_Tela);
+    bnt_cadastro_to_login2.addEventListener("click", Alterar_Tela);
+
 }
