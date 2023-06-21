@@ -1,10 +1,74 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+@keyframes circulo1 {
+    100% {
+        left: -461px;
+    }
+}
+
+@keyframes circulo2 {
+    100% {
+        left: -138px;
+        top: -95.65px;
+    }
+}
+
+@keyframes circulo3 {
+    100% {
+        left: 83%;
+    }
+}
+
+@keyframes circulo4 {
+    100% {
+        left: 64%;
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.circulos#login #circulo1 {
+    animation: circulo1 5s ease-in-out forwards;
+}
+
+.circulos#login #circulo2 {
+    animation: circulo2 5s ease-in-out forwards;
+}
+
+.circulos#login #circulo3 {
+    animation-name: float, circulo3;
+    animation-duration: 3s, 5s;
+    animation-iteration-count: infinite, 1;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.circulos#login #circulo4 {
+    animation-name: float, circulo4;
+    animation-duration: 3s, 5s;
+    animation-iteration-count: infinite, 1;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
 
 #criar_conta {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 40%;
     height: 100%;
 
@@ -31,8 +95,8 @@
     gap: 7px;
 
     position: absolute;
-    width: 77px;
-    height: 77px;
+    width: 6.5vw;
+    height: 6.5vw;
     left: 36.1%;
     top: 50%;
 
@@ -41,8 +105,8 @@
 }
 
 #alterar_tela img {
-    width: 40px;
-    height: 22px;
+    width: 3.3vw;
+    height: 1.8vw;
 }
 
 #seta_esquerda {
@@ -67,40 +131,40 @@
 
 #criar_conta_msg {
     position: absolute;
-    width: 347px;
-    height: 58px;
-    left: 33px;
-    top: 155px;
+    width: 28vw;
+    height: 10vw;
+    left: 3%;
+    top: 27.5%;
 
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 1.3vw;
     letter-spacing: 0.02em;
     color: #313056;
 }
 
 #msg_novo_login {
     position: absolute;
-    width: 347px;
-    height: 44px;
-    left: 38px;
-    top: 80px;
+    width: 28vw;
+    height: 10vw;
+    left: 3%;
+    top: 14.6%;
 
     font-family: 'Inter';
     font-style: bold;
     font-weight: 700;
-    font-size: 34px;
-    line-height: 44px;
+    font-size: 2.6vw;
+    line-height: 3.2vw;
     letter-spacing: 0.065em;
     color: #313056;
 }
 
 #linha_novo_login {
     position: absolute;
-    width: 95.13px;
-    left: 25px;
-    top: 152.5px;
+    width: 5.7vw;
+    left: 3%;
+    top: 27.3%;
 
     border: 1.5px solid #000000;
     transform: rotate(180deg);
@@ -123,17 +187,17 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 900;
-    font-size: 24px;
-    line-height: 28px;
+    font-size: 1.8vw;
+    line-height: 2.2vw;
     color: #313056;
 }
 
 #criar_conta_btn {
     position: absolute;
     width: 8em;
-    height: 55px;
-    left: 85px;
-    top: 340px;
+    height: 2.4em;
+    left: 10%;
+    top: 70%;
 }
 
 :is(#criar_conta_btn, #criar_conta_btn_to_840px):hover {
@@ -152,32 +216,31 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 100px;
-
+    gap: 7vw;
+    margin-left: 1vw;
 }
 
-#botao_lembrar_senha {
+#realiza_login #botao_lembrar_senha {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 5px;
-
 }
 
-#botao_lembrar_senha input {
-    width: 20px;
-    height: 20px;
+#realiza_login #botao_lembrar_senha input {
+    width: 1.5vw;
+    height: 1.5vw;
     margin-bottom: 2px;
 
 }
 
-#botao_lembrar_senha label {
+#realiza_login #botao_lembrar_senha label {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 18px;
+    font-size: 1.3vw;
+    line-height: 1.6vw;
     letter-spacing: 0.02em;
 
     color: #313056;
@@ -190,8 +253,8 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 44px;
-    line-height: 58px;
+    font-size: 2.5vw;
+    line-height: 3.2vw;
     letter-spacing: 0.15em;
     color: #313056;
 }
@@ -206,7 +269,7 @@
 #inputs {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1vw;
 
 }
 
@@ -215,11 +278,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 50px;
+    gap: 1vw;
     padding-left: 15px;
 
-    width: 350px;
-    height: 55px;
+    width: 30vw;
+    height: 4.3vw;
 
     background: rgba(255, 255, 255, 0.655);
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
@@ -231,7 +294,7 @@
     display: grid;
     place-items: center;
 
-    height: 55px;
+    height: 100%;
 
     background: rgba(255, 255, 255, 0);
     border-radius: 60px;
@@ -242,22 +305,22 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 28px;
+    font-size: 1.5vw;
+    line-height: 1.8vw;
 
     color: #313056;
 }
 
 
 :is(#senha, #email) input::placeholder {
-    width: 130px;
-    height: 20px;
+    width: 100%;
+    height: 80%;
 
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 19px;
-    line-height: 23px;
+    font-size: 1.5vw;
+    line-height: 1.8vw;
 
     letter-spacing: 0.25em;
 
@@ -269,8 +332,8 @@
 }
 
 :is(#email, #senha) img {
-    width: 30px;
-    height: 22px;
+    width: 2.2vw;
+    height: 1.9vw;
 }
 
 #botoes {
@@ -278,7 +341,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 1.4vw;
 }
 
 #realiza_login_btn {
@@ -287,10 +350,10 @@
     justify-content: center;
     align-items: center;
     padding: 10px 13px 10px 22px;
-    gap: 20px;
+    gap: 1vw;
 
-    width: 230px;
-    height: 55px;
+    width: 20vw;
+    height: 4.3vw;
 
     background: #313056;
     box-shadow: 1px 1px 15px rgba(255, 255, 255, 0.649);
@@ -299,8 +362,8 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
-    font-size: 20px;
-    line-height: 28px;
+    font-size: 1.5vw;
+    line-height: 1.8vw;
 
     color: #FFFFFF;
 
@@ -317,8 +380,8 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 28px;
+    font-size: 1.5vw;
+    line-height: 1.8vw;
 
     color: #211e80;
 }
@@ -342,37 +405,37 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 2vw;
 }
 
 #linha_esquerda {
-    width: 150px;
+    width: 15vw;
     height: 0px;
 
-    border: 2px solid #000000;
+    border: 1px solid #000000;
     transform: rotate(180deg);
 }
 
 #linha_direita {
-    width: 150px;
+    width: 15vw;
     height: 0px;
 
-    border: 2px solid #000000;
+    border: 1px solid #000000;
     transform: rotate(180deg);
 
 }
 
 #icon_google {
-    width: 25px;
-    height: 25px;
+    width: 2.5vw;
+    height: 2.5vw;
 }
 
 #logo_google {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 45px;
-    height: 45px;
+    width: 4vw;
+    height: 4vw;
 
     background: rgba(255, 255, 255, 0.34);
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
@@ -446,11 +509,11 @@
         line-height: 20px;
     }
 
-    #botao_lembrar_senha label {
+    #realiza_login #botao_lembrar_senha label {
         font-size: 15px;
     }
 
-    #botao_lembrar_senha input {
+    #realiza_login #botao_lembrar_senha input {
         width: 15px;
         height: 15px;
         margin-bottom: 3px;
@@ -535,6 +598,10 @@
 
 @media (max-width: 840px) {
 
+    .circulos#login * {
+        animation: float 6s ease-in-out infinite;
+    }
+
     #realiza_login_msg {
         padding-top: 50px;
         padding-bottom: 15px;
@@ -551,7 +618,7 @@
     }
 
     #esqueceu_senha,
-    #botao_lembrar_senha label {
+    #realiza_login #botao_lembrar_senha label {
         font-size: 13.5px;
         margin: 5px;
     }
@@ -622,15 +689,15 @@
     }
 
     #esqueceu_senha,
-    #botao_lembrar_senha label {
+    #realiza_login #botao_lembrar_senha label {
         font-size: 10px;
     }
 
-    #botao_lembrar_senha {
+    #realiza_login #botao_lembrar_senha {
         gap: 0px;
     }
 
-    #botao_lembrar_senha input {
+    #realiza_login #botao_lembrar_senha input {
         width: 12px;
         margin: 0px;
         margin-bottom: 3px;

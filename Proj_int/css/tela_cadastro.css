@@ -208,7 +208,7 @@
     display: none;
 }
 
-#botao_lembrar_senha {
+#realiza_cadastro #botao_lembrar_senha {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -218,14 +218,14 @@
 
 }
 
-#botao_lembrar_senha input {
+#realiza_cadastro #botao_lembrar_senha input {
     width: 20px;
     height: 20px;
     margin-bottom: 2px;
 
 }
 
-#botao_lembrar_senha label {
+#realiza_cadastro #botao_lembrar_senha label {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
@@ -506,17 +506,17 @@
         line-height: 25px;
     }
 
-    #botao_lembrar_senha label {
+    #realiza_cadastro #botao_lembrar_senha label {
         font-size: 15px;
     }
 
-    #botao_lembrar_senha input {
+    #realiza_cadastro #botao_lembrar_senha input {
         width: 15px;
         height: 15px;
         margin-bottom: 3px;
     }
 
-    #botao_lembrar_senha {
+    #realiza_cadastro #botao_lembrar_senha {
         padding-right: 180px;
     }
 
@@ -653,7 +653,7 @@
         width: 100%;
     }
 
-    #botao_lembrar_senha label {
+    #realiza_cadastro #botao_lembrar_senha label {
         font-size: 13.5px;
         margin: 5px;
     }
@@ -743,15 +743,15 @@
         gap: 3vw;
     }
 
-    #botao_lembrar_senha label {
+    #realiza_cadastro #botao_lembrar_senha label {
         font-size: 3.5vw
     }
 
-    #botao_lembrar_senha {
+    #realiza_cadastro #botao_lembrar_senha {
         gap: 0px;
     }
 
-    #botao_lembrar_senha input {
+    #realiza_cadastro #botao_lembrar_senha input {
         width: 4vw;
         margin: 0px;
         margin-bottom: 3px;
@@ -794,7 +794,7 @@
         gap: 5px;
     }
 
-    #botao_lembrar_senha {
+    #realiza_cadastro #botao_lembrar_senha {
         padding-right: 28vw
     }
 
