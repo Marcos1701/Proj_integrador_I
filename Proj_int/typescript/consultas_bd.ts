@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import { client } from './conf_bd_pg.js'
 import { v4 as uuid } from 'uuid'
-import { Interface } from 'readline'
 
 const validastring = (id: string) => {
     if (id === '' || id === undefined || id === null) {

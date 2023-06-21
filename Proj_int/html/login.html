@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/background.css">
     <link rel="stylesheet" href="../css/tela_cadastro.css">
     <link rel="stylesheet" href="../css/tela_login.css">
+    <script src="../javascript/login.js"></script>
     <title>Realizar Login</title>
 
 
@@ -43,6 +44,7 @@
                 <p id="realiza_login_msg">Realizar Login</p>
                 <div class="entradas">
                     <div id="inputs">
+                        <div id="msg_erro_login"></div>
                         <div id="email">
                             <img src="../imagens/Icones/icons-to-email.png" alt="icone_cadeado">
                             <input type="email" id="email_login" placeholder="E-MAIL">
@@ -88,7 +90,7 @@
         </div>
         </div>
 
-        <div class="conteiner_dados" id="desabilitado">
+        <div class="conteiner_dados" id="desabilitado" hidden>
             <div id="realizar_login">
                 <p id="msg_login">
                     Já possui uma conta?
@@ -97,7 +99,7 @@
                     Realize seu login e tenha acesso a todas as funcionalidades do Planr.
                 </p>
                 <div id="linha_realizar_login"></div>
-                <button id="realizar_login_bnt" onclick="window.location.href = './tela_login.html'">REALIZAR
+                <button id="realizar_login_bnt">REALIZAR
                     LOGIN</button>
             </div>
             <div id="realiza_cadastro">
@@ -106,19 +108,19 @@
                     <div id="inputs">
                         <div id="usuario">
                             <div id="nome">
-                                <input type="text" id="nome_de_usuario_login" placeholder="NOME">
+                                <input type="text" id="nome_de_usuario" placeholder="NOME">
                             </div>
                             <div id="sobrenome">
-                                <input type="text" id="nome_de_usuario_login" placeholder="SOBRENOME">
+                                <input type="text" id="nome_de_usuario" placeholder="SOBRENOME">
                             </div>
                         </div>
                         <div id="email">
                             <img src="../imagens/Icones/icons-to-email.png" alt="icone_cadeado">
-                            <input type="email" id="email_login" placeholder="E-MAIL">
+                            <input type="email" id="email_cadastro" placeholder="E-MAIL">
                         </div>
                         <div id="senha">
                             <img src="../imagens/Icones/icons-to-password.png" alt="icone_cadeado">
-                            <input type="password" id="senha_login" placeholder="SENHA">
+                            <input type="password" id="senha_cadastro" placeholder="SENHA">
                         </div>
                     </div>
                 </div>
