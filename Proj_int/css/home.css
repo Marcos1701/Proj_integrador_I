@@ -1,4 +1,4 @@
-#conteiner_dados {
+.conteiner_dados#habilitado {
     height: calc(100vh - 80px);
     width: calc(100vw - 80px);
     flex-direction: column;
@@ -8,7 +8,7 @@
 header {
     display: flex;
     flex-direction: row;
-    gap: 25vw;
+    gap: 22vw;
 }
 
 #nova_tarefa_bnt {
@@ -20,15 +20,22 @@ header {
     gap: 1.7vw;
     padding: 1vw;
 
-    background: linear-gradient(90deg, rgba(89, 242, 75, 0.95) 0%, rgba(129, 62, 215, 0.798) 52.6%, rgba(46, 198, 232, 0.95) 100%);
-    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    background-image: linear-gradient(180deg, #7fff07 0%, #00ff00 50%, #32cd32 100%);
+    box-shadow: -10px 5px 10px rgba(0, 0, 0, 0.521);
+    border: 1px solid #313056;
     border-radius: 69px;
     font-size: 1.5vw;
     font-weight: 550;
+    color: #313056;
 }
 
 #botoes_tarefa {
     display: none;
+}
+
+#botoes_tarefa img {
+    width: 1.5vw;
+    height: 1.5vw;
 }
 
 #nova_tarefa_bnt img {
@@ -38,6 +45,7 @@ header {
 
 #nova_tarefa_bnt:hover {
     cursor: pointer;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.354);
 }
 
 #barra_pesquisa_e_conf_usuario {
@@ -45,10 +53,10 @@ header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 2.3vw;
+    gap: 2vw;
 }
 
-#op_usuario {
+#menu_usuario_bnt {
     display: flex;
     background: none;
     padding: 0px;
@@ -61,13 +69,39 @@ header {
     height: 3.69vw;
 }
 
+#opcoes_usuario {
+    position: absolute;
+    top: 19vh;
+    right: 7vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1vw;
+    width: 10vw;
+    height: 10vw;
+    padding: 1vw;
+    background: #4c484dd5;
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #000000;
+    border-radius: 10px;
+
+    #opcoes_usuario * {
+        background: none;
+        border: none;
+        font-size: 1.5vw;
+        font-weight: 550;
+        color: #313056;
+    }
+}
+
 #search {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     width: 18.5vw;
-    height: 3.69vw;
+    height: 3.6vw;
 
     background: #F2AB7C;
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
@@ -79,9 +113,9 @@ header {
     border-radius: 60px 0px 0px 60px;
     border: none;
     outline: none;
-    padding: 1vh;
-    width: 11vw;
-    height: 1.3vw;
+    padding: .65vw;
+    width: 10.5vw;
+    height: 1vw;
 }
 
 #search_bnt {
@@ -106,7 +140,7 @@ header {
     width: 28vw;
     height: 0px;
 
-    border: 2px solid #313056;
+    border: 1px solid #313056;
     transform: rotate(180deg)
 }
 
@@ -115,7 +149,13 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 2.5vw;
+    gap: 2vw;
+}
+
+#Todo_list_msg h1 {
+    font-size: 2vw;
+    font-weight: 550;
+    color: #313056;
 }
 
 #tarefas-conteiner {
@@ -124,17 +164,46 @@ header {
     gap: 2vw;
 }
 
-.tarefa{
+.tarefa {
     display: flex;
     align-items: flex-start;
+    flex-direction: row;
     margin-left: 4rem;
     gap: 1.5vw;
+    width: 56vw;
 }
 
-#concluir_tarefa_checkbox{
-    width: 1.3vw;
-    height: 1.3vw;
+.tarefa:hover {
+    cursor: pointer;
 
+    #botoes_tarefa {
+        display: flex;
+        flex-direction: column;
+        gap: .3vw;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #botoes_tarefa * {
+        background: transparent;
+    }
+
+    #botoes_tarefa img {
+        background: #c43df62d;
+        border-radius: 30%;
+        padding: 0.6vw;
+        box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    }
+}
+
+#concluir_tarefa_checkbox {
+    width: 1.5vw;
+    height: 1.5vw;
+    margin-top: 3vh;
+}
+
+#concluir_tarefa_checkbox:hover {
+    cursor: pointer;
 }
 
 .tarefa-content {
@@ -142,10 +211,10 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    width: 36vw;
-    height: 5.2vw;
-    padding: 0 15px 10px;
+    gap: 10px;
+    width: 38vw;
+    height: 12.5vh;
+    padding: 0 10px 10px;
     background: #c43df62d;
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border-radius: 15px;
@@ -164,20 +233,23 @@ header {
 }
 
 #titulo_tarefa {
+    -webkit-line-clamp: 1;
     margin-top: 5px;
     font-size: 1.3vw;
     font-weight: bold;
-    width: 50%;
+    width: 90%;
     border: 1px solid #313056a1;
     border-radius: 10px;
-    padding: 4px;
+    padding: 4px 15px 4px 15px;
     text-align: center;
 }
 
 #descricao_tarefa {
-    font-size: .9vw;
+    display: block;
+    font-size: 1vw;
     font-weight: 600;
     width: 98%;
+    height: 1.6vw;
     border: 1px solid #3130564e;
     border-radius: 10px;
     padding: 1px 5px 10px 5px;
@@ -186,33 +258,24 @@ header {
 
 .tarefa-content:hover {
     cursor: pointer;
-
-    height: 6.5vw;
-
-    #botoes_tarefa {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-    }
+    background: #c53df679;
 }
 
 #navegacao_tarefas {
     position: absolute;
-    top: 83vh;
-    left: 75vw;
+    top: 80vh;
+    left: calc(80vw - 100px);
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 #navegacao_tarefas #paginas {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 a {
@@ -227,7 +290,7 @@ a {
 
     border: 1px solid black;
     border-radius: 50%;
-    padding: 5px 10px;
+    padding: 5px 8.5px;
     background-color: rgba(255, 255, 255, 0.484);
     text-align: center;
 }
@@ -242,14 +305,13 @@ a {
     border: 1px solid rgba(255, 255, 255, 0.97);
 }
 
+#navegacao_tarefas .selecionado:hover {
+    background-color: rgba(41, 42, 44, 0.696);
+}
+
 #navegacao_tarefas img {
     padding: 0;
     margin: 0;
-}
-
-#navegacao_tarefas a:hover img {
-    width: 12px;
-    height: 12px;
 }
 
 #navegacao_tarefas :is(#anterior_bnt,
@@ -259,4 +321,225 @@ a {
     align-items: center;
     width: 6px;
     height: 12px;
+}
+
+
+@media(max-width: 1024px) {
+    #navegacao_tarefas {
+        top: 80vh;
+        left: 70vw;
+    }
+
+    #navegacao_tarefas #paginas {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #navegacao_tarefas a {
+        margin: 0;
+        font-size: 10px;
+        font-weight: bold;
+
+        border: 1px solid black;
+        border-radius: 50%;
+        padding: 5px 8.5px;
+        background-color: rgba(255, 255, 255, 0.484);
+        text-align: center;
+    }
+
+    #navegacao_tarefas a:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    #navegacao_tarefas .selecionado {
+        background-color: rgba(41, 42, 44, 0.696);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.97);
+    }
+
+    #navegacao_tarefas .selecionado:hover {
+        background-color: rgba(41, 42, 44, 0.696);
+    }
+
+    #navegacao_tarefas img {
+        padding: 0;
+        margin: 0;
+    }
+
+    #navegacao_tarefas :is(#anterior_bnt,
+        #proximo_bnt) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 6px;
+        height: 12px;
+    }
+
+}
+
+@media(max-width: 768px) {
+    #navegacao_tarefas {
+        top: 80vh;
+        left: 70vw;
+    }
+
+    #navegacao_tarefas #paginas {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #navegacao_tarefas a {
+        margin: 0;
+        font-size: 10px;
+        font-weight: bold;
+
+        border: 1px solid black;
+        border-radius: 50%;
+        padding: 5px 8.5px;
+        background-color: rgba(255, 255, 255, 0.484);
+        text-align: center;
+    }
+
+    #navegacao_tarefas a:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    #navegacao_tarefas .selecionado {
+        background-color: rgba(41, 42, 44, 0.696);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.97);
+    }
+
+    #navegacao_tarefas .selecionado:hover {
+        background-color: rgba(41, 42, 44, 0.696);
+    }
+
+    #navegacao_tarefas img {
+        padding: 0;
+        margin: 0;
+    }
+
+    #navegacao_tarefas :is(#anterior_bnt,
+        #proximo_bnt) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 6px;
+        height: 12px;
+    }
+
+}
+
+@media(max-width: 425px) {
+    #navegacao_tarefas {
+        top: 80vh;
+        left: 70vw;
+    }
+
+    #navegacao_tarefas #paginas {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #navegacao_tarefas a {
+        margin: 0;
+        font-size: 10px;
+        font-weight: bold;
+
+        border: 1px solid black;
+        border-radius: 50%;
+        padding: 5px 8.5px;
+        background-color: rgba(255, 255, 255, 0.484);
+        text-align: center;
+    }
+
+    #navegacao_tarefas a:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    #navegacao_tarefas .selecionado {
+        background-color: rgba(41, 42, 44, 0.696);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.97);
+    }
+
+    #navegacao_tarefas .selecionado:hover {
+        background-color: rgba(41, 42, 44, 0.696);
+    }
+
+    #navegacao_tarefas img {
+        padding: 0;
+        margin: 0;
+    }
+
+    #navegacao_tarefas :is(#anterior_bnt,
+        #proximo_bnt) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 6px;
+        height: 12px;
+    }
+
+}
+
+@media(max-width: 375px) {
+    #navegacao_tarefas {
+        top: 80vh;
+        left: 70vw;
+    }
+
+    #navegacao_tarefas #paginas {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #navegacao_tarefas a {
+        margin: 0;
+        font-size: 10px;
+        font-weight: bold;
+
+        border: 1px solid black;
+        border-radius: 50%;
+        padding: 5px 8.5px;
+        background-color: rgba(255, 255, 255, 0.484);
+        text-align: center;
+    }
+
+    #navegacao_tarefas a:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    #navegacao_tarefas .selecionado {
+        background-color: rgba(41, 42, 44, 0.696);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.97);
+    }
+
+    #navegacao_tarefas .selecionado:hover {
+        background-color: rgba(41, 42, 44, 0.696);
+    }
+
+    #navegacao_tarefas img {
+        padding: 0;
+        margin: 0;
+    }
+
+    #navegacao_tarefas :is(#anterior_bnt,
+        #proximo_bnt) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 6px;
+        height: 12px;
+    }
+
 }
