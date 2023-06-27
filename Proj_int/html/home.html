@@ -33,7 +33,7 @@
 
                 <div id="conf_usuario">
                     <div id="search" title="Pesquisar por título da tarefa">
-                        <input type="text" name="search" id="search_input" placeholder="Pesquisar">
+                        <input type="search" name="search" id="search_input" placeholder="Pesquisar">
                         <a href="#" id="search_bnt">
                             <img src="../imagens/Icones/search.svg" alt="simbolo de lupa" id="lupa">
                         </a>
@@ -43,20 +43,58 @@
                             <img src="../imagens/Avatar/Avatar.svg" alt="simbolo de usuário" id="avatar">
                         </button>
 
-                        <div id="triangle_op_usuario"></div>
-                        <ul id="opcoes_usuario">
-                            <li><a href="#" id="perfil_bnt"><img src="../imagens/Icones/profile2.svg"
-                                        alt="imagem de perfil">Perfil</a></li>
-                            <li><a href="#" id="config_bnt"><img src="../imagens/Icones/conf_3.svg"
-                                        alt="imagem de engrenagem">Configurações</a></li>
-                            <li><a href="#" id="sair_bnt"><img src="../imagens/Icones/logout.svg"
-                                        alt="icone de logout">Sair</a></li>
-                        </ul>
+                        <div id="menu" hidden>
+                            <div id="triangle_op_usuario"></div>
+                            <ul id="opcoes_usuario">
+                                <li><a href="#" id="perfil_bnt"><img src="../imagens/Icones/profile2.svg"
+                                            alt="imagem de perfil">Perfil</a></li>
+                                <li><a href="#" id="config_bnt"><img src="../imagens/Icones/conf_3.svg"
+                                            alt="imagem de engrenagem">Configurações</a></li>
+                                <li><a href="#" id="sair_bnt"><img src="../imagens/Icones/logout.svg"
+                                            alt="icone de logout">Sair</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </header>
 
             <main>
+                <div class="background-blur" id="add_tarefa" hidden>
+                    <div id="adicionar_tarefa">
+                        <h3>ADICIONAR TAREFA</h3>
+
+                        <form action="" id="form_tarefa">
+                            <div id="titulo-tarefa">
+                                <label for="titulo_tarefa_input">Título</label>
+                                <input type="text" name="titulo_tarefa_input" id="titulo_tarefa_input"
+                                    placeholder="Digite o título da tarefa">
+                            </div>
+
+                            <div id="descricao-tarefa">
+                                <label for="descricao_tarefa_input">Descrição</label>
+                                <textarea name="descricao_tarefa_input" id="descricao_tarefa_input" cols="30" rows="4"
+                                    placeholder="Digite a descrição da tarefa"></textarea>
+                            </div>
+
+                            <div class="switch">
+                                <label for="switch">Adicionar data? </label>
+                                <input type="checkbox" id="switch" />
+                                <label for="switch" id="toogle">Toggle</label>
+                            </div>
+
+                            <div id="data-tarefa" hidden>
+                                <label for="data_tarefa_input">Data</label>
+                                <input type="date" name="data_tarefa_input" id="data_tarefa_input">
+                            </div>
+
+
+                            <div id="botoes-tarefa">
+                                <button id="cancelar_tarefa_bnt">Cancelar</button>
+                                <button id="salvar_tarefa_bnt">Salvar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <div id="Todo_list_msg">
                     <div id="linha_esq"></div>
                     <h1>TO-DO LIST</h1>

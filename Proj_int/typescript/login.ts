@@ -118,21 +118,29 @@ window.onload = function () {
         return;
     }
 
-    if (bnt_lembrar_senha_login.checked) {
-        const email: HTMLInputElement = document.getElementById("email_login") as HTMLInputElement;
-        const senha: HTMLInputElement = document.getElementById("senha_login") as HTMLInputElement;
-        const email_login: string = localStorage.getItem("email") as string;
-        const senha_login: string = localStorage.getItem("senha") as string;
-        if (!email || !senha || !email_login || !senha_login) return;
-        email.value = email_login;
-        senha.value = senha_login;
-    }
+    // if (bnt_lembrar_senha_login.checked) {
+    //     const email: HTMLInputElement = document.getElementById("email_login") as HTMLInputElement;
+    //     const senha: HTMLInputElement = document.getElementById("senha_login") as HTMLInputElement;
+    //     const email_login: string = localStorage.getItem("email") as string;
+    //     const senha_login: string = localStorage.getItem("senha") as string;
+    //     if (!email || !senha || !email_login || !senha_login) {
+    //         console.log("Elemento não encontrado");
+    //         return;
+    //     }
+    //     email.value = email_login;
+    //     senha.value = senha_login;
+    // }
 
     bntLogin.addEventListener("click", function () {
+        window.location.href = "./home.html";
+        return;
         const email: HTMLInputElement = document.getElementById("email_login") as HTMLInputElement;
         const senha: HTMLInputElement = document.getElementById("senha_login") as HTMLInputElement;
 
-        if (!email || !senha) return;
+        if (!email || !senha) {
+            console.log("Elemento não encontrado");
+            return;
+        }
 
         if (email.value == "" || senha.value == "") {
             email.value === "" ? email.classList.add("error") : email.classList.remove("error");
@@ -142,6 +150,11 @@ window.onload = function () {
             senha.classList.remove("error");
             RealizarLogin(email.value, senha.value);
         }
+    })
+
+    realiza_cadastro.addEventListener("click", function () {
+        window.location.href = "./home.html";
+        return;
     })
 
     login_via_google.addEventListener("click", function () {

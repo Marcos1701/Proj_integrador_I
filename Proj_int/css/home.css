@@ -27,6 +27,192 @@ header {
     color: #313056;
 }
 
+.background-blur {
+    position: absolute;
+    z-index: 1;
+    top: -6vh;
+    left: -20vw;
+    width: calc(170vw + 20vh);
+    height: calc(100vh + 20vw);
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#adicionar_tarefa {
+    position: absolute;
+    z-index: 1;
+    top: 10vh;
+    left: 45vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.8vw;
+    background: #e4e4e4d7;
+    border-radius: 10px;
+    width: 40vw;
+    height: 50vh;
+    margin: 0 auto;
+    margin-top: 10vh;
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #000000;
+}
+
+#adicionar_tarefa h3 {
+    font-size: calc(1.5vw + 1vh);
+    font-weight: 550;
+    color: #313056;
+}
+
+#adicionar_tarefa #titulo_tarefa_input {
+    width: 15vw;
+    padding: 1vh;
+    padding-left: 1.5vh;
+    margin-left: 2.5vw;
+    border: 1px solid #313056;
+    border-radius: 15px;
+    font-size: 2vh;
+    background: none;
+    color: #313056;
+}
+
+#adicionar_tarefa #titulo_tarefa_input::placeholder {
+    font-size: 1.8vh;
+    color: #313056;
+}
+
+#adicionar_tarefa #titulo_tarefa_input:focus {
+    outline: none;
+}
+
+#adicionar_tarefa #descricao-tarefa {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    padding: 0;
+}
+
+#adicionar_tarefa #descricao_tarefa_input {
+    width: 15vw;
+    padding: 1vh;
+    border: 1px solid #313056;
+    border-radius: 10px;
+    font-size: 2vh;
+    background: none;
+    color: #313056;
+}
+
+#adicionar_tarefa #descricao_tarefa_input::placeholder {
+    color: #313056;
+}
+
+#adicionar_tarefa #descricao_tarefa_input:focus {
+    outline: none;
+}
+
+.switch {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.switch input[type=checkbox] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+.switch label#toogle {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 35px;
+    height: 20px;
+    background: #f1f1f1;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+}
+
+.switch label#toogle:after {
+
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 12px;
+    height: 12px;
+    background: #5e5959;
+    border-radius: 90px;
+    transition: 0.3s;
+
+}
+
+.switch input:checked+label#toogle {
+    background: #00c3ff;
+}
+
+.switch input:checked+label#toogle:after {
+    background: #ffffff;
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+}
+
+.switch label#toogle:active:after {
+    width: 15px;
+}
+
+#adicionar_tarefa #data_tarefa_input {
+    /*input do tipo date*/
+
+    width: 12vw;
+    padding: .5vh;
+    margin-left: 2vw;
+    border: 1px solid #313056;
+    border-radius: 10px;
+    font-size: 2vh;
+    background: none;
+    color: #313056;
+    text-align: center;
+}
+
+#adicionar_tarefa #data_tarefa_input:focus {
+    outline: none;
+}
+
+#adicionar_tarefa #form_tarefa {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+#adicionar_tarefa #form_tarefa #botoes-tarefa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw;
+    margin-top: 1vh;
+}
+
+#adicionar_tarefa #form_tarefa #botoes-tarefa button {
+    width: 10vw;
+    height: 4vh;
+    border: 1px solid #313056;
+    border-radius: 10px;
+    background: none;
+    color: #313056;
+    font-size: 1.6vh;
+    font-weight: 550;
+}
+
+#adicionar_tarefa #form_tarefa #botoes-tarefa button:hover {
+    cursor: pointer;
+    background: #313056;
+    color: #ffffff;
+}
+
+#adicionar_tarefa #form_tarefa #botoes-tarefa button:focus {
+    outline: none;
+}
+
 #botoes_tarefa {
     display: none;
 }
@@ -70,7 +256,7 @@ header {
     position: absolute;
     z-index: 1;
     top: calc(28.1.2vh - 5vw);
-    right: 9vw;
+    right: 10vw;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -84,6 +270,11 @@ header {
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border: 1px solid #000000;
     border-radius: 10px;
+}
+
+#menu {
+    padding: 0;
+    margin: 0;
 }
 
 #triangle_op_usuario {
@@ -147,6 +338,10 @@ header {
 
 #search_input::placeholder {
     color: #313056;
+}
+
+#search_input::-webkit-search-cancel-button {
+    cursor: pointer;
 }
 
 #search_input:focus {
@@ -364,6 +559,7 @@ a {
     header {
         gap: 18vw;
     }
+
 
     #tarefas-conteiner {
         display: flex;
@@ -601,4 +797,70 @@ a {
         height: 1.5vh;
     }
 
+}
+
+
+@media(max-width: 400px) {
+    .tarefa {
+        width: 60vw;
+        height: 10vh;
+    }
+
+    .tarefa-content {
+        width: 50vw;
+        height: 8vh;
+    }
+
+    header {
+        gap: 10vw;
+    }
+
+    #menu_usuario_bnt img {
+        width: 3vh;
+        height: 3vh;
+    }
+
+    #search {
+        width: 2vh;
+        height: 2.6vh;
+        padding-bottom: 0;
+    }
+
+    #lupa {
+        width: 2vh;
+        height: 2vh;
+    }
+
+    #opcoes_usuario {
+        right: calc(9.2vw - 1.5vh);
+        width: 8.8vh;
+        height: 10vh;
+    }
+
+    #opcoes_usuario a {
+        font-size: 1.2vh;
+    }
+
+    #nova_tarefa_bnt {
+        width: 30vw;
+        height: calc(2.5vw + 3vh);
+        font-size: 2.8vw;
+        padding-left: 2.5vw;
+    }
+
+    #titulo_tarefa {
+        font-size: 1.3vh;
+        height: 1.2vh;
+    }
+
+    #descricao_tarefa {
+        font-size: 1.1vh;
+        height: 1.2vh;
+    }
+
+    #navegacao_tarefas {
+        right: 0;
+        left: 5%;
+        top: 93%;
+    }
 }
