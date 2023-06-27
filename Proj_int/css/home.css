@@ -38,6 +38,94 @@ header {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+#informacoes_usuario {
+    position: absolute;
+    z-index: 1;
+    top: -3vh;
+    left: 45vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.8vw;
+    background: #e4e4e4d7;
+    border-radius: 10px;
+    width: 40vw;
+    height: 80vh;
+    margin: 0 auto;
+    margin-top: 10vh;
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #000000;
+
+}
+
+#perfil_usuario #img-perfil {
+    height: 15vh;
+    border: 3px solid #000000;
+    border-radius: 50%;
+}
+
+#perfil_usuario #img-perfil:hover {
+    cursor: pointer;
+}
+
+#perfil_usuario #dados_perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+    margin-top: 1vw;
+}
+
+#perfil_usuario #dados_perfil h3 {
+    font-size: calc(1.5vw + 1vh);
+    font-weight: 550;
+    color: #313056;
+}
+
+#perfil_usuario #dados_perfil h2 {
+    font-size: calc(1.5vw + .6vh);
+    font-weight: 500;
+    color: #313056;
+}
+
+#perfil_usuario #dados_perfil :is(#email-perfil, #senha-perfil) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1vw;
+    width: 100%;
+}
+
+#perfil_usuario #dados_perfil :is(#email, #senha) {
+    font-size: 2.3vh;
+    color: #080d43;
+}
+
+#perfil_usuario #dados_perfil #botoes-perfil {
+    display: flex;
+    gap: 5vw;
+    margin-top: 4vh;
+}
+
+:is(#perfil_usuario #dados_perfil #botoes-perfil,
+    #adicionar_tarefa #form_tarefa #botoes-tarefa) button {
+    width: 10vw;
+    height: 4vh;
+    border: 1px solid #313056;
+    border-radius: 10px;
+    background: none;
+    color: #313056;
+    font-size: 1.6vh;
+    font-weight: 550;
+}
+
+:is(#perfil_usuario #dados_perfil #botoes-perfil,
+    #adicionar_tarefa #form_tarefa #botoes-tarefa) button:hover {
+    cursor: pointer;
+    background: #313056;
+    color: #ffffff;
+}
+
 #adicionar_tarefa {
     position: absolute;
     z-index: 1;
@@ -190,27 +278,6 @@ header {
     justify-content: center;
     gap: 2vw;
     margin-top: 1vh;
-}
-
-#adicionar_tarefa #form_tarefa #botoes-tarefa button {
-    width: 10vw;
-    height: 4vh;
-    border: 1px solid #313056;
-    border-radius: 10px;
-    background: none;
-    color: #313056;
-    font-size: 1.6vh;
-    font-weight: 550;
-}
-
-#adicionar_tarefa #form_tarefa #botoes-tarefa button:hover {
-    cursor: pointer;
-    background: #313056;
-    color: #ffffff;
-}
-
-#adicionar_tarefa #form_tarefa #botoes-tarefa button:focus {
-    outline: none;
 }
 
 #botoes_tarefa {
