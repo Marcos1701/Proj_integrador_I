@@ -1,4 +1,16 @@
 
+function onSignIn(googleUser: any): void {
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Nome: ' + profile.getName());
+    console.log('Imagem URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+    const id_token = googleUser.getAuthResponse().id_token;
+    console.log("ID Token: " + id_token);
+
+}
+
 async function RealizarLogin(email: string, senha: string): Promise<void> {
     const url: string = "http://localhost:3000/login";
     const data: object = {
@@ -97,9 +109,32 @@ function Alterar_Tela(): void {
     })
 }
 
+function Cadastro_to_Login(): void {
+    const circulos: HTMLDivElement = document.querySelector(".circulos") as HTMLDivElement
+    const circle1: HTMLDivElement = circulos.querySelector("#circulo1") as HTMLDivElement;
+    const circle2: HTMLDivElement = circulos.querySelector("#circulo2") as HTMLDivElement;
+
+    circulos.insertBefore(circle2, circle1);
+    circulos.setAttribute("id", "login")
+    Alterar_Tela();
+}
+
+function Login_to_Cadastro(): void {
+    const circulos: HTMLDivElement = document.querySelector(".circulos") as HTMLDivElement
+    const circle1: HTMLDivElement = circulos.querySelector("#circulo1") as HTMLDivElement;
+    const circle2: HTMLDivElement = circulos.querySelector("#circulo2") as HTMLDivElement;
+
+    circulos.insertBefore(circle1, circle2);
+    circulos.setAttribute("id", "circulos-cadastro")
+    Alterar_Tela();
+}
+
+function realiza_login_google(response: any) {
+    console.log(response);
+}
+
 window.onload = function () {
     const bntLogin: HTMLButtonElement = document.getElementById("realiza_login_btn") as HTMLButtonElement;
-    const login_via_google: HTMLButtonElement = document.getElementById("logo_google") as HTMLButtonElement;
     const bnt_login_to_cadastro: HTMLButtonElement = document.getElementById("criar_conta_btn") as HTMLButtonElement;
     const bnt_login_to_cadastro2: HTMLButtonElement = document.getElementById("criar_conta_btn_to_840px") as HTMLButtonElement;
     const bnt_alterar_tela: HTMLButtonElement = document.getElementById("alterar_tela") as HTMLButtonElement;
@@ -113,23 +148,27 @@ window.onload = function () {
 
     if (!bntLogin || !bnt_login_to_cadastro || !bnt_login_to_cadastro2
         || !bnt_alterar_tela || !bnt_cadastro_to_login || !bnt_cadastro_to_login2
-        || !realiza_cadastro || !login_via_google || !bnt_lembrar_senha_login) {
+        || !realiza_cadastro || !bnt_lembrar_senha_login) {
         console.log("Elemento não encontrado");
         return;
     }
 
-    // if (bnt_lembrar_senha_login.checked) {
-    //     const email: HTMLInputElement = document.getElementById("email_login") as HTMLInputElement;
-    //     const senha: HTMLInputElement = document.getElementById("senha_login") as HTMLInputElement;
-    //     const email_login: string = localStorage.getItem("email") as string;
-    //     const senha_login: string = localStorage.getItem("senha") as string;
-    //     if (!email || !senha || !email_login || !senha_login) {
-    //         console.log("Elemento não encontrado");
-    //         return;
-    //     }
-    //     email.value = email_login;
-    //     senha.value = senha_login;
-    // }
+    if (bnt_lembrar_senha_login.checked) {
+        const email: HTMLInputElement = document.getElementById("email_login") as HTMLInputElement;
+        const senha: HTMLInputElement = document.getElementById("senha_login") as HTMLInputElement;
+        const email_login: string = localStorage.getItem("email") as string;
+        const senha_login: string = localStorage.getItem("senha") as string;
+        if (!email || !senha || !email_login || !senha_login) {
+            console.log("Elemento não encontrado");
+            return;
+        }
+        email.value = email_login;
+        senha.value = senha_login;
+    }
+
+    bnt_lembrar_senha_login.addEventListener("click", function () {
+        bnt_lembrar_senha_login.checked = bnt_lembrar_senha_login.checked ? false : true;
+    })
 
     bntLogin.addEventListener("click", function () {
         window.location.href = "./home.html";
@@ -157,10 +196,6 @@ window.onload = function () {
         return;
     })
 
-    login_via_google.addEventListener("click", function () {
-        window.location.href = "./auth/google";
-    })
-
     bnt_lembrar_senha_login.addEventListener("click", function () {
         bnt_lembrar_senha_login.checked = bnt_lembrar_senha_login.checked ? false : true;
     })
@@ -169,24 +204,10 @@ window.onload = function () {
         bnt_lembrar_senha_cadastro.checked = bnt_lembrar_senha_cadastro.checked ? false : true;
     })
     bnt_login_to_cadastro.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.id === "circulos-cadastro") {
-                element.removeAttribute("hidden");
-            } else {
-                element.setAttribute("hidden", "");
-            }
-        })
+        Login_to_Cadastro();
     });
     bnt_login_to_cadastro2.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.id === "circulos-cadastro") {
-                element.removeAttribute("hidden");
-            } else {
-                element.setAttribute("hidden", "");
-            }
-        })
+        Login_to_Cadastro();
     })
     bnt_alterar_tela.addEventListener("click", () => {
         Alterar_Tela();
@@ -202,30 +223,10 @@ window.onload = function () {
         })
     });
     bnt_cadastro_to_login.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.getAttribute("hidden") === null) {
-                element.setAttribute("hidden", "");
-            } else {
-                element.removeAttribute("hidden");
-                if (element.getAttribute("id") === null) {
-                    element.setAttribute("id", "circulos-login")
-                }
-            }
-        })
+        Cadastro_to_Login();
     });
     bnt_cadastro_to_login2.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.getAttribute("hidden") === null) {
-                element.setAttribute("hidden", "");
-            } else {
-                element.removeAttribute("hidden");
-                if (element.getAttribute("id") === null) {
-                    element.setAttribute("id", "circulos-login")
-                }
-            }
-        })
+        Cadastro_to_Login();
     });
 
 }

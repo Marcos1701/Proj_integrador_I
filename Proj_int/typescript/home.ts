@@ -47,5 +47,14 @@ window.onload = function () {
         }
     });
 
+    const log_out: HTMLAnchorElement = document.querySelector("#sair_bnt") as HTMLAnchorElement;
+    if (!log_out) {
+        console.log("Elemento não encontrado");
+        return;
+    }
+    log_out.addEventListener("click", function () {
+        window.location.href = "./login.html";
+    })
+
 
 }

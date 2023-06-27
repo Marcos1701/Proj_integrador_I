@@ -8,23 +8,18 @@
     <link rel="stylesheet" href="../css/background.css">
     <link rel="stylesheet" href="../css/tela_cadastro.css">
     <link rel="stylesheet" href="../css/tela_login.css">
+
     <title>Realizar Login</title>
 </head>
 
 <body>
+
     <main class="container">
         <div class="circulos">
             <div id="circulo4"></div>
             <div id="circulo3"></div>
             <div id="circulo2"></div>
             <div id="circulo1"></div>
-        </div>
-
-        <div class="circulos" id="circulos-cadastro" hidden>
-            <div id="circulo4"></div>
-            <div id="circulo3"></div>
-            <div id="circulo1"></div>
-            <div id="circulo2"></div>
         </div>
 
         <div class="conteiner_dados" id="habilitado">
@@ -56,7 +51,7 @@
                 <div id="botoes">
                     <div class="referentes_a_senha">
                         <div id="botao_lembrar_senha">
-                            <input type="radio" id="lembrar_senha">
+                            <input type="checkbox" id="lembrar_senha">
                             <label for="lembrar_senha">Lembrar Senha</label>
                         </div>
                         <p id="esqueceu_senha">Esqueceu a senha?</p>
@@ -73,9 +68,15 @@
                         <p id="ou">ou acesse via</p>
                         <div id="linha_direita"></div>
                     </div>
-                    <button id="logo_google">
-                        <img src="../imagens/Icones/logo_google.png" alt="icone_google" id="icon_google">
-                    </button>
+                    <div id="g_id_onload"
+                        data-client_id="1096638047922-hdf7su8vfljv893ndpg0cdgqnre3o5se.apps.googleusercontent.com"
+                        data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
+                        data-auto_prompt="false">
+                    </div>
+
+                    <div class="g_id_signin" data-type="icon" data-shape="circle" data-theme="outline"
+                        data-text="signin" data-size="large">
+                    </div>
 
                 </div>
 
@@ -139,9 +140,15 @@
                         <p id="ou">ou acesse via</p>
                         <div id="linha_direita"></div>
                     </div>
-                    <button id="logo_google">
-                        <img src="../imagens/Icones/logo_google.png" alt="icone_google" id="icon_google">
-                    </button>
+                    <div id="g_id_onload"
+                        data-client_id="1096638047922-hdf7su8vfljv893ndpg0cdgqnre3o5se.apps.googleusercontent.com"
+                        data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
+                        data-auto_prompt="false">
+                    </div>
+
+                    <div class="g_id_signin" data-type="icon" data-shape="circle" data-theme="outline"
+                        data-text="signin" data-size="large">
+                    </div>
 
                 </div>
 
@@ -153,7 +160,14 @@
         </div><!-- Fim do conteiner-cadastro -->
     </main>
 
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="../javascript/login.js"></script>
+    <script>
+        function handleCredentialResponse(response) {
+            console.log("chegou aqui")
+            console.log("Encoded JWT ID token: " + response.credential);
+        };
+    </script>
 </body>
 
 </html>

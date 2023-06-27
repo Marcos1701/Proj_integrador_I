@@ -44,4 +44,12 @@ window.onload = function () {
             menu.setAttribute("hidden", "");
         }
     });
+    const log_out = document.querySelector("#sair_bnt");
+    if (!log_out) {
+        console.log("Elemento não encontrado");
+        return;
+    }
+    log_out.addEventListener("click", function () {
+        window.location.href = "./login.html";
+    });
 };

@@ -8,6 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Nome: ' + profile.getName());
+    console.log('Imagem URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    const id_token = googleUser.getAuthResponse().id_token;
+    console.log("ID Token: " + id_token);
+}
 function RealizarLogin(email, senha) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = "http://localhost:3000/login";
@@ -107,9 +116,27 @@ function Alterar_Tela() {
         }
     });
 }
+function Cadastro_to_Login() {
+    const circulos = document.querySelector(".circulos");
+    const circle1 = circulos.querySelector("#circulo1");
+    const circle2 = circulos.querySelector("#circulo2");
+    circulos.insertBefore(circle2, circle1);
+    circulos.setAttribute("id", "login");
+    Alterar_Tela();
+}
+function Login_to_Cadastro() {
+    const circulos = document.querySelector(".circulos");
+    const circle1 = circulos.querySelector("#circulo1");
+    const circle2 = circulos.querySelector("#circulo2");
+    circulos.insertBefore(circle1, circle2);
+    circulos.setAttribute("id", "circulos-cadastro");
+    Alterar_Tela();
+}
+function realiza_login_google(response) {
+    console.log(response);
+}
 window.onload = function () {
     const bntLogin = document.getElementById("realiza_login_btn");
-    const login_via_google = document.getElementById("logo_google");
     const bnt_login_to_cadastro = document.getElementById("criar_conta_btn");
     const bnt_login_to_cadastro2 = document.getElementById("criar_conta_btn_to_840px");
     const bnt_alterar_tela = document.getElementById("alterar_tela");
@@ -120,22 +147,25 @@ window.onload = function () {
     const realiza_cadastro = document.getElementById("realiza_cadastro_btn");
     if (!bntLogin || !bnt_login_to_cadastro || !bnt_login_to_cadastro2
         || !bnt_alterar_tela || !bnt_cadastro_to_login || !bnt_cadastro_to_login2
-        || !realiza_cadastro || !login_via_google || !bnt_lembrar_senha_login) {
+        || !realiza_cadastro || !bnt_lembrar_senha_login) {
         console.log("Elemento não encontrado");
         return;
     }
-    // if (bnt_lembrar_senha_login.checked) {
-    //     const email: HTMLInputElement = document.getElementById("email_login") as HTMLInputElement;
-    //     const senha: HTMLInputElement = document.getElementById("senha_login") as HTMLInputElement;
-    //     const email_login: string = localStorage.getItem("email") as string;
-    //     const senha_login: string = localStorage.getItem("senha") as string;
-    //     if (!email || !senha || !email_login || !senha_login) {
-    //         console.log("Elemento não encontrado");
-    //         return;
-    //     }
-    //     email.value = email_login;
-    //     senha.value = senha_login;
-    // }
+    if (bnt_lembrar_senha_login.checked) {
+        const email = document.getElementById("email_login");
+        const senha = document.getElementById("senha_login");
+        const email_login = localStorage.getItem("email");
+        const senha_login = localStorage.getItem("senha");
+        if (!email || !senha || !email_login || !senha_login) {
+            console.log("Elemento não encontrado");
+            return;
+        }
+        email.value = email_login;
+        senha.value = senha_login;
+    }
+    bnt_lembrar_senha_login.addEventListener("click", function () {
+        bnt_lembrar_senha_login.checked = bnt_lembrar_senha_login.checked ? false : true;
+    });
     bntLogin.addEventListener("click", function () {
         window.location.href = "./home.html";
         return;
@@ -159,9 +189,6 @@ window.onload = function () {
         window.location.href = "./home.html";
         return;
     });
-    login_via_google.addEventListener("click", function () {
-        window.location.href = "./auth/google";
-    });
     bnt_lembrar_senha_login.addEventListener("click", function () {
         bnt_lembrar_senha_login.checked = bnt_lembrar_senha_login.checked ? false : true;
     });
@@ -169,26 +196,10 @@ window.onload = function () {
         bnt_lembrar_senha_cadastro.checked = bnt_lembrar_senha_cadastro.checked ? false : true;
     });
     bnt_login_to_cadastro.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.id === "circulos-cadastro") {
-                element.removeAttribute("hidden");
-            }
-            else {
-                element.setAttribute("hidden", "");
-            }
-        });
+        Login_to_Cadastro();
     });
     bnt_login_to_cadastro2.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.id === "circulos-cadastro") {
-                element.removeAttribute("hidden");
-            }
-            else {
-                element.setAttribute("hidden", "");
-            }
-        });
+        Login_to_Cadastro();
     });
     bnt_alterar_tela.addEventListener("click", () => {
         Alterar_Tela();
@@ -205,31 +216,9 @@ window.onload = function () {
         });
     });
     bnt_cadastro_to_login.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.getAttribute("hidden") === null) {
-                element.setAttribute("hidden", "");
-            }
-            else {
-                element.removeAttribute("hidden");
-                if (element.getAttribute("id") === null) {
-                    element.setAttribute("id", "circulos-login");
-                }
-            }
-        });
+        Cadastro_to_Login();
     });
     bnt_cadastro_to_login2.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.getAttribute("hidden") === null) {
-                element.setAttribute("hidden", "");
-            }
-            else {
-                element.removeAttribute("hidden");
-                if (element.getAttribute("id") === null) {
-                    element.setAttribute("id", "circulos-login");
-                }
-            }
-        });
+        Cadastro_to_Login();
     });
 };
