@@ -5,12 +5,30 @@ window.onload = function () {
     const bnt_cancelar_tarefa: HTMLButtonElement = document.querySelector("#cancelar_tarefa_bnt") as HTMLButtonElement;
     const add_date: HTMLInputElement = document.querySelector("#add_tarefa #switch") as HTMLInputElement;
     const menu_usuario: HTMLButtonElement = document.querySelector("#menu_usuario_bnt") as HTMLButtonElement;
-
-    if (!bnt_new_tarefa || !bnt_add_tarefa || !bnt_cancelar_tarefa
-        || !add_date || !menu_usuario) {
+    const bnt_visualizar_perfil: HTMLAnchorElement = document.querySelector("#perfil_bnt") as HTMLAnchorElement;
+    const cancelar_alteracoes_usuario: HTMLButtonElement = document.getElementById("cancelar_perfil_bnt") as HTMLButtonElement;
+    const salvar_alteracoes_usuario: HTMLButtonElement = document.getElementById("salvar_perfil_bnt") as HTMLButtonElement;
+    if (!cancelar_alteracoes_usuario || !salvar_alteracoes_usuario) {
         console.log("Elemento não encontrado");
         return;
     }
+    cancelar_alteracoes_usuario.addEventListener("click", function () {
+        document.querySelector("#perfil_usuario")?.setAttribute("hidden", "");
+    });
+    salvar_alteracoes_usuario.addEventListener("click", function () {
+        document.querySelector("#perfil_usuario")?.setAttribute("hidden", "");
+    });
+
+
+    if (!bnt_new_tarefa || !bnt_add_tarefa || !bnt_cancelar_tarefa
+        || !add_date || !menu_usuario || !bnt_visualizar_perfil) {
+        console.log("Elemento não encontrado");
+        return;
+    }
+
+    bnt_visualizar_perfil.addEventListener("click", function () {
+        document.querySelector("#perfil_usuario")?.removeAttribute("hidden");
+    });
     bnt_new_tarefa.addEventListener("click", function () {
         document.querySelector("#add_tarefa")?.removeAttribute("hidden");
     });
