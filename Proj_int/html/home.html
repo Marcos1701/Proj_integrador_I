@@ -59,8 +59,13 @@
             </header>
 
             <main>
+                <div class="background-blur" id="loading" hidden>
+                    <div id="loader">
+
+                    </div>
+                </div>
                 <div class="background-blur" id="add_tarefa" hidden>
-                    <div id="adicionar_tarefa">
+                    <section id="adicionar_tarefa">
                         <h3>ADICIONAR TAREFA</h3>
 
                         <form action="" id="form_tarefa">
@@ -93,34 +98,35 @@
                                 <button id="salvar_tarefa_bnt">Salvar</button>
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
 
                 <div class="background-blur" id="perfil_usuario" hidden>
-                    <div id="informacoes_usuario">
+                    <section id="informacoes_usuario">
                         <div id="imagem_perfil">
                             <img src="../imagens/Avatar/Avatar.svg" alt="simbolo de usuário" id="img-perfil">
                         </div>
 
-                        <div id="dados_perfil">
+                        <section id="dados_perfil">
                             <h3>PERFIL</h3>
 
-                            <a href="#" id="alterar_nome">
-                                <h2>Olá, NOME_DE_USUARIO</h2>
-                            </a>
+                            <div id="nome-perfil">
+                                <label for="nome_usuario">Nome de usuario: </label>
+                                <a href="#" id="nome" title="clique aqui para alterar o nome de usuario">Zé da Manga</a>
+                                <input type="hidden" name="nome_usuario" id="nome_usuario">
+                            </div>
 
-                            <label for="nome_usuario" hidden>Nome de usuario </label>
-                            <input type="hidden" name="nome_usuario" id="nome_usuario">
                             <div id="email-perfil">
                                 <label for="email_perfil_input">E-mail: </label>
-                                <a href="#" id="email">zédamanga@aaaaaaa.com</a>
+                                <a href="#" id="email"
+                                    title="clique aqui para alterar o email">zédamanga@aaaaaaa.com</a>
                                 <input type="email" name="email_perfil_input" id="email_perfil_input"
                                     placeholder="Digite seu novo e-mail" hidden>
                             </div>
 
                             <div id="senha-perfil">
                                 <label for="senha_perfil_input">Senha: </label>
-                                <a href="#" id="senha">***********</a>
+                                <a href="#" id="senha" title="clique aqui para alterar a senha">***********</a>
                                 <input type="password" name="senha_perfil_input" id="senha_perfil_input"
                                     placeholder="Digite sua nova senha" hidden>
                             </div>
@@ -129,8 +135,8 @@
                                 <button id="salvar_perfil_bnt">Salvar</button>
                             </div>
 
-                        </div>
-                    </div>
+                        </section>
+                    </section>
                 </div>
                 <div id="Todo_list_msg">
                     <div id="linha_esq"></div>
@@ -138,7 +144,7 @@
                     <div id="linha_dir"></div>
                 </div>
 
-                <div id="tarefas-conteiner">
+                <section id="tarefas-conteiner">
                     <div class="tarefa">
                         <input type="checkbox" id="concluir_tarefa_checkbox" alt="simbolo de check">
                         <div class="tarefa-content">
@@ -194,25 +200,22 @@
                                     alt="simbolo de lixeira"></button>
                         </div>
                     </div>
-                </div>
-
-                <div id="navegacao_tarefas">
-                    <a href="#" id="anterior_bnt"><img src="../imagens/Icones/seta_nav_esquerda.svg"
-                            alt="seta para esquerda">
-                    </a>
-                    <div id="paginas">
-                        <a href="#" id="pagina_atual" class="selecionado">1</a>
-                        <a href="#" id="pagina_seguinte">2</a>
-                        <a href="#" id="separador">...</a>
-                        <a href="#" id="total_paginas">3</a>
-                    </div>
-                    <a href="#" id="proximo_bnt"><img src="../imagens/Icones/seta_nav_direita.svg"
-                            alt="seta para direita">
-                    </a>
-
-                </div>
-
+                </section>
             </main>
+            <footer id="navegacao_tarefas">
+                <a href="#" id="anterior_bnt"><img src="../imagens/Icones/seta_nav_esquerda.svg"
+                        alt="seta para esquerda">
+                </a>
+                <div id="paginas">
+                    <a href="#" id="pagina_atual" class="selecionado">1</a>
+                    <a href="#" id="pagina_seguinte">2</a>
+                    <a href="#" id="separador">...</a>
+                    <a href="#" id="total_paginas">3</a>
+                </div>
+                <a href="#" id="proximo_bnt"><img src="../imagens/Icones/seta_nav_direita.svg" alt="seta para direita">
+                </a>
+
+            </footer>
         </div>
 
 

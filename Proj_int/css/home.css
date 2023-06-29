@@ -2,7 +2,8 @@
     height: calc(100vh - 80px);
     width: calc(100vw - 80px);
     flex-direction: column;
-    gap: 5vh
+    align-items: center;
+    justify-content: space-around;
 }
 
 header {
@@ -42,11 +43,12 @@ header {
     position: absolute;
     z-index: 1;
     top: -3vh;
-    left: 45vw;
+    left: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.8vw;
+    justify-content: center;
+    padding: 1.4vw;
     background: #e4e4e4d7;
     border-radius: 10px;
     width: 40vw;
@@ -55,11 +57,13 @@ header {
     margin-top: 10vh;
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border: 1px solid #000000;
+    gap: 3vh;
 
 }
 
 #perfil_usuario #img-perfil {
-    height: 15vh;
+    height: 15vw;
+    margin: 0;
     border: 3px solid #000000;
     border-radius: 50%;
 }
@@ -73,7 +77,6 @@ header {
     flex-direction: column;
     align-items: center;
     gap: 2vh;
-    margin-top: 1vw;
 }
 
 #perfil_usuario #dados_perfil h3 {
@@ -88,7 +91,7 @@ header {
     color: #313056;
 }
 
-#perfil_usuario #dados_perfil :is(#email-perfil, #senha-perfil) {
+#perfil_usuario #dados_perfil :is(#nome-perfil, #email-perfil, #senha-perfil) {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -96,9 +99,14 @@ header {
     width: 100%;
 }
 
-#perfil_usuario #dados_perfil :is(#email, #senha) {
+#perfil_usuario #dados_perfil :is(#nome, #email, #senha) {
     font-size: 2.3vh;
     color: #080d43;
+}
+
+#perfil_usuario #dados_perfil :is(#nome, #email, #senha):hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 #perfil_usuario #dados_perfil #botoes-perfil {
@@ -559,11 +567,13 @@ header {
 }
 
 #navegacao_tarefas {
-    position: absolute;
+    /* position: absolute;
     top: 80vh;
-    left: calc(80vw - 100px);
+    left: calc(80vw - 100px); */
+    width: 80%;
+    margin: 0;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     gap: 8px;
 }
@@ -764,6 +774,32 @@ a {
         width: 2.5vh;
         height: 2.5vh;
     }
+
+    #perfil_usuario #dados_perfil :is(#nome-perfil, #email-perfil, #senha-perfil) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #perfil_usuario #dados_perfil :is(#nome-perfil, #email-perfil, #senha-perfil) label {
+        font-size: calc(1.5vh + 0.8vw);
+    }
+
+    #perfil_usuario #dados_perfil :is(#nome, #email, #senha) {
+        font-size: calc(1.5vh + 0.5vw);
+    }
+
+    #perfil_usuario #informacoes_usuario {
+        top: 8vh;
+        left: 18%;
+        width: 50vw;
+        height: calc(70vh - 5vw);
+    }
+
+    #perfil_usuario #dados_perfil #botoes-perfil button {
+        width: 15vw;
+        height: 4vh;
+        font-size: 1.5vh;
+    }
 }
 
 @media(max-width: 570px) {
@@ -844,10 +880,6 @@ a {
         width: 25vw;
     }
 
-    #navegacao_tarefas {
-        right: 50%;
-    }
-
     #navegacao_tarefas #paginas a {
         display: flex;
         align-items: center;
@@ -925,9 +957,24 @@ a {
         height: 1.2vh;
     }
 
-    #navegacao_tarefas {
-        right: 0;
-        left: 5%;
-        top: 93%;
+    #perfil_usuario #informacoes_usuario {
+        top: 9vh;
+        left: 15%;
+        width: 50vw;
+        height: 50vh;
+    }
+
+    #perfil_usuario #dados_perfil :is(#nome-perfil, #email-perfil, #senha-perfil) label {
+        font-size: calc(1.2vh + 0.8vw);
+    }
+
+    #perfil_usuario #dados_perfil :is(#nome, #email, #senha) {
+        font-size: calc(1.2vh + 0.5vw);
+    }
+
+    #perfil_usuario #dados_perfil #botoes-perfil button {
+        width: 18vw;
+        height: 3vh;
+        font-size: 1.2vh;
     }
 }
