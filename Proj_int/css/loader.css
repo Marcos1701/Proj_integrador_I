@@ -1,0 +1,48 @@
+.loader {
+    position: absolute;
+    z-index: 1;
+    top: 45vh;
+    left: 60vw;
+    width: 10vw;
+    height: 7.5vw;
+    border-radius: 10px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 1px 1px 10px rgb(239, 5, 247);
+}
+
+.custom-loader {
+    width: 4vw;
+    height: 4vw;
+    display: grid;
+}
+
+.custom-loader::before,
+.custom-loader::after {
+    content: "";
+    grid-area: 1/1;
+    --c: radial-gradient(farthest-side, #912adb 92%, #0000);
+    background:
+        var(--c) 50% 0,
+        var(--c) 50% 100%,
+        var(--c) 100% 50%,
+        var(--c) 0 50%;
+    background-size: 1vw 1vw;
+    background-repeat: no-repeat;
+    animation: s2 1s infinite;
+}
+
+.custom-loader::before {
+    margin: .25vw;
+    filter: hue-rotate(45deg);
+    background-size: .7vw .7vw;
+    animation-timing-function: linear
+}
+
+@keyframes s2 {
+    100% {
+        transform: rotate(.5turn)
+    }
+}
