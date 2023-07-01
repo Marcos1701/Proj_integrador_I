@@ -35,6 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cadastro = exports.Login_via_Email = exports.Login_via_Google = void 0;
 const Acessa_bd_1 = require("./Acessa_bd");
 const crypto = __importStar(require("crypto"));
+const uuid_1 = require("uuid");
 const validastring = (...id) => {
     for (let i = 0; i < id.length; i++) {
         if (id[i] === '' || id[i] === undefined || id[i] === null) {
@@ -146,18 +147,22 @@ function Login_via_Email(req, res) {
 exports.Login_via_Email = Login_via_Email;
 function Cadastro(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { nome, sobre_nome, email, senha } = req.body;
-        if (!validastring(nome, sobre_nome, email, senha)) {
+        const { nome, email, senha } = req.body;
+        if (!validastring(nome, email, senha)) {
             return res.status(500).json({ error: "Dados inválidos" });
         }
         const token = gerar_JWT(email, senha);
+        if (!token) {
+            return res.status(500).json({ error: "Erro ao gerar o token" });
+        }
+        const id = (0, uuid_1.v4)();
         Acessa_bd_1.client.query("SELECT * FROM usuario WHERE email = $1", [email], (err, result) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
             }
             if (result.rows.length == 0) {
-                Acessa_bd_1.client.query("INSERT INTO usuario (nome, sobre_nome, email, senha) VALUES ($1, $2, $3, $4)", [nome, sobre_nome, email, senha], (err, result) => {
+                Acessa_bd_1.client.query("INSERT INTO usuario (id, nome, email, senha, token, id_metodo_login) VALUES ($1, $2, $3, $4, $5, $6)", [id, nome, email, senha, token, 2], (err, result) => {
                     if (err) {
                         console.log(err);
                         return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
