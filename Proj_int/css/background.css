@@ -36,7 +36,7 @@ body {
 }
 
 .circulos * {
-    width: calc(100vw - 35%);
+    width: calc(100vh + 15%);
     height: calc(100vh + 30%);
     position: absolute;
 }
@@ -56,14 +56,14 @@ body {
 }
 
 #circulo1 {
-    left: -461px;
+    left: -561px;
     top: -87px;
     background: linear-gradient(206.45deg, #A272E0 17.54%, rgba(62, 191, 114, 1) 74.46%);
     border-radius: 50%;
 }
 
 #circulo2 {
-    left: -138px;
+    left: -238px;
     top: -95.65px;
     background: linear-gradient(216.97deg, rgba(255, 7, 201, 1) 18.99%, rgba(135, 62, 169, 0.54) 43.5%, rgba(207, 253, 23, 1) 72.5%);
     border-radius: 50%;

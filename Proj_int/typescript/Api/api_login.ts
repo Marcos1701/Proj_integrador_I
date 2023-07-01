@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { client } from './Acessa_bd';
 import * as crypto from 'crypto'
+import { v4 as uuid } from 'uuid';
 
 const validastring = (...id: string[]) => {
     for (let i = 0; i < id.length; i++) {
@@ -110,11 +111,15 @@ async function Login_via_Email(req: Request, res: Response) {
 }
 
 async function Cadastro(req: Request, res: Response) {
-    const { nome, sobre_nome, email, senha } = req.body;
-    if (!validastring(nome, sobre_nome, email, senha)) {
+    const { nome, email, senha } = req.body;
+    if (!validastring(nome, email, senha)) {
         return res.status(500).json({ error: "Dados inválidos" });
     }
     const token = gerar_JWT(email, senha);
+    if (!token) {
+        return res.status(500).json({ error: "Erro ao gerar o token" })
+    }
+    const id: string = uuid();
 
     client.query("SELECT * FROM usuario WHERE email = $1", [email], (err, result) => {
         if (err) {
@@ -122,7 +127,7 @@ async function Cadastro(req: Request, res: Response) {
             return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
         }
         if (result.rows.length == 0) {
-            client.query("INSERT INTO usuario (nome, sobre_nome, email, senha) VALUES ($1, $2, $3, $4)", [nome, sobre_nome, email, senha], (err, result) => {
+            client.query("INSERT INTO usuario (id, nome, email, senha, token, id_metodo_login) VALUES ($1, $2, $3, $4, $5, $6)", [id, nome, email, senha, token, 2], (err, result) => {
                 if (err) {
                     console.log(err);
                     return res.status(500).json({ error: "Erro ao acessar o banco de dados" });

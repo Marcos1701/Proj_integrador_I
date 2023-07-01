@@ -1,5 +1,5 @@
-import router from './router'
-import express, { Application } from "express";
+import { router } from './router'
+import express, { Application } from 'express';
 import cors from 'cors';
 
 const app: Application = express();
@@ -12,4 +12,3 @@ app.use(express.static('public'));
 app.listen(3000, () => {
     console.log("API rodando");
 });
-

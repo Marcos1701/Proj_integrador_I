@@ -1,7 +1,38 @@
-function handleCredentialResponse(response: any) {
+async function handleCredentialResponse(response: any) {
     console.log("Encoded JWT ID token: " + response.credential);
     // Send the token to your auth backend.
-    // get_Data(response.credential);
+    const url: string = "http://localhost:3000/login/google";
+    const token: string = response.credential;
+    const data: object = {
+        token: token
+    };
+
+    await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+    }).then(async (response) => {
+        if (response.status === 200) {
+            const { token }: { token: string } = await response.json();
+            localStorage.setItem("token", token);
+            if (localStorage.getItem("token") === null) {
+                console.log("Token não encontrado");
+                return;
+            }
+            console.log("Login realizado com sucesso");
+            // window.location.href = "./home";
+        } else {
+            const { error } = await response.json();
+            const msgErro = document.getElementById("msg_erro_login");
+            if (msgErro) {
+                msgErro.innerText = error;
+                msgErro.style.display = "block";
+            }
+            console.log(error);
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
 };
 
 async function RealizarLogin(email: string, senha: string): Promise<void> {
@@ -18,8 +49,8 @@ async function RealizarLogin(email: string, senha: string): Promise<void> {
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }
     }).then(async (response) => {
-        if (response.status == 200) {
-            const { token } = await response.json();
+        if (response.status === 200) {
+            const { token }: { token: string } = await response.json();
             localStorage.setItem("token", token);
             if (localStorage.getItem("token") === null) {
                 console.log("Token não encontrado");
@@ -32,7 +63,9 @@ async function RealizarLogin(email: string, senha: string): Promise<void> {
                 localStorage.removeItem("email");
                 localStorage.removeItem("senha");
             }
-            window.location.href = "./home";
+            console.log("Login realizado com sucesso");
+            console.log(token);
+            // window.location.href = "./home";
         } else {
             const { error } = await response.json();
             const msgErro = document.getElementById("msg_erro_login");
@@ -40,6 +73,7 @@ async function RealizarLogin(email: string, senha: string): Promise<void> {
                 msgErro.innerText = error;
                 msgErro.style.display = "block";
             }
+            console.log(error);
         }
     }).catch((error) => {
         console.log(error);
@@ -62,7 +96,7 @@ async function RealizarCadastro(nome: string, email: string, senha: string): Pro
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }
     }).then(async (response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
             const { token } = await response.json();
             localStorage.setItem("token", token);
             if (localStorage.getItem("token") === null) {
@@ -76,7 +110,9 @@ async function RealizarCadastro(nome: string, email: string, senha: string): Pro
                 localStorage.removeItem("email");
                 localStorage.removeItem("senha");
             }
-            window.location.href = "./home";
+            console.log("Cadastro realizado com sucesso");
+            console.log(token);
+            // window.location.href = "./home";
         } else {
             const { error } = await response.json();
             const msgErro = document.getElementById("msg_erro_cadastro");
@@ -84,6 +120,7 @@ async function RealizarCadastro(nome: string, email: string, senha: string): Pro
                 msgErro.innerText = error;
                 msgErro.style.display = "block";
             }
+            console.log(error);
         }
     }).catch((error) => {
         console.log(error);
@@ -122,17 +159,13 @@ function Login_to_Cadastro(): void {
     Alterar_Tela();
 }
 
-function realiza_login_google(response: any) {
-    console.log(response);
-}
-
 window.onload = function () {
     const bntLogin: HTMLButtonElement = document.getElementById("realiza_login_btn") as HTMLButtonElement;
     const bnt_login_to_cadastro: HTMLButtonElement = document.getElementById("criar_conta_btn") as HTMLButtonElement;
     const bnt_login_to_cadastro2: HTMLButtonElement = document.getElementById("criar_conta_btn_to_840px") as HTMLButtonElement;
-    const bnt_alterar_tela: HTMLButtonElement = document.getElementById("alterar_tela") as HTMLButtonElement;
-    const bnt_lembrar_senha_login: HTMLInputElement = document.querySelector("#realiza_login #lembrar_senha") as HTMLInputElement;
-    const bnt_lembrar_senha_cadastro: HTMLInputElement = document.querySelector("#realiza_cadastro #lembrar_senha") as HTMLInputElement;
+    const bnt_alterar_tela: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".alterar_tela") as NodeListOf<HTMLButtonElement>;
+    const bnt_lembrar_senha_login: HTMLInputElement = document.querySelector("#realiza_login #lembrar_senha-login") as HTMLInputElement;
+    const bnt_lembrar_senha_cadastro: HTMLInputElement = document.querySelector("#realiza_cadastro #lembrar_senha-cadastro") as HTMLInputElement;
 
     const bnt_cadastro_to_login: HTMLButtonElement = document.getElementById("realizar_login_bnt") as HTMLButtonElement;
     const bnt_cadastro_to_login2: HTMLButtonElement = document.getElementById("login_btn_to_840px") as HTMLButtonElement;
@@ -141,8 +174,8 @@ window.onload = function () {
 
     if (!bntLogin || !bnt_login_to_cadastro || !bnt_login_to_cadastro2
         || !bnt_alterar_tela || !bnt_cadastro_to_login || !bnt_cadastro_to_login2
-        || !realiza_cadastro || !bnt_lembrar_senha_login) {
-        console.log("Elemento não encontrado");
+        || !realiza_cadastro || !bnt_lembrar_senha_login || !bnt_lembrar_senha_cadastro) {
+        console.log("Elemento não encontrado1");
         return;
     }
 
@@ -164,8 +197,6 @@ window.onload = function () {
     })
 
     bntLogin.addEventListener("click", function () {
-        window.location.href = "./home.html";
-        return;
         const email: HTMLInputElement = document.getElementById("email_login") as HTMLInputElement;
         const senha: HTMLInputElement = document.getElementById("senha_login") as HTMLInputElement;
 
@@ -185,8 +216,25 @@ window.onload = function () {
     })
 
     realiza_cadastro.addEventListener("click", function () {
-        window.location.href = "./home.html";
-        return;
+        const nome: HTMLInputElement = document.getElementById("nome_de_usuario") as HTMLInputElement;
+        const email: HTMLInputElement = document.getElementById("email_cadastro") as HTMLInputElement;
+        const senha: HTMLInputElement = document.getElementById("senha_cadastro") as HTMLInputElement;
+
+        if (!nome || !email || !senha) {
+            console.log("Elemento não encontrado");
+            return;
+        }
+
+        if (nome.value == "" || email.value == "" || senha.value == "") {
+            nome.value === "" ? nome.classList.add("error") : nome.classList.remove("error");
+            email.value === "" ? email.classList.add("error") : email.classList.remove("error");
+            senha.value === "" ? senha.classList.add("error") : senha.classList.remove("error");
+        } else {
+            nome.classList.remove("error");
+            email.classList.remove("error");
+            senha.classList.remove("error");
+            RealizarCadastro(nome.value, email.value, senha.value);
+        }
     })
 
     bnt_lembrar_senha_login.addEventListener("click", function () {
@@ -202,18 +250,19 @@ window.onload = function () {
     bnt_login_to_cadastro2.addEventListener("click", () => {
         Login_to_Cadastro();
     })
-    bnt_alterar_tela.addEventListener("click", () => {
-        Alterar_Tela();
-        document.querySelectorAll(".circulos").forEach((element) => {
-            if (element.getAttribute("hidden") === null) {
-                element.setAttribute("hidden", "");
-            } else {
-                element.removeAttribute("hidden");
-                if (element.getAttribute("id") === null) {
-                    element.setAttribute("id", "circulos-login")
-                }
+    bnt_alterar_tela.forEach((element) => {
+        element.addEventListener("click", () => {
+            const div_circulos: HTMLDivElement = document.querySelector(".circulos") as HTMLDivElement;
+            if (!div_circulos) {
+                console.log("Elemento não encontrado");
+                return;
             }
-        })
+            if (div_circulos.id == "circulos-cadastro") {
+                Cadastro_to_Login();
+            } else {
+                Login_to_Cadastro();
+            }
+        });
     });
     bnt_cadastro_to_login.addEventListener("click", () => {
         Cadastro_to_Login();

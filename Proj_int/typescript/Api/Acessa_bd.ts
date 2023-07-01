@@ -8,17 +8,22 @@ const client = new Client.Client({
     password: 'postgres'
 });
 
-client.connect();
+client.connect().then(() => {
+    console.log("Conectado ao banco de dados");
+}).catch((err) => {
+    console.log(err);
+});
 
 (async () => {
-    client.query(`
+    try {
+        client.query(`
     CREATE TABLE IF NOT EXISTS metodo_login(
         id SERIAL PRIMARY KEY,
         nome VARCHAR(255) NOT NULL
     );
     `)
 
-    client.query(`
+        client.query(`
     CREATE TABLE IF NOT EXISTS usuario (
         id varchar PRIMARY KEY,
         nome VARCHAR(255) NOT NULL,
@@ -30,31 +35,28 @@ client.connect();
         );
      `)
 
-    client.query(`
+        client.query(`
     CREATE TABLE IF NOT EXISTS ADM (
-        id_usuario INTEGER PRIMARY KEY,
-        id_responsavel INTEGER NOT NULL,
+        id_usuario varchar PRIMARY KEY,
+        id_responsavel varchar NOT NULL,
         FOREIGN KEY (id_usuario) REFERENCES usuario(id),
         FOREIGN KEY (id_responsavel) REFERENCES usuario(id)
     );
     `)
 
-    client.query(`
+        client.query(`
         CREATE OR REPLACE FUNCTION ADICIONAR_USUARIO(nome_usuario VARCHAR(255), email_usuario VARCHAR(255), id_metodo_login INTEGER, token_usuario varchar, senha_usuario VARCHAR(255) DEFAULT NULL)
         RETURNS VOID AS $$
         BEGIN   
-            IF (nome_usuario IS NULL OR EMAIL_USUARIO IS NULL OR id_metodo_login IS NULL OR token_usuario IS NULL) THEN
+        IF (nome_usuario IS NULL OR email_usuario IS NULL OR id_metodo_login IS NULL OR token_usuario IS NULL) THEN
                 RAISE EXCEPTION 'Nome, email ou metodo de login invalido';
-            END IF;
-            IF EXISTS (SELECT * FROM USUARIO WHERE email = email_usuario) THEN
+            ELSIF EXISTS (SELECT * FROM USUARIO WHERE email = email_usuario) THEN
                 RAISE EXCEPTION 'Email ja cadastrado';
-            END IF;
-
-            IF EXISTS (SELECT * FROM USUARIO WHERE token = token_usuario) THEN
+            ELSIF EXISTS (SELECT * FROM USUARIO WHERE token = token_usuario) THEN
                 RAISE EXCEPTION 'USUARIO ja cadastrado';
             END IF;
 
-            IF (senha IS NULL) THEN
+            IF (senha_usuario IS NULL) THEN
                 IF NOT EXISTS (SELECT * FROM METODO_LOGIN WHERE id = id_metodo_login AND NOME ILIKE 'GOOGLE') THEN
                     RAISE EXCEPTION 'Metodo de login invalido';
                 END IF;
@@ -121,10 +123,10 @@ client.connect();
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
-    `)
+    `).catch(err => console.log(`Erro ao criar funcoes: ${err}`));
 
-    client.query(`
-        CREATE IF NOT EXISTS TABLE TAREFA (
+        client.query(`
+        CREATE TABLE IF NOT EXISTS TAREFA (
             id VARCHAR PRIMARY KEY,
             titulo VARCHAR(150) NOT NULL,
             descricao VARCHAR(300) NOT NULL,
@@ -132,12 +134,12 @@ client.connect();
             DATA_CONCLUSAO DATE DEFAULT NULL,
             PRIORIDADE INTEGER DEFAULT 0 NOT NULL,
             STATUS CHAR(1) DEFAULT 'P' NOT NULL, -- P = Pendente, C = Concluida, A = Atrasada
-            id_usuario INTEGER NOT NULL,
+            id_usuario VARCHAR NOT NULL,
             FOREIGN KEY (id_usuario) REFERENCES usuario(id)
         );
-    `)
+    `).catch(err => console.log(`Erro ao criar tabela tarefa: ${err}`))
 
-    client.query(`
+        client.query(`
         CREATE OR REPLACE FUNCTION ADICIONAR_TAREFA(id_task varchar, titulo VARCHAR(150), descricao VARCHAR(300), id_usuario INTEGER, data_conclusao DATE DEFAULT NULL, prioridade INTEGER DEFAULT NULL)
         RETURNS VOID AS $$
         BEGIN
@@ -205,7 +207,7 @@ client.connect();
                 RAISE EXCEPTION 'Id do usuario invalido';
             END IF;
 
-            IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND AND id_usuario = id_do_usuario) THEN
+            IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario) THEN
                 IF (titulo IS NOT NULL) THEN
                     UPDATE TAREFA SET titulo = titulo WHERE id = id_tarefa AND id_usuario = id_do_usuario;
                 END IF;
@@ -356,7 +358,12 @@ client.connect();
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
-        `)
-})().catch(e => console.error(e.message, e.stack))
+        `).catch((err) => {
+            console.log(`Erro ao criar as funções referentes as tarefas: ${err}`)
+        });
+    } catch (error) {
+        console.log(error)
+    }
+})();
 
 export { client };

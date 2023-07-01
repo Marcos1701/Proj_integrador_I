@@ -1,4 +1,4 @@
-import express, { Application, Router, Request, Response } from "express";
+import express, { Router } from "express";
 
 import {
     Login_via_Google, Login_via_Email, Cadastro
@@ -17,14 +17,7 @@ import {
 } from './api_admin.js'
 
 
-const app: Application = express();
-const router: Router = express.Router();
-
-app.use(express.json());
-
-router.get('/', (req: Request, res: Response) => {
-    res.send("api rodando")
-});
+export const router: Router = express.Router();
 
 router.post('/login/google', Login_via_Google);
 router.post('/login', Login_via_Email);
@@ -42,5 +35,3 @@ router.post('/admin/get/tarefas', get_tarefas_usuario);
 router.post('/admin/get/tarefas/pendentes', get_tarefas_pendentes);
 router.post('/admin/get/tarefas/concluidas', get_tarefas_concluidas);
 router.post('/admin/get/tarefas/atrasadas', get_tarefas_atrasadas);
-
-export default router;

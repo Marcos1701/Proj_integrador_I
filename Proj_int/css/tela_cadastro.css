@@ -185,10 +185,9 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 1vw;
+    /* font-size: 1vw; */
     line-height: 1.2vw;
     letter-spacing: 0.02em;
-
     color: #313056;
 }
 
@@ -218,7 +217,6 @@
 }
 
 #nome,
-#sobrenome,
 #email,
 #senha {
     display: flex;
@@ -227,15 +225,20 @@
     gap: 20px;
     padding-left: 15px;
 
-    width: 3vw;
-    height: 50px;
+    width: 24em;
+    height: 3.3em;
 
     background: rgba(255, 255, 255, 0.655);
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border-radius: 60px;
 }
 
-:is(#sobrenome, #nome, #email, #senha) input {
+#nome {
+    padding-left: 3em;
+    width: 22em;
+}
+
+:is(#nome, #email, #senha) input {
 
     display: grid;
     place-items: center;
@@ -258,7 +261,7 @@
 }
 
 
-:is(#nome, #sobrenome, #senha, #email) input::placeholder {
+:is(#nome, #senha, #email) input::placeholder {
     height: 20px;
 
     font-family: 'Inter';
@@ -279,15 +282,6 @@
     gap: 8px;
 }
 
-#nome {
-    padding-left: 25px;
-    width: 115px;
-}
-
-#sobrenome {
-    padding-left: 25px;
-    width: 190px;
-}
 
 #senha input::-ms-reveal {
     filter: drop-shadow(1px 1px 1px currentColor);
@@ -371,29 +365,6 @@
 
 }
 
-#icon_google {
-    width: 25px;
-    height: 25px;
-}
-
-#logo_google {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 45px;
-    height: 45px;
-
-    background: rgba(255, 255, 255, 0.34);
-    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
-    border-radius: 60px;
-}
-
-#logo_google:hover {
-    background: rgba(255, 255, 255, 0.34);
-    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.407);
-    border-radius: 60px;
-}
-
 @media (max-width: 1060px) {
 
     #msg_cadastro {
@@ -411,7 +382,6 @@
     }
 
     #nome,
-    #sobrenome,
     #email,
     #senha {
         gap: 20px;
@@ -421,7 +391,7 @@
         height: 45px;
     }
 
-    :is(#nome, #sobrenome, #email, #senha) input {
+    :is(#nome, #email, #senha) input {
         height: 45px;
     }
 
@@ -434,16 +404,6 @@
 
     #senha input::-ms-reveal {
         filter: drop-shadow(1px 1px 1px currentColor);
-    }
-
-    #nome {
-        padding-left: 15px;
-        width: 90px;
-    }
-
-    #sobrenome {
-        padding-left: 15px;
-        width: 190px;
     }
 
     #botoes {
@@ -537,7 +497,7 @@
         line-height: 25px;
     }
 
-    #alterar_tela {
+    .alterar_tela {
         position: absolute;
         width: 67px;
         height: 67px;
@@ -545,7 +505,7 @@
         top: 50%;
     }
 
-    #alterar_tela img {
+    .alterar_tela img {
         width: 30px;
         height: 17px;
     }
@@ -634,7 +594,7 @@
     }
 
     #realizar_login,
-    #alterar_tela {
+    .alterar_tela {
         display: none;
     }
 
@@ -734,7 +694,7 @@
     }
 
     #realizar_login,
-    #alterar_tela {
+    .alterar_tela {
         display: none;
     }
 
