@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
     "jsonwebtoken": "^9.0.0",
     "module-alias": "^2.2.2",
     "pg": "^8.11.0",
@@ -11,16 +12,21 @@
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {
+    "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/pg": "^8.10.2",
     "@types/uuid": "^9.0.1",
+    "nodemon": "^2.0.22",
     "typescript": "^5.1.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon Proj_int/typescript/Api/index.ts",
+    "build": "tsc",
+    "start": "nodemon Proj_int/javascript/Api/index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Marcos1701 <catce.2022111tads0428@aluno.ifpi.edu.br>",
+  "license": "ISC",
+  "repository": "https://github.com/Marcos1701/Proj_integrador_I.git"
 }

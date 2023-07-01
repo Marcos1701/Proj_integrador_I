@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { client } from '../conf_bd_pg';
+import { client } from './Acessa_bd';
 import * as crypto from 'crypto'
 
 const validastring = (...id: string[]) => {

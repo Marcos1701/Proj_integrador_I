@@ -33,7 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cadastro = exports.Login_via_Email = exports.Login_via_Google = void 0;
-const conf_bd_pg_1 = require("../conf_bd_pg");
+const Acessa_bd_1 = require("./Acessa_bd");
 const crypto = __importStar(require("crypto"));
 const validastring = (...id) => {
     for (let i = 0; i < id.length; i++) {
@@ -94,13 +94,13 @@ function Login_via_Google(req, res) {
             return res.status(500).json({ error: erro });
         }
         if (email && name) {
-            conf_bd_pg_1.client.query("SELECT * FROM usuario WHERE email = $1", [email], (err, result) => {
+            Acessa_bd_1.client.query("SELECT * FROM usuario WHERE email = $1", [email], (err, result) => {
                 if (err) {
                     console.log(err);
                     return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
                 }
                 if (result.rows.length == 0) {
-                    conf_bd_pg_1.client.query("INSERT INTO usuario (nome, email) VALUES ($1, $2)", [name, email], (err, result) => {
+                    Acessa_bd_1.client.query("INSERT INTO usuario (nome, email) VALUES ($1, $2)", [name, email], (err, result) => {
                         if (err) {
                             console.log(err);
                             return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
@@ -125,7 +125,7 @@ function Login_via_Email(req, res) {
         if (!validastring(email, senha)) {
             return res.status(500).json({ error: "Dados inválidos" });
         }
-        conf_bd_pg_1.client.query("SELECT * FROM usuario WHERE email = $1 AND senha = $2", [email, senha], (err, result) => {
+        Acessa_bd_1.client.query("SELECT * FROM usuario WHERE email = $1 AND senha = $2", [email, senha], (err, result) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
@@ -151,13 +151,13 @@ function Cadastro(req, res) {
             return res.status(500).json({ error: "Dados inválidos" });
         }
         const token = gerar_JWT(email, senha);
-        conf_bd_pg_1.client.query("SELECT * FROM usuario WHERE email = $1", [email], (err, result) => {
+        Acessa_bd_1.client.query("SELECT * FROM usuario WHERE email = $1", [email], (err, result) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
             }
             if (result.rows.length == 0) {
-                conf_bd_pg_1.client.query("INSERT INTO usuario (nome, sobre_nome, email, senha) VALUES ($1, $2, $3, $4)", [nome, sobre_nome, email, senha], (err, result) => {
+                Acessa_bd_1.client.query("INSERT INTO usuario (nome, sobre_nome, email, senha) VALUES ($1, $2, $3, $4)", [nome, sobre_nome, email, senha], (err, result) => {
                     if (err) {
                         console.log(err);
                         return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
