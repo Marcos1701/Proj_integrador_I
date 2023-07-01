@@ -1,15 +1,8 @@
-
-function onSignIn(googleUser: any): void {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Nome: ' + profile.getName());
-    console.log('Imagem URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-    const id_token = googleUser.getAuthResponse().id_token;
-    console.log("ID Token: " + id_token);
-
-}
+function handleCredentialResponse(response: any) {
+    console.log("Encoded JWT ID token: " + response.credential);
+    // Send the token to your auth backend.
+    // get_Data(response.credential);
+};
 
 async function RealizarLogin(email: string, senha: string): Promise<void> {
     const url: string = "http://localhost:3000/login";

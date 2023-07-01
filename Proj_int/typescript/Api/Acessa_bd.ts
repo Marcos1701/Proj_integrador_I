@@ -1,12 +1,12 @@
-import postgres from 'postgres'
+import Client from 'pg'
 
-const sql = postgres('postgres://username:password@host:port/database', {
-    host: 'localhost',            // Postgres ip address[s] or domain name[s]
-    port: 5432,          // Postgres server port[s]
-    database: 'planr',            // Name of database to connect to
-    username: 'postgres',            // Username of database user
-    password: 'postgres',            // Password of database user
-    ssl: false,         // True, or options for tls.connect
-})
+const client = new Client.Client({
+    host: 'localhost',
+    port: 5432,
+    database: 'planr',
+    user: 'postgres',
+    password: 'postgres'
+});
 
-export default sql
+client.connect();
+export { client };
