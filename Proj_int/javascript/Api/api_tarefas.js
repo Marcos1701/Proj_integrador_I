@@ -136,57 +136,75 @@ function get_tarefas(req, res) {
             console.log(err);
             return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
         });
-        const tarefas = yield Acessa_bd_1.client.query(`SELECT GET_TAREFAS($1)`, [id_usuario], (err, result) => {
-            if (err) {
-                console.log(err);
-                res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
-                return null;
-            }
-            // console.log(result.rows)
+        const tarefas = yield Acessa_bd_1.client.query(`SELECT * FROM TAREFA WHERE ID_USUARIO = $1`, [id_usuario]).then((result) => {
             return result.rows;
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
         });
-        if (tarefas === undefined || tarefas === null || tarefas.rowCount === 0) {
+        if (tarefas === undefined || tarefas === null || tarefas.length === 0) {
             return res.status(200).json({ tarefas: [] });
         }
-        console.log(tarefas);
         if (ordenacao === "conclusao") {
-            tarefas.sort((a, b) => {
-                if (a.DATA_CONCLUSAO > b.DATA_CONCLUSAO) {
-                    return 1;
+            for (let i = 0; i < tarefas.length; i++) {
+                for (let j = 0; j < tarefas.length; j++) {
+                    if (tarefas[i].data_conclusao > tarefas[j].data_conclusao) {
+                        let aux = tarefas[i];
+                        tarefas[i] = tarefas[j];
+                        tarefas[j] = aux;
+                    }
                 }
-                if (a.DATA_CONCLUSAO < b.DATA_CONCLUSAO) {
-                    return -1;
-                }
-                return 0;
-            });
+            }
         }
         else if (ordenacao === "prioridade") {
-            tarefas.sort((a, b) => {
-                if (a.PRIORIDADE > b.PRIORIDADE) {
-                    return 1;
+            for (let i = 0; i < tarefas.length; i++) {
+                for (let j = 0; j < tarefas.length; j++) {
+                    if (tarefas[i].prioridade > tarefas[j].prioridade) {
+                        let aux = tarefas[i];
+                        tarefas[i] = tarefas[j];
+                        tarefas[j] = aux;
+                    }
                 }
-                if (a.PRIORIDADE < b.PRIORIDADE) {
-                    return -1;
-                }
-                return 0;
-            });
+            }
         }
         else if (ordenacao === "criacao") {
-            tarefas.sort((a, b) => {
-                if (a.DATA_CRIACAO > b.DATA_CRIACAO) {
-                    return 1;
+            for (let i = 0; i < tarefas.length; i++) {
+                for (let j = 0; j < tarefas.length; j++) {
+                    if (tarefas[i].data_criacao > tarefas[j].data_criacao) {
+                        let aux = tarefas[i];
+                        tarefas[i] = tarefas[j];
+                        tarefas[j] = aux;
+                    }
                 }
-                if (a.DATA_CRIACAO < b.DATA_CRIACAO) {
-                    return -1;
-                }
-                return 0;
-            });
+            }
         }
         let retorno_tarefas = []; // organiza as tarefas de 3 em 3
-        for (let i = 0; i < tarefas.length; i += 3) {
-            let tarefa = tarefas.slice(i, i + 3);
-            retorno_tarefas.push(tarefa);
+        let count = 0;
+        let tarefas_aux = [];
+        for (let tarefa of tarefas) {
+            let tarefa_aux = {
+                id: tarefa.id,
+                titulo: tarefa.titulo,
+                descricao: tarefa.descricao,
+                data_criacao: tarefa.data_criacao,
+                prioridade: tarefa.prioridade,
+                data_conclusao: tarefa.data_conclusao
+            };
+            tarefas_aux.push(tarefa_aux);
+            count++;
+            if (count === 3 || tarefas.length === 1) {
+                retorno_tarefas.push(tarefas_aux);
+                tarefas_aux = [];
+                count = 0;
+            }
+            if (tarefas.length === 2 && count === 1) {
+                retorno_tarefas.push(tarefas_aux);
+                tarefas_aux = [];
+                count = 0;
+            }
         }
+        // console.log(tarefas)
+        // console.log(retorno_tarefas)
         return res.status(200).json({ tarefas: retorno_tarefas });
     });
 }
