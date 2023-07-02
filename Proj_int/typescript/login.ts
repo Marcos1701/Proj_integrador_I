@@ -1,8 +1,14 @@
-async function handleCredentialResponse(response: any) {
-    console.log("Encoded JWT ID token: " + response.credential);
+function handleCredentialResponse(response: any) {
+    // console.log("Encoded JWT ID token: " + response.credential);
+    console.log("ID token recebido com sucesso")
     // Send the token to your auth backend.
+    Login_via_Google(response.credential);
+};
+
+async function Login_via_Google(token: string) {
+    const loadding: HTMLElement = document.getElementById("loading") as HTMLElement;
+    loadding.removeAttribute("hidden");
     const url: string = "http://localhost:3000/login/google";
-    const token: string = response.credential;
     const data: object = {
         token: token
     };
@@ -19,8 +25,8 @@ async function handleCredentialResponse(response: any) {
                 console.log("Token não encontrado");
                 return;
             }
-            console.log("Login realizado com sucesso");
-            // window.location.href = "./home";
+            // console.log("Login realizado com sucesso");
+            window.location.href = "./home.html";
         } else {
             const { error } = await response.json();
             const msgErro = document.getElementById("msg_erro_login");
@@ -32,17 +38,21 @@ async function handleCredentialResponse(response: any) {
         }
     }).catch((error) => {
         console.log(error);
+    }).finally(() => {
+        loadding.setAttribute("hidden", "");
     });
-};
+}
 
 async function RealizarLogin(email: string, senha: string): Promise<void> {
+    const loadding: HTMLElement = document.getElementById("loading") as HTMLElement;
+    loadding.removeAttribute("hidden");
     const url: string = "http://localhost:3000/login";
     const data: object = {
         email: email,
         senha: senha
     };
 
-    const bnt_lembrar_senha: HTMLInputElement = document.getElementById("lembrar_senha") as HTMLInputElement;
+    const bnt_lembrar_senha: HTMLInputElement = document.getElementById("lembrar_senha-login") as HTMLInputElement;
 
     await fetch(url, {
         method: "POST",
@@ -63,9 +73,7 @@ async function RealizarLogin(email: string, senha: string): Promise<void> {
                 localStorage.removeItem("email");
                 localStorage.removeItem("senha");
             }
-            console.log("Login realizado com sucesso");
-            console.log(token);
-            // window.location.href = "./home";
+            window.location.href = "./home.html";
         } else {
             const { error } = await response.json();
             const msgErro = document.getElementById("msg_erro_login");
@@ -77,11 +85,15 @@ async function RealizarLogin(email: string, senha: string): Promise<void> {
         }
     }).catch((error) => {
         console.log(error);
-    })
+    }).finally(() => {
+        loadding.setAttribute("hidden", "");
+    });
     return;
 }
 
 async function RealizarCadastro(nome: string, email: string, senha: string): Promise<void> {
+    const loadding: HTMLElement = document.getElementById("loading") as HTMLElement;
+    loadding.removeAttribute("hidden");
     const url: string = "http://localhost:3000/cadastro";
     const data: object = {
         nome: nome,
@@ -89,14 +101,14 @@ async function RealizarCadastro(nome: string, email: string, senha: string): Pro
         senha: senha
     };
 
-    const bnt_lembrar_senha: HTMLInputElement = document.getElementById("lembrar_senha") as HTMLInputElement;
+    const bnt_lembrar_senha: HTMLInputElement = document.getElementById("lembrar_senha-cadastro") as HTMLInputElement;
 
     await fetch(url, {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }
     }).then(async (response) => {
-        if (response.status === 200) {
+        if (response.status === 201) {
             const { token } = await response.json();
             localStorage.setItem("token", token);
             if (localStorage.getItem("token") === null) {
@@ -110,9 +122,7 @@ async function RealizarCadastro(nome: string, email: string, senha: string): Pro
                 localStorage.removeItem("email");
                 localStorage.removeItem("senha");
             }
-            console.log("Cadastro realizado com sucesso");
-            console.log(token);
-            // window.location.href = "./home";
+            window.location.href = "./home.html";
         } else {
             const { error } = await response.json();
             const msgErro = document.getElementById("msg_erro_cadastro");
@@ -124,7 +134,9 @@ async function RealizarCadastro(nome: string, email: string, senha: string): Pro
         }
     }).catch((error) => {
         console.log(error);
-    })
+    }).finally(() => {
+        loadding.setAttribute("hidden", "");
+    });
     return;
 }
 
@@ -195,6 +207,10 @@ window.onload = function () {
     bnt_lembrar_senha_login.addEventListener("click", function () {
         bnt_lembrar_senha_login.checked = bnt_lembrar_senha_login.checked ? false : true;
     })
+
+    bnt_lembrar_senha_cadastro.addEventListener("click", function () {
+        bnt_lembrar_senha_cadastro.checked = bnt_lembrar_senha_cadastro.checked ? false : true;
+    });
 
     bntLogin.addEventListener("click", function () {
         const email: HTMLInputElement = document.getElementById("email_login") as HTMLInputElement;

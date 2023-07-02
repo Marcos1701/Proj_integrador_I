@@ -45,10 +45,10 @@ client.connect().then(() => {
     `)
 
         client.query(`
-        CREATE OR REPLACE FUNCTION ADICIONAR_USUARIO(nome_usuario VARCHAR(255), email_usuario VARCHAR(255), id_metodo_login INTEGER, token_usuario varchar, senha_usuario VARCHAR(255) DEFAULT NULL)
+        CREATE OR REPLACE FUNCTION ADICIONAR_USUARIO(id_usuario varchar, nome_usuario VARCHAR(255), email_usuario VARCHAR(255), id_metodo_login INTEGER, token_usuario varchar, senha_usuario VARCHAR(255) DEFAULT NULL)
         RETURNS VOID AS $$
         BEGIN   
-        IF (nome_usuario IS NULL OR email_usuario IS NULL OR id_metodo_login IS NULL OR token_usuario IS NULL) THEN
+        IF (id_usuario IS NULL OR nome_usuario IS NULL OR email_usuario IS NULL OR id_metodo_login IS NULL OR token_usuario IS NULL) THEN
                 RAISE EXCEPTION 'Nome, email ou metodo de login invalido';
             ELSIF EXISTS (SELECT * FROM USUARIO WHERE email = email_usuario) THEN
                 RAISE EXCEPTION 'Email ja cadastrado';
@@ -60,9 +60,9 @@ client.connect().then(() => {
                 IF NOT EXISTS (SELECT * FROM METODO_LOGIN WHERE id = id_metodo_login AND NOME ILIKE 'GOOGLE') THEN
                     RAISE EXCEPTION 'Metodo de login invalido';
                 END IF;
-                INSERT INTO usuario (nome, email, id_metodo_login, token) VALUES (nome_usuario, email_usuario, id_metodo_login, token_usuario);
+                INSERT INTO usuario (id, nome, email, id_metodo_login, token) VALUES (id_usuario, nome_usuario, email_usuario, id_metodo_login, token_usuario);
             ELSE
-                INSERT INTO usuario (nome, email, senha, id_metodo_login, token) VALUES (nome_usuario, email_usuario, senha_usuario, id_metodo_login, token_usuario);
+                INSERT INTO usuario (id, nome, email, senha, id_metodo_login, token) VALUES (id_usuario, nome_usuario, email_usuario, senha_usuario, id_metodo_login, token_usuario);
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;

@@ -302,25 +302,19 @@
 }
 
 :is(#email, #senha) input {
-
-    display: grid;
-    place-items: center;
-
-    height: 80%;
-
-    background: rgba(255, 255, 255, 0);
-    border-radius: 60px;
-
-    border: none;
-    outline: none;
-
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.1vw;
-    line-height: 1.8vw;
-
-    color: #313056;
+display: grid;
+place-items: center;
+/* height: 80%; */
+background: rgba(255, 255, 255, 0);
+border-radius: 60px;
+border: none;
+outline: none;
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+/* font-size: 1.1vw; */
+line-height: 1.8vw;
+color: #313056;
 }
 
 

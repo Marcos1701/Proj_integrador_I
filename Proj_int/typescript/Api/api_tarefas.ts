@@ -1,8 +1,6 @@
 import express, { Request, Response } from 'express';
 import { client } from './Acessa_bd';
-import * as crypto from 'crypto'
 import { v4 as uuid } from 'uuid';
-import { RowList } from 'postgres';
 
 const validastring = (...id: string[]) => {
     for (let i = 0; i < id.length; i++) {
@@ -118,7 +116,8 @@ async function get_tarefas(req: Request, res: Response) {
     const tarefas: any = await client.query(`SELECT GET_TAREFAS($1)`, [id_usuario], (err, result) => {
         if (err) {
             console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return null;
         }
         return result.rows[0].get_tarefas;
     });
@@ -148,7 +147,7 @@ async function get_tarefas(req: Request, res: Response) {
             }
             return 0;
         });
-    } else if (ordenacao === "CRIACAO") {
+    } else if (ordenacao === "criacao") {
         tarefas.sort((a: { DATA_CRIACAO: Date; }, b: { DATA_CRIACAO: Date; }) => {
             if (a.DATA_CRIACAO > b.DATA_CRIACAO) {
                 return 1;

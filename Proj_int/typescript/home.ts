@@ -1,3 +1,80 @@
+async function Carregar_Tarefas() {
+    const token: string = localStorage.getItem("token") as string;
+    const ordenacao: string = localStorage.getItem("ordenacao") as string;
+
+    const retorno = await fetch("http://localhost:3000/tarefas/get/all", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, ordenacao }),
+    });
+    const result = await retorno.json();
+    if (result.erro) {
+        console.log(result.erro);
+        return;
+    }
+    const tarefas: any[] = result.tarefas;
+    const div_tarefas: HTMLDivElement = document.querySelector("#tarefas") as HTMLDivElement;
+    if (!div_tarefas) {
+        console.log("Elemento não encontrado");
+        return;
+    }
+    if (tarefas.length === 0) {
+        div_tarefas.innerHTML = "<h1>Nenhuma tarefa encontrada</h1>";
+        return;
+    }
+    div_tarefas.innerHTML = "";
+    const template_tarefas: HTMLTemplateElement = document.querySelector("#template-tarefa") as HTMLTemplateElement;
+    if (!template_tarefas) {
+        console.log("Elemento não encontrado");
+        return;
+    }
+    for (let pagina of tarefas) {
+        for (let i = 0; i < pagina.length; i++) {
+            const tarefa = pagina[i];
+            const clone = template_tarefas.content.cloneNode(true) as DocumentFragment;
+            const div_tarefa: HTMLDivElement = clone.querySelector(".tarefa") as HTMLDivElement;
+            div_tarefa.setAttribute("id", tarefa.id.toString());
+            // const div_tarefa_conteudo: HTMLDivElement = clone.querySelector(".tarefa-content") as HTMLDivElement;
+            const titulo: HTMLDivElement = clone.querySelector("#titulo_tarefa") as HTMLDivElement;
+            const descricao: HTMLDivElement = clone.querySelector("#descricao_tarefa") as HTMLDivElement;
+            titulo.innerText = tarefa.titulo;
+            descricao.innerText = tarefa.descricao;
+            // const div_tarefa_data: HTMLDivElement = clone.querySelector(".tarefa-data") as HTMLDivElement;
+            // const data: HTMLDivElement = clone.querySelector("#data_tarefa") as HTMLDivElement;
+        }
+    }
+}
+
+async function adicionar_tarefa() {
+    const token: string = localStorage.getItem("token") as string;
+    const input_titulo: HTMLInputElement = document.querySelector("#add_tarefa #titulo_tarefa") as HTMLInputElement;
+    const input_descricao: HTMLInputElement = document.querySelector("#add_tarefa #descricao_tarefa") as HTMLInputElement;
+    const input_data: HTMLInputElement = document.querySelector("#add_tarefa #data_tarefa") as HTMLInputElement;
+    const input_prioridade: HTMLInputElement = document.querySelector("#add_tarefa #prioridade_tarefa") as HTMLInputElement;
+
+    const titulo: string = input_titulo.value ? input_titulo.value : "Sem título";
+    const descricao: string = input_descricao.value ? input_descricao.value : "Sem descrição";
+    const data: Date | null = input_data.value ? new Date(input_data.value) : null;
+
+    const prioridade: number = input_prioridade.value ? parseInt(input_prioridade.value) : 0;
+
+    const retorno = await fetch("http://localhost:3000/tarefas", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, titulo, descricao, data, prioridade }),
+    });
+    const result = await retorno.json();
+    if (result.erro) {
+        console.log(result.erro);
+        return;
+    }
+    Carregar_Tarefas();
+}
+
 
 window.onload = function () {
     const bnt_new_tarefa: HTMLButtonElement = document.querySelector("#nova_tarefa_bnt") as HTMLButtonElement;
@@ -12,6 +89,8 @@ window.onload = function () {
         console.log("Elemento não encontrado");
         return;
     }
+
+    localStorage.setItem("ordenacao", "criacao");
     cancelar_alteracoes_usuario.addEventListener("click", function () {
         document.querySelector("#perfil_usuario")?.setAttribute("hidden", "");
     });

@@ -28,17 +28,6 @@ header {
     color: #313056;
 }
 
-.background-blur {
-    position: absolute;
-    z-index: 1;
-    top: -6vh;
-    left: -20vw;
-    width: calc(170vw + 20vh);
-    height: calc(100vh + 20vw);
-    backdrop-filter: blur(5px);
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
 #informacoes_usuario {
     position: absolute;
     z-index: 1;

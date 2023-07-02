@@ -244,8 +244,9 @@
     place-items: center;
 
     height: 50px;
+    width: 100%;
 
-    background: rgba(255, 255, 255, 0);
+    background: transparent;
     border-radius: 60px;
 
     border: none;
@@ -256,10 +257,16 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
-
     color: #313056;
 }
 
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-text-fill-color: #000;
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff00 inset;
+}
 
 :is(#nome, #senha, #email) input::placeholder {
     height: 20px;

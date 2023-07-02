@@ -128,7 +128,8 @@ function get_tarefas(req, res) {
         const tarefas = yield Acessa_bd_1.client.query(`SELECT GET_TAREFAS($1)`, [id_usuario], (err, result) => {
             if (err) {
                 console.log(err);
-                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                return null;
             }
             return result.rows[0].get_tarefas;
         });
@@ -157,7 +158,7 @@ function get_tarefas(req, res) {
                 return 0;
             });
         }
-        else if (ordenacao === "CRIACAO") {
+        else if (ordenacao === "criacao") {
             tarefas.sort((a, b) => {
                 if (a.DATA_CRIACAO > b.DATA_CRIACAO) {
                     return 1;

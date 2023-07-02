@@ -67,31 +67,40 @@ const gerar_JWT = (email, senha) => {
 };
 function Get_Data_Google(token) {
     return __awaiter(this, void 0, void 0, function* () {
-        const url = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=";
-        yield fetch(url + token, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        }).then((response) => __awaiter(this, void 0, void 0, function* () {
-            if (response.status == 200) {
+        try {
+            let retorno = { erro: "erro ao acessar o Google", email: "", name: "" };
+            const url = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=";
+            const response = yield fetch(url + token, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
+            if (response.status === 200) {
                 const { email, name } = yield response.json();
-                return { email, name };
+                console.log(email, name);
+                retorno = { email: email, name: name, erro: "" };
             }
             else {
                 const { error } = yield response.json();
-                return { erro: error };
+                retorno.erro = error;
             }
-        })).catch((error) => {
-            return { erro: error };
-        });
-        return { erro: "Erro ao acessar o Google", email: "", name: "" };
+            return retorno;
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                return { erro: error.message, email: "", name: "" };
+            }
+        }
     });
 }
 function Login_via_Google(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { token } = req.body;
         const retorno = yield Get_Data_Google(token);
+        if (retorno === null || retorno === undefined) {
+            return res.status(500).json({ error: "Erro ao acessar o Google" });
+        }
         const { email, name, erro } = retorno;
-        if (erro) {
+        if (erro || !email || !name) {
             return res.status(500).json({ error: erro });
         }
         if (email && name) {
@@ -100,8 +109,10 @@ function Login_via_Google(req, res) {
                     console.log(err);
                     return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
                 }
+                const id = (0, uuid_1.v4)();
                 if (result.rows.length == 0) {
-                    Acessa_bd_1.client.query("INSERT INTO usuario (nome, email) VALUES ($1, $2)", [name, email], (err, result) => {
+                    // client.query("INSERT INTO usuario (id, nome, email, token, id_metodo_login) VALUES ($1, $2)", [id, name, email, token, 1], (err, result) => {
+                    Acessa_bd_1.client.query("SELECT ADICIONAR_USUARIO($1, $2, $3, $4, $5)", [id, name, email, 1, token], (err, result) => {
                         if (err) {
                             console.log(err);
                             return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
@@ -109,8 +120,11 @@ function Login_via_Google(req, res) {
                         return res.status(200).json({ token: token });
                     });
                 }
-                else {
+                else if (result.rows[0].id_metodo_login == 1) {
                     return res.status(200).json({ token: token });
+                }
+                else {
+                    return res.status(500).json({ error: "Email já cadastrado via Email" });
                 }
             });
         }
@@ -126,19 +140,22 @@ function Login_via_Email(req, res) {
         if (!validastring(email, senha)) {
             return res.status(500).json({ error: "Dados inválidos" });
         }
-        Acessa_bd_1.client.query("SELECT * FROM usuario WHERE email = $1 AND senha = $2", [email, senha], (err, result) => {
+        Acessa_bd_1.client.query("SELECT * FROM usuario WHERE email = $1", [email], (err, result) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
             }
             if (result.rows.length == 0) {
-                return res.status(500).json({ error: "Email ou senha incorretos" });
+                return res.status(500).json({ error: "Email não cadastrado!!" });
+            }
+            else if (result.rows[0].id_metodo_login == 1) {
+                return res.status(500).json({ error: "Ops, email já cadastrado via Google.." });
+            }
+            else if (result.rows[0].senha != senha) {
+                return res.status(500).json({ error: "Senha incorreta!!" });
             }
             else {
-                const token = gerar_JWT(email, senha);
-                if (!token) {
-                    return res.status(500).json({ error: "Erro ao gerar o token" });
-                }
+                const { token } = result.rows[0];
                 return res.status(200).json({ token: token });
             }
         });
@@ -162,12 +179,13 @@ function Cadastro(req, res) {
                 return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
             }
             if (result.rows.length == 0) {
-                Acessa_bd_1.client.query("INSERT INTO usuario (id, nome, email, senha, token, id_metodo_login) VALUES ($1, $2, $3, $4, $5, $6)", [id, nome, email, senha, token, 2], (err, result) => {
+                // client.query("INSERT INTO usuario (id, nome, email, senha, token, id_metodo_login) VALUES ($1, $2, $3, $4, $5, $6)", [id, nome, email, senha, token, 2], (err, result) => {
+                Acessa_bd_1.client.query("SELECT ADICIONAR_USUARIO($1, $2, $3, $4, $5, $6)", [id, nome, email, 2, token, senha], (err, result) => {
                     if (err) {
                         console.log(err);
                         return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
                     }
-                    return res.status(200).json({ token: token });
+                    return res.status(201).json({ token: token });
                 });
             }
             else {

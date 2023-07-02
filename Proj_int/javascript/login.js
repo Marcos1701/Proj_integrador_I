@@ -9,11 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 function handleCredentialResponse(response) {
+    // console.log("Encoded JWT ID token: " + response.credential);
+    console.log("ID token recebido com sucesso");
+    // Send the token to your auth backend.
+    Login_via_Google(response.credential);
+}
+;
+function Login_via_Google(token) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("Encoded JWT ID token: " + response.credential);
-        // Send the token to your auth backend.
+        const loadding = document.getElementById("loading");
+        loadding.removeAttribute("hidden");
         const url = "http://localhost:3000/login/google";
-        const token = response.credential;
         const data = {
             token: token
         };
@@ -29,8 +35,8 @@ function handleCredentialResponse(response) {
                     console.log("Token não encontrado");
                     return;
                 }
-                console.log("Login realizado com sucesso");
-                // window.location.href = "./home";
+                // console.log("Login realizado com sucesso");
+                window.location.href = "./home.html";
             }
             else {
                 const { error } = yield response.json();
@@ -43,18 +49,21 @@ function handleCredentialResponse(response) {
             }
         })).catch((error) => {
             console.log(error);
+        }).finally(() => {
+            loadding.setAttribute("hidden", "");
         });
     });
 }
-;
 function RealizarLogin(email, senha) {
     return __awaiter(this, void 0, void 0, function* () {
+        const loadding = document.getElementById("loading");
+        loadding.removeAttribute("hidden");
         const url = "http://localhost:3000/login";
         const data = {
             email: email,
             senha: senha
         };
-        const bnt_lembrar_senha = document.getElementById("lembrar_senha");
+        const bnt_lembrar_senha = document.getElementById("lembrar_senha-login");
         yield fetch(url, {
             method: "POST",
             body: JSON.stringify(data),
@@ -75,9 +84,7 @@ function RealizarLogin(email, senha) {
                     localStorage.removeItem("email");
                     localStorage.removeItem("senha");
                 }
-                console.log("Login realizado com sucesso");
-                console.log(token);
-                // window.location.href = "./home";
+                window.location.href = "./home.html";
             }
             else {
                 const { error } = yield response.json();
@@ -90,25 +97,29 @@ function RealizarLogin(email, senha) {
             }
         })).catch((error) => {
             console.log(error);
+        }).finally(() => {
+            loadding.setAttribute("hidden", "");
         });
         return;
     });
 }
 function RealizarCadastro(nome, email, senha) {
     return __awaiter(this, void 0, void 0, function* () {
+        const loadding = document.getElementById("loading");
+        loadding.removeAttribute("hidden");
         const url = "http://localhost:3000/cadastro";
         const data = {
             nome: nome,
             email: email,
             senha: senha
         };
-        const bnt_lembrar_senha = document.getElementById("lembrar_senha");
+        const bnt_lembrar_senha = document.getElementById("lembrar_senha-cadastro");
         yield fetch(url, {
             method: "POST",
             body: JSON.stringify(data),
             headers: { "Content-Type": "application/json" }
         }).then((response) => __awaiter(this, void 0, void 0, function* () {
-            if (response.status === 200) {
+            if (response.status === 201) {
                 const { token } = yield response.json();
                 localStorage.setItem("token", token);
                 if (localStorage.getItem("token") === null) {
@@ -123,9 +134,7 @@ function RealizarCadastro(nome, email, senha) {
                     localStorage.removeItem("email");
                     localStorage.removeItem("senha");
                 }
-                console.log("Cadastro realizado com sucesso");
-                console.log(token);
-                // window.location.href = "./home";
+                window.location.href = "./home.html";
             }
             else {
                 const { error } = yield response.json();
@@ -138,6 +147,8 @@ function RealizarCadastro(nome, email, senha) {
             }
         })).catch((error) => {
             console.log(error);
+        }).finally(() => {
+            loadding.setAttribute("hidden", "");
         });
         return;
     });
@@ -198,6 +209,9 @@ window.onload = function () {
     }
     bnt_lembrar_senha_login.addEventListener("click", function () {
         bnt_lembrar_senha_login.checked = bnt_lembrar_senha_login.checked ? false : true;
+    });
+    bnt_lembrar_senha_cadastro.addEventListener("click", function () {
+        bnt_lembrar_senha_cadastro.checked = bnt_lembrar_senha_cadastro.checked ? false : true;
     });
     bntLogin.addEventListener("click", function () {
         const email = document.getElementById("email_login");
