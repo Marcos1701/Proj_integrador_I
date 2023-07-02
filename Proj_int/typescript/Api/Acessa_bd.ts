@@ -82,7 +82,7 @@ client.connect().then(() => {
         $$ LANGUAGE PLPGSQL;
 
         CREATE OR REPLACE FUNCTION GET_ID_USUARIO(email_usuario VARCHAR(255))
-        RETURNS INTEGER AS $$
+        RETURNS VARCHAR AS $$
         BEGIN
             IF (email_usuario IS NULL) THEN
                 RAISE EXCEPTION 'Email invalido';
@@ -140,7 +140,7 @@ client.connect().then(() => {
     `).catch(err => console.log(`Erro ao criar tabela tarefa: ${err}`))
 
         client.query(`
-        CREATE OR REPLACE FUNCTION ADICIONAR_TAREFA(id_task varchar, titulo VARCHAR(150), descricao VARCHAR(300), id_usuario INTEGER, data_conclusao DATE DEFAULT NULL, prioridade INTEGER DEFAULT NULL)
+        CREATE OR REPLACE FUNCTION ADICIONAR_TAREFA(id_task varchar, titulo VARCHAR(150), descricao VARCHAR(300), id_usuario VARCHAR, prioridade INTEGER DEFAULT NULL, data_conclusao DATE DEFAULT NULL)
         RETURNS VOID AS $$
         BEGIN
             IF (titulo IS NULL OR descricao IS NULL OR id_usuario IS NULL OR id_task IS NULL) THEN
@@ -162,25 +162,27 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION GET_TAREFAS(id_do_usuario INTEGER)
-        RETURNS TABLE (id VARCHAR, titulo VARCHAR(150), descricao VARCHAR(300), data_criacao DATE, data_conclusao DATE, prioridade INTEGER) AS $$
+
+        DROP FUNCTION IF EXISTS GET_TAREFAS;
+        CREATE OR REPLACE FUNCTION GET_TAREFAS(id_do_usuario VARCHAR)
+        RETURNS TABLE (id_tr VARCHAR, titulo_tr VARCHAR(150), descricao_tr VARCHAR(300), data_criacao_tr DATE, data_conclusao_tr DATE, prioridade_tr INTEGER, status_tr CHAR(1)) AS $$
         BEGIN
             IF (id_do_usuario IS NULL) THEN
                 RAISE EXCEPTION 'Id do usuario invalido';
             END IF;
 
             IF EXISTS (SELECT * FROM USUARIO WHERE id = id_do_usuario) THEN
-                RETURN QUERY SELECT id, titulo, descricao, data_criacao, data_conclusao, prioridade FROM TAREFA WHERE id_usuario = id_do_usuario;
+                RETURN QUERY SELECT id id_tr, titulo titulo_tr, descricao descricao_tr, data_criacao data_criacao_tr, data_conclusao data_conclusao_tr, prioridade prioridade_tr, status status_tr FROM TAREFA WHERE id_usuario = id_do_usuario;
             ELSE
                 RAISE EXCEPTION 'Usuario nao cadastrado';
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION GET_TAREFA(id_tarefa VARCHAR, id_do_usuario INTEGER)
-        RETURNS TABLE (id VARCHAR, titulo VARCHAR(150), descricao VARCHAR(300), data_criacao DATE, data_conclusao DATE, prioridade INTEGER) AS $$
+        CREATE OR REPLACE FUNCTION GET_TAREFA(id_tarefa VARCHAR, id_do_usuario VARCHAR)
+        RETURNS TABLE (id_tr VARCHAR, titulo_tr VARCHAR(150), descricao_tr VARCHAR(300), data_criacao_tr DATE, data_conclusao_tr DATE, prioridade_tr INTEGER) AS $$
         BEGIN
-            IF (id IS NULL) THEN
+            IF (id_tarefa IS NULL) THEN
                 RAISE EXCEPTION 'Id da tarefa invalido';
             END IF;
 
@@ -189,7 +191,7 @@ client.connect().then(() => {
             END IF;
 
             IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa and id_usuario = id_do_usuario) THEN
-                RETURN QUERY SELECT id, titulo, descricao, data_criacao, data_conclusao, prioridade FROM TAREFA WHERE id = id_tarefa and  id_usuario = id_do_usuario;
+                RETURN QUERY SELECT id_tr, titulo_tr, descricao_tr, data_criacao_tr, data_conclusao_tr, prioridade_tr FROM TAREFA WHERE id = id_tarefa and  id_usuario = id_do_usuario;
             ELSE
                 RAISE EXCEPTION 'Tarefa nao cadastrada ou nao pertence ao usuario';
             END IF;
@@ -264,7 +266,7 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION GET_USUARIOS(ID_RESPONSAVEL INTEGER)
+        CREATE OR REPLACE FUNCTION GET_USUARIOS(ID_RESPONSAVEL VARCHAR)
         RETURNS TABLE (id INTEGER, nome VARCHAR(150), email VARCHAR(150), senha VARCHAR(150), data_criacao DATE) AS $$
         BEGIN
             IF (ID_RESPONSAVEL IS NULL) THEN
@@ -279,7 +281,7 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION GET_TAREFAS_USUARIO(ID_RESPONSAVEL INTEGER, ID_DO_USUARIO INTEGER)
+        CREATE OR REPLACE FUNCTION GET_TAREFAS_USUARIO(ID_RESPONSAVEL VARCHAR, ID_DO_USUARIO VARCHAR)
         RETURNS TABLE (id VARCHAR, titulo VARCHAR(150), descricao VARCHAR(300), data_criacao DATE, data_conclusao DATE, prioridade INTEGER) AS $$
         BEGIN
             IF (ID_RESPONSAVEL IS NULL OR ID_DO_USUARIO IS NULL) THEN

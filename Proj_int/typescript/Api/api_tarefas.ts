@@ -12,7 +12,7 @@ const validastring = (...id: string[]) => {
 }
 
 async function get_email(token: string): Promise<string> {
-    const retorno = await client.query(`SELECT email FROM usuarios WHERE token = $1`, [token]);
+    const retorno = await client.query(`SELECT email FROM usuario WHERE token = $1`, [token]);
     const email = retorno.rows[0].email;
     if (email === undefined || email === null) {
         return "";
@@ -22,8 +22,8 @@ async function get_email(token: string): Promise<string> {
 
 
 async function adicionar_tarefa(req: Request, res: Response) {
-    const { token, titulo, descricao, data_final, prioridade } = req.body;
-    if (!validastring(token, titulo, descricao, data_final, prioridade)) {
+    const { token, titulo, descricao, data, prioridade } = req.body;
+    if (!validastring(token, titulo, descricao, data, prioridade)) {
         return res.status(400).json({ erro: "Dados inválidos" });
     }
     const email: string = await get_email(token)
@@ -38,13 +38,24 @@ async function adicionar_tarefa(req: Request, res: Response) {
     });
 
     const id = uuid();
-    client.query(`SELECT ADICIONAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id, titulo, descricao, id_usuario, data_final, prioridade], (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
-        }
-        return res.status(200).json({ id: id });
-    });
+    if (data === undefined || data === null) {
+
+        client.query(`SELECT ADICIONAR_TAREFA($1, $2, $3, $4, $5)`, [id, titulo, descricao, id_usuario, prioridade], (err, result) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            }
+            return res.status(200).json({ id: id });
+        });
+    } else {
+        client.query(`SELECT ADICIONAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id, titulo, descricao, id_usuario, data, prioridade], (err, result) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            }
+            return res.status(200).json({ id: id });
+        });
+    }
 }
 
 async function editar_tarefa(req: Request, res: Response) {
@@ -113,59 +124,77 @@ async function get_tarefas(req: Request, res: Response) {
         return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
     });
 
-    const tarefas: any = await client.query(`SELECT GET_TAREFAS($1)`, [id_usuario], (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
-            return null;
-        }
-        return result.rows[0].get_tarefas;
-    });
+    const tarefas = await client.query(`SELECT * FROM TAREFA WHERE ID_USUARIO = $1`, [id_usuario]).then((result) => {
+        return result.rows;
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+    }) as any[];
 
-    if (tarefas === undefined || tarefas === null) {
+    if (tarefas === undefined || tarefas === null || tarefas.length === 0) {
         return res.status(200).json({ tarefas: [] });
     }
 
-
     if (ordenacao === "conclusao") {
-        tarefas.sort((a: { DATA_CONCLUSAO: Date; }, b: { DATA_CONCLUSAO: Date; }) => {
-            if (a.DATA_CONCLUSAO > b.DATA_CONCLUSAO) {
-                return 1;
+        for (let i = 0; i < tarefas.length; i++) {
+            for (let j = 0; j < tarefas.length; j++) {
+                if (tarefas[i].data_conclusao > tarefas[j].data_conclusao) {
+                    let aux = tarefas[i];
+                    tarefas[i] = tarefas[j];
+                    tarefas[j] = aux;
+                }
             }
-            if (a.DATA_CONCLUSAO < b.DATA_CONCLUSAO) {
-                return -1;
-            }
-            return 0;
-        });
+        }
     } else if (ordenacao === "prioridade") {
-        tarefas.sort((a: { PRIORIDADE: number; }, b: { PRIORIDADE: number; }) => {
-            if (a.PRIORIDADE > b.PRIORIDADE) {
-                return 1;
+        for (let i = 0; i < tarefas.length; i++) {
+            for (let j = 0; j < tarefas.length; j++) {
+                if (tarefas[i].prioridade > tarefas[j].prioridade) {
+                    let aux = tarefas[i];
+                    tarefas[i] = tarefas[j];
+                    tarefas[j] = aux;
+                }
             }
-            if (a.PRIORIDADE < b.PRIORIDADE) {
-                return -1;
-            }
-            return 0;
-        });
+        }
     } else if (ordenacao === "criacao") {
-        tarefas.sort((a: { DATA_CRIACAO: Date; }, b: { DATA_CRIACAO: Date; }) => {
-            if (a.DATA_CRIACAO > b.DATA_CRIACAO) {
-                return 1;
+        for (let i = 0; i < tarefas.length; i++) {
+            for (let j = 0; j < tarefas.length; j++) {
+                if (tarefas[i].data_criacao > tarefas[j].data_criacao) {
+                    let aux = tarefas[i];
+                    tarefas[i] = tarefas[j];
+                    tarefas[j] = aux;
+                }
             }
-            if (a.DATA_CRIACAO < b.DATA_CRIACAO) {
-                return -1;
-            }
-            return 0;
-        });
+        }
     }
 
     let retorno_tarefas = []; // organiza as tarefas de 3 em 3
+    let count = 0;
+    let tarefas_aux = [];
 
-    for (let i = 0; i < tarefas.length; i += 3) {
-        let tarefa = tarefas.slice(i, i + 3);
-        retorno_tarefas.push(tarefa);
+    for (let tarefa of tarefas) {
+        let tarefa_aux = {
+            id: tarefa.id,
+            titulo: tarefa.titulo,
+            descricao: tarefa.descricao,
+            data_criacao: tarefa.data_criacao,
+            prioridade: tarefa.prioridade,
+            data_conclusao: tarefa.data_conclusao
+        }
+        tarefas_aux.push(tarefa_aux);
+        count++;
+        if (count === 3 || tarefas.length === 1) {
+            retorno_tarefas.push(tarefas_aux);
+            tarefas_aux = [];
+            count = 0;
+        }
+        if (tarefas.length === 2 && count === 1) {
+            retorno_tarefas.push(tarefas_aux);
+            tarefas_aux = [];
+            count = 0;
+        }
     }
-
+    // console.log(tarefas)
+    // console.log(retorno_tarefas)
     return res.status(200).json({ tarefas: retorno_tarefas });
 }
 

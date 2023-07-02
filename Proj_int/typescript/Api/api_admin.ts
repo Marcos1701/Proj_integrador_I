@@ -200,7 +200,7 @@ async function get_tarefas_atrasadas(req: Request, res: Response) {
     });
 }
 
-export { 
+export {
     get_usuarios, adicionar_admin, get_all_tarefas,
     get_tarefas_usuario, get_tarefas_pendentes,
     get_tarefas_concluidas, get_tarefas_atrasadas
