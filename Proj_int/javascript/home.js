@@ -118,7 +118,6 @@ function Carregar_Tarefas() {
             console.log("Elemento não encontrado");
             return [];
         }
-        // console.log(tarefas);
         if (tarefas.length === 0) {
             div_tarefas.innerHTML = "<h3>Nenhuma tarefa encontrada</h3>";
             return [];
@@ -135,7 +134,7 @@ function Carregar_Tarefas() {
             console.log("Pagina atual não encontrada");
             return [];
         }
-        const pagina = parseInt(pagina_atual);
+        const pagina = parseInt(pagina_atual) - 1;
         for (let i = 0; i < tarefas[pagina].length; i++) {
             const tarefa = tarefas[pagina][i];
             const clone = template_tarefas.content.cloneNode(true);
@@ -147,8 +146,8 @@ function Carregar_Tarefas() {
             const data_criacao_tarefa = clone.querySelector("#data_criacao_tarefa");
             const prioridade_tarefa = clone.querySelector("#prioridade_tarefa");
             const status_tarefa = clone.querySelector("#status_tarefa");
-            const btn_editar_tarefa = clone.querySelector("#editar_tarefa");
-            const btn_excluir_tarefa = clone.querySelector("#excluir_tarefa");
+            const btn_editar_tarefa = clone.querySelector("#botoes_tarefa #editar_tarefa_bnt");
+            const btn_excluir_tarefa = clone.querySelector("#botoes_tarefa #excluir_tarefa_bnt");
             const concluir_tarefa = clone.querySelector("#concluir_tarefa_checkbox");
             titulo.innerText = tarefa.titulo;
             descricao.innerText = tarefa.descricao;
@@ -175,8 +174,8 @@ function Carregar_Tarefas() {
                 const descricao_editar_tarefa = div_editar_tarefa.querySelector("#edit-descricao_tarefa");
                 const data_editar_tarefa = div_editar_tarefa.querySelector("#edit-data_tarefa");
                 const prioridade_editar_tarefa = div_editar_tarefa.querySelector("#edit-prioridade_tarefa");
-                const cancelar_editar_tarefa = div_editar_tarefa.querySelector("#cancelar_tarefa_bnt");
-                const salvar_editar_tarefa = div_editar_tarefa.querySelector("#salvar_tarefa_bnt");
+                const cancelar_editar_tarefa = div_editar_tarefa.querySelector("#cancelar_edit-tarefa_bnt");
+                const salvar_editar_tarefa = div_editar_tarefa.querySelector("#salvar_edit-tarefa_bnt");
                 titulo_editar_tarefa.value = tarefa.titulo;
                 descricao_editar_tarefa.value = tarefa.descricao;
                 data_editar_tarefa.value = tarefa.data ? new Date(tarefa.data).toISOString().split("T")[0] : "";

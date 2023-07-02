@@ -103,7 +103,6 @@ async function Carregar_Tarefas(): Promise<any[]> {
         console.log("Elemento não encontrado");
         return [];
     }
-    // console.log(tarefas);
     if (tarefas.length === 0) {
         div_tarefas.innerHTML = "<h3>Nenhuma tarefa encontrada</h3>";
         return [];
@@ -120,7 +119,7 @@ async function Carregar_Tarefas(): Promise<any[]> {
         console.log("Pagina atual não encontrada");
         return [];
     }
-    const pagina: number = parseInt(pagina_atual);
+    const pagina: number = parseInt(pagina_atual) - 1;
 
     for (let i = 0; i < tarefas[pagina].length; i++) {
         const tarefa = tarefas[pagina][i];
@@ -133,8 +132,8 @@ async function Carregar_Tarefas(): Promise<any[]> {
         const data_criacao_tarefa: HTMLDivElement = clone.querySelector("#data_criacao_tarefa") as HTMLDivElement;
         const prioridade_tarefa: HTMLDivElement = clone.querySelector("#prioridade_tarefa") as HTMLDivElement;
         const status_tarefa: HTMLDivElement = clone.querySelector("#status_tarefa") as HTMLDivElement;
-        const btn_editar_tarefa: HTMLButtonElement = clone.querySelector("#editar_tarefa") as HTMLButtonElement;
-        const btn_excluir_tarefa: HTMLButtonElement = clone.querySelector("#excluir_tarefa") as HTMLButtonElement;
+        const btn_editar_tarefa: HTMLButtonElement = clone.querySelector("#botoes_tarefa #editar_tarefa_bnt") as HTMLButtonElement;
+        const btn_excluir_tarefa: HTMLButtonElement = clone.querySelector("#botoes_tarefa #excluir_tarefa_bnt") as HTMLButtonElement;
         const concluir_tarefa: HTMLInputElement = clone.querySelector("#concluir_tarefa_checkbox") as HTMLInputElement;
 
 
@@ -166,8 +165,8 @@ async function Carregar_Tarefas(): Promise<any[]> {
             const descricao_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-descricao_tarefa") as HTMLInputElement;
             const data_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-data_tarefa") as HTMLInputElement;
             const prioridade_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-prioridade_tarefa") as HTMLInputElement;
-            const cancelar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#cancelar_tarefa_bnt") as HTMLButtonElement;
-            const salvar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#salvar_tarefa_bnt") as HTMLButtonElement;
+            const cancelar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#cancelar_edit-tarefa_bnt") as HTMLButtonElement;
+            const salvar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#salvar_edit-tarefa_bnt") as HTMLButtonElement;
 
             titulo_editar_tarefa.value = tarefa.titulo;
             descricao_editar_tarefa.value = tarefa.descricao;
