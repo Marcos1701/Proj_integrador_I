@@ -92,7 +92,7 @@ client.connect().then(() => {
         $$ LANGUAGE PLPGSQL;
 
         CREATE OR REPLACE FUNCTION GET_ID_USUARIO(email_usuario VARCHAR(255))
-        RETURNS INTEGER AS $$
+        RETURNS VARCHAR AS $$
         BEGIN
             IF (email_usuario IS NULL) THEN
                 RAISE EXCEPTION 'Email invalido';
@@ -148,7 +148,7 @@ client.connect().then(() => {
         );
     `).catch(err => console.log(`Erro ao criar tabela tarefa: ${err}`));
         client.query(`
-        CREATE OR REPLACE FUNCTION ADICIONAR_TAREFA(id_task varchar, titulo VARCHAR(150), descricao VARCHAR(300), id_usuario INTEGER, data_conclusao DATE DEFAULT NULL, prioridade INTEGER DEFAULT NULL)
+        CREATE OR REPLACE FUNCTION ADICIONAR_TAREFA(id_task varchar, titulo VARCHAR(150), descricao VARCHAR(300), id_usuario INTEGER, prioridade INTEGER DEFAULT NULL, data_conclusao DATE DEFAULT NULL)
         RETURNS VOID AS $$
         BEGIN
             IF (titulo IS NULL OR descricao IS NULL OR id_usuario IS NULL OR id_task IS NULL) THEN
@@ -170,15 +170,16 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION GET_TAREFAS(id_do_usuario INTEGER)
-        RETURNS TABLE (id VARCHAR, titulo VARCHAR(150), descricao VARCHAR(300), data_criacao DATE, data_conclusao DATE, prioridade INTEGER) AS $$
+
+        CREATE OR REPLACE FUNCTION GET_TAREFAS(id_do_usuario VARCHAR)
+        RETURNS TABLE (id_tarefa VARCHAR, titulo_tarefa VARCHAR(150), descricao_tarefa VARCHAR(300), data_criacao_tarefa DATE, data_conclusao_tarefa DATE, prioridade_tarefa INTEGER) AS $$
         BEGIN
             IF (id_do_usuario IS NULL) THEN
                 RAISE EXCEPTION 'Id do usuario invalido';
             END IF;
 
             IF EXISTS (SELECT * FROM USUARIO WHERE id = id_do_usuario) THEN
-                RETURN QUERY SELECT id, titulo, descricao, data_criacao, data_conclusao, prioridade FROM TAREFA WHERE id_usuario = id_do_usuario;
+                RETURN QUERY SELECT id id_tarefa, titulo titulo_tarefa, descricao descricao_tarefa, data_criacao data_criacao_tarefa, data_conclusao data_conclusao_tarefa, prioridade prioridade_tarefa FROM TAREFA WHERE id_usuario = id_do_usuario;
             ELSE
                 RAISE EXCEPTION 'Usuario nao cadastrado';
             END IF;
