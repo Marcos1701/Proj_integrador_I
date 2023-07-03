@@ -188,7 +188,8 @@ function get_tarefas(req, res) {
                 descricao: tarefa.descricao,
                 data_criacao: tarefa.data_criacao,
                 prioridade: tarefa.prioridade,
-                data_conclusao: tarefa.data_conclusao
+                data_conclusao: tarefa.data_conclusao,
+                status: tarefa.status
             };
             tarefas_aux.push(tarefa_aux);
             count++;
