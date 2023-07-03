@@ -133,8 +133,8 @@ function excluir_tarefa(req, res) {
 exports.excluir_tarefa = excluir_tarefa;
 function get_tarefas(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { token, ordenacao } = req.body;
-        if (!validastring(token, ordenacao)) {
+        const { token, ordenacao, pagina } = req.body;
+        if (!validastring(token, ordenacao, pagina)) {
             return res.status(400).json({ erro: "Dados inválidos" });
         }
         const email = yield get_email(token);
@@ -213,8 +213,12 @@ function get_tarefas(req, res) {
                 count = 0;
             }
         }
+        const p = parseInt(pagina) - 1;
+        if (p > retorno_tarefas.length || isNaN(p)) {
+            return res.status(200).json({ tarefas: [] });
+        }
         // console.log(retorno_tarefas);
-        return res.status(200).json({ tarefas: retorno_tarefas });
+        return res.status(200).json({ tarefas: retorno_tarefas[p], total: retorno_tarefas.length });
     });
 }
 exports.get_tarefas = get_tarefas;
