@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editar_tarefa = exports.get_tarefa = exports.concluir_tarefa = exports.get_tarefas = exports.excluir_tarefa = exports.adicionar_tarefa = void 0;
+exports.desconcluir_tarefa = exports.editar_tarefa = exports.get_tarefa = exports.concluir_tarefa = exports.get_tarefas = exports.excluir_tarefa = exports.adicionar_tarefa = exports.get_email = void 0;
 const Acessa_bd_1 = require("./Acessa_bd");
 const uuid_1 = require("uuid");
 const validastring = (...id) => {
@@ -30,10 +30,11 @@ function get_email(token) {
         return email;
     });
 }
+exports.get_email = get_email;
 function adicionar_tarefa(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { token, titulo, descricao, data, prioridade } = req.body;
-        if (!validastring(token, titulo, descricao, data, prioridade)) {
+        if (!validastring(token, titulo, descricao, prioridade)) {
             return res.status(400).json({ erro: "Dados inválidos" });
         }
         const email = yield get_email(token);
@@ -71,7 +72,7 @@ exports.adicionar_tarefa = adicionar_tarefa;
 function editar_tarefa(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { token, id, titulo, descricao, data, prioridade } = req.body;
-        if (!validastring(token, id, titulo, descricao, data, prioridade)) {
+        if (!validastring(token, id, titulo, descricao, prioridade)) {
             return res.status(400).json({ erro: "Dados inválidos" });
         }
         const email = yield get_email(token);
@@ -81,8 +82,7 @@ function editar_tarefa(req, res) {
         const id_usuario = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
             return result.rows[0].get_id_usuario;
         }).catch((err) => {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err.message });
         });
         if (data === undefined || data === null) {
             Acessa_bd_1.client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, NULL)`, [id_usuario, id, titulo, descricao, prioridade], (err, result) => {
@@ -96,8 +96,7 @@ function editar_tarefa(req, res) {
         else {
             Acessa_bd_1.client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id_usuario, id, titulo, descricao, data, prioridade], (err, result) => {
                 if (err) {
-                    console.log(err);
-                    return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                    return res.status(500).json({ erro: err.message });
                 }
                 return res.status(200).json({ id: id });
             });
@@ -118,15 +117,13 @@ function excluir_tarefa(req, res) {
         const id_usuario = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
             return result.rows[0].get_id_usuario;
         }).catch((err) => {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err.message });
         });
         Acessa_bd_1.client.query(`SELECT DELETAR_TAREFA($1, $2)`, [id, id_usuario], (err, result) => {
             if (err) {
-                console.log(err);
-                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                return res.status(500).json({ erro: err.message });
             }
-            return res.status(204);
+            return res.sendStatus(204);
         });
     });
 }
@@ -144,14 +141,12 @@ function get_tarefas(req, res) {
         const id_usuario = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
             return result.rows[0].get_id_usuario;
         }).catch((err) => {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err.message });
         });
         const tarefas = yield Acessa_bd_1.client.query(`SELECT * FROM TAREFA WHERE ID_USUARIO = $1`, [id_usuario]).then((result) => {
             return result.rows;
         }).catch((err) => {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err.message });
         });
         if (tarefas === undefined || tarefas === null || tarefas.length === 0) {
             return res.status(200).json({ tarefas: [] });
@@ -189,7 +184,6 @@ function get_tarefas(req, res) {
                 }
             }
         }
-        // console.log(tarefas);
         let retorno_tarefas = []; // organiza as tarefas de 3 em 3
         let count = 0;
         let total = 0;
@@ -207,7 +201,7 @@ function get_tarefas(req, res) {
             tarefas_aux.push(tarefa_aux);
             count++;
             total++;
-            if (count === 3 || tarefas.length === 1 || (tarefas.length === 2 && count === 1) || total === tarefas.length) {
+            if (count === 3 || tarefas.length === 1 || (tarefas.length === 2 && count === 2) || total === tarefas.length) {
                 retorno_tarefas.push(tarefas_aux);
                 tarefas_aux = [];
                 count = 0;
@@ -251,19 +245,41 @@ function concluir_tarefa(req, res) {
         const id_usuario = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
             return result.rows[0].get_id_usuario;
         }).catch((err) => {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err.message });
         });
         Acessa_bd_1.client.query(`SELECT CONCLUIR_TAREFA($1, $2)`, [id, id_usuario], (err, result) => {
             if (err) {
-                console.log(err);
-                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                return res.status(500).json({ erro: err.message });
             }
-            return res.status(200);
+            return res.sendStatus(200);
         });
     });
 }
 exports.concluir_tarefa = concluir_tarefa;
+function desconcluir_tarefa(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { token, id } = req.body;
+        if (!validastring(token, id)) {
+            return res.status(400).json({ erro: "Dados inválidos" });
+        }
+        const email = yield get_email(token);
+        if (email === "") {
+            return res.status(400).json({ erro: "Token inválido" });
+        }
+        const id_usuario = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
+            return result.rows[0].get_id_usuario;
+        }).catch((err) => {
+            return res.status(500).json({ erro: err.message });
+        });
+        Acessa_bd_1.client.query(`SELECT DESCONCLUIR_TAREFA($1, $2)`, [id, id_usuario], (err, result) => {
+            if (err) {
+                return res.status(500).json({ erro: err.message });
+            }
+            return res.sendStatus(200);
+        });
+    });
+}
+exports.desconcluir_tarefa = desconcluir_tarefa;
 function get_tarefa(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { token, id } = req.body;
@@ -277,13 +293,12 @@ function get_tarefa(req, res) {
         const id_usuario = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
             return result.rows[0].get_id_usuario;
         }).catch((err) => {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err.message });
         });
         const tarefa = yield Acessa_bd_1.client.query(`SELECT GET_TAREFA($1, $2)`, [id, id_usuario], (err, result) => {
             if (err) {
                 console.log(err);
-                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                return res.status(500).json({ erro: err });
             }
             return result.rows[0].get_tarefa;
         });
@@ -294,3 +309,12 @@ function get_tarefa(req, res) {
     });
 }
 exports.get_tarefa = get_tarefa;
+setInterval(() => {
+    //atualizar tarefas a cada 24 horas
+    Acessa_bd_1.client.query(`SELECT ATUALIZAR_TAREFAS()`, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+    });
+}, 86400000 //24 horas
+);

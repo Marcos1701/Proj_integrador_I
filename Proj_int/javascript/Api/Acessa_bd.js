@@ -77,6 +77,56 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
+        CREATE OR REPLACE FUNCTION EDITAR_USUARIO(token_usuario varchar, novo_token varchar, nome_usuario VARCHAR(255) DEFAULT NULL, email_usuario VARCHAR(255) DEFAULT NULL, senha_usuario VARCHAR(255) DEFAULT NULL)
+        RETURNS VOID AS $$
+        BEGIN
+            IF (token_usuario IS NULL) THEN
+                RAISE EXCEPTION 'token do usuario invalido';
+            END IF;
+
+            IF NOT EXISTS (SELECT * FROM USUARIO WHERE token = token_usuario) THEN
+                RAISE EXCEPTION 'Usuario nao cadastrado';
+            END IF;
+
+            IF (novo_token IS NOT NULL) THEN
+                IF EXISTS (SELECT * FROM USUARIO WHERE token = novo_token) THEN
+                    RAISE EXCEPTION 'Token ja cadastrado';
+                END IF;
+                UPDATE USUARIO SET token = novo_token WHERE token = token_usuario;
+            END IF;
+
+            IF (email_usuario IS NOT NULL) THEN
+                IF EXISTS (SELECT * FROM USUARIO WHERE email = email_usuario) THEN
+                    RAISE EXCEPTION 'Email ja cadastrado';
+                END IF;
+                UPDATE USUARIO SET email = email_usuario WHERE token = token_usuario;
+            END IF;
+
+            IF (nome_usuario IS NOT NULL) THEN
+                UPDATE USUARIO SET nome = nome_usuario WHERE token = token_usuario;
+            END IF;
+
+            IF (senha_usuario IS NOT NULL) THEN
+                UPDATE USUARIO SET senha = senha_usuario WHERE token = token_usuario;
+            END IF;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
+        CREATE OR REPLACE FUNCTION EXCLUIR_USUARIO(token_usuario varchar)
+        RETURNS VOID AS $$
+        BEGIN
+            IF (token_usuario IS NULL) THEN
+                RAISE EXCEPTION 'token do usuario invalido';
+            END IF;
+
+            IF NOT EXISTS (SELECT * FROM USUARIO WHERE token = token_usuario) THEN
+                RAISE EXCEPTION 'Usuario nao cadastrado';
+            END IF;
+
+            DELETE FROM USUARIO WHERE token = token_usuario;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
         CREATE OR REPLACE FUNCTION VALIDA_LOGIN(email_usuario VARCHAR(255), senha_usuario VARCHAR(255))
         RETURNS BOOLEAN AS $$
         BEGIN
@@ -88,6 +138,22 @@ client.connect().then(() => {
             ELSE
                 RETURN FALSE;
             END IF;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
+        CREATE OR REPLACE FUNCTION GET_DATA(token_user VARCHAR(255))
+        RETURNS TABLE (id_usuario varchar, nome_usuario VARCHAR(255), email_usuario VARCHAR(255), senha_usuario VARCHAR(255), id_metodo_login INTEGER, token_usuario varchar) AS $$
+        BEGIN
+
+            IF (token_user IS NULL) THEN
+                RAISE EXCEPTION 'token do usuario invalido';
+            END IF;
+
+            IF NOT EXISTS (SELECT * FROM USUARIO WHERE token = token_user) THEN
+                RAISE EXCEPTION 'Usuario nao cadastrado';
+            END IF;
+
+            RETURN QUERY SELECT id, nome, email, senha, id_metodo_login, token FROM USUARIO WHERE token = token_user;
         END;
         $$ LANGUAGE PLPGSQL;
 
@@ -218,6 +284,10 @@ client.connect().then(() => {
                 RAISE EXCEPTION 'Id do usuario invalido';
             END IF;
 
+            IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario != id_do_usuario) THEN
+                RAISE EXCEPTION 'Usuario nao tem permissao para EDITAR esta tarefa';
+            END IF;
+
             IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario) THEN
                 IF (titulo_tr IS NOT NULL) THEN
                     UPDATE TAREFA SET titulo = titulo_tr WHERE id = id_tarefa AND id_usuario = id_do_usuario;
@@ -232,7 +302,7 @@ client.connect().then(() => {
                     UPDATE TAREFA SET prioridade = prioridade_tr WHERE id = id_tarefa AND id_usuario = id_do_usuario;
                 END IF;
             ELSE
-                RAISE EXCEPTION 'Tarefa nao cadastrada OU USUARIO NAO TEM PERMISSAO PARA EDITAR ESTA TAREFA';
+                RAISE EXCEPTION 'Tarefa nao cadastrada';
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
@@ -248,10 +318,14 @@ client.connect().then(() => {
                 RAISE EXCEPTION 'Id do usuario invalido';
             END IF;
 
+            IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario != id_do_usuario ) THEN
+                RAISE EXCEPTION 'Usuario nao tem permissao para deletar esta tarefa';
+            END IF;
+
             IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario) THEN
                 DELETE FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario;
             ELSE
-                RAISE EXCEPTION 'Tarefa nao cadastrada OU USUARIO NAO TEM PERMISSAO PARA DELETAR ESTA TAREFA';
+                RAISE EXCEPTION 'Tarefa nao cadastrada';
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
@@ -267,10 +341,46 @@ client.connect().then(() => {
                 RAISE EXCEPTION 'Id do usuario invalido';
             END IF;
 
+            IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario != id_do_usuario ) THEN
+                RAISE EXCEPTION 'Usuario nao tem permissao para CONCLUIR esta tarefa';
+            END IF;
+
             IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario) THEN
                 UPDATE TAREFA SET status = 'C' WHERE id = id_tarefa and  id_usuario = id_do_usuario;
             ELSE
-                RAISE EXCEPTION 'Tarefa nao cadastrada OU USUARIO NAO TEM PERMISSAO PARA CONCLUIR ESTA TAREFA';
+                RAISE EXCEPTION 'Tarefa nao cadastrada';
+            END IF;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
+
+        CREATE OR REPLACE FUNCTION DESCONCLUIR_TAREFA(id_tarefa VARCHAR, id_do_usuario VARCHAR)
+        RETURNS VOID AS $$
+        BEGIN
+            IF (id_tarefa IS NULL) THEN
+                RAISE EXCEPTION 'Id da tarefa invalido';
+            END IF;
+
+            IF (id_do_usuario IS NULL) THEN
+                RAISE EXCEPTION 'Id do usuario invalido';
+            END IF;
+
+            IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario != id_do_usuario ) THEN
+                RAISE EXCEPTION 'Usuario nao tem permissao para DESCONCLUIR esta tarefa';
+            END IF;
+
+            IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario) THEN
+                IF (SELECT status FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario) = 'C' THEN
+                    IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario AND data_conclusao > CURRENT_DATE) THEN
+                        UPDATE TAREFA SET status = 'A' WHERE id = id_tarefa and  id_usuario = id_do_usuario;
+                    ELSE
+                        UPDATE TAREFA SET status = 'P' WHERE id = id_tarefa and  id_usuario = id_do_usuario;
+                    END IF;
+                ELSE
+                    RAISE EXCEPTION 'Tarefa nao esta concluida';
+                END IF;
+            ELSE
+                RAISE EXCEPTION 'Tarefa nao cadastrada';
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
@@ -369,6 +479,15 @@ client.connect().then(() => {
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
+
+        CREATE OR REPLACE FUNCTION ATUALIZAR_TAREFAS()
+        RETURNS VOID AS $$
+        BEGIN
+            UPDATE TAREFA SET status = 'A' WHERE status = 'P' AND data_conclusao > CURRENT_DATE;
+            UPDATE TAREFA SET status = 'P' WHERE status = 'A' AND data_conclusao < CURRENT_DATE;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
         `).catch((err) => {
             console.log(`Erro ao criar as funções referentes as tarefas: ${err}`);
         });

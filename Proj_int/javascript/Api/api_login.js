@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Cadastro = exports.Login_via_Email = exports.Login_via_Google = void 0;
+exports.Cadastro = exports.Login_via_Email = exports.Login_via_Google = exports.gerar_JWT = void 0;
 const Acessa_bd_1 = require("./Acessa_bd");
 const crypto = __importStar(require("crypto"));
 const uuid_1 = require("uuid");
@@ -65,6 +65,7 @@ const gerar_JWT = (email, senha) => {
     const token = data + "." + signature;
     return token;
 };
+exports.gerar_JWT = gerar_JWT;
 function Get_Data_Google(token) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -168,7 +169,7 @@ function Cadastro(req, res) {
         if (!validastring(nome, email, senha)) {
             return res.status(500).json({ error: "Dados inválidos" });
         }
-        const token = gerar_JWT(email, senha);
+        const token = (0, exports.gerar_JWT)(email, senha);
         if (!token) {
             return res.status(500).json({ error: "Erro ao gerar o token" });
         }
