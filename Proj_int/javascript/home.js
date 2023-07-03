@@ -16,12 +16,36 @@ if (!token) {
 if (!ordenacao) {
     localStorage.setItem("ordenacao", "criacao");
 }
-function editar_tarefa(id, titulo, descricao, prioridade, data_conclusao) {
+function editar_tarefa(id, titulo_tr, descricao_tr, prioridade_tr, data_conclusao) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            const tarefa = document.getElementById(id);
+            if (!tarefa) {
+                console.log("Elemento não encontrado");
+                return;
+            }
+            const titulo_tarefa = tarefa.querySelector("#titulo_tarefa");
+            const descricao_tarefa = tarefa.querySelector("#descricao_tarefa");
+            const data_tarefa = tarefa.querySelector("#data_tarefa");
+            const prioridade_tarefa = tarefa.querySelector("#prioridade_tarefa");
+            const msg_erro_edit = document.querySelector("#msg-erro_edit");
+            const apresentar_erro = (msg) => {
+                msg_erro_edit.innerText = msg;
+                msg_erro_edit.removeAttribute("hidden");
+                setTimeout(() => {
+                    msg_erro_edit.setAttribute("hidden", "");
+                }, 3000);
+            };
+            if (titulo_tr === titulo_tarefa.innerText && descricao_tr === descricao_tarefa.innerText && `Prioridade: ${prioridade_tr}` === prioridade_tarefa.innerText && `Data Conclusão: ${data_conclusao ? data_conclusao : "Sem data"}` === data_tarefa.innerText) {
+                apresentar_erro("Nenhuma alteração foi feita");
+                return;
+            }
+            const titulo = titulo_tr.length >= 1 ? titulo_tr : "Sem título";
+            const descricao = descricao_tr.length >= 1 ? descricao_tr : "Sem descrição";
+            const prioridade = prioridade_tr && parseInt(prioridade_tr) >= 0 && parseInt(prioridade_tr) <= 5 ? prioridade_tr : 0;
             (_a = document.querySelector("#loading")) === null || _a === void 0 ? void 0 : _a.removeAttribute("hidden");
-            const data = data_conclusao ? new Date(data_conclusao) : null;
+            const data = data_conclusao ? new Date(data_conclusao).toISOString() : null;
             const retorno = yield fetch("http://localhost:3000/tarefas", {
                 method: "PUT",
                 headers: {
@@ -29,67 +53,91 @@ function editar_tarefa(id, titulo, descricao, prioridade, data_conclusao) {
                 },
                 body: JSON.stringify({ token, id, titulo, descricao, data, prioridade }),
             });
-            (_b = document.querySelector("#loading")) === null || _b === void 0 ? void 0 : _b.setAttribute("hidden", "");
             if (retorno.status === 200) {
                 Carregar_Tarefas();
             }
             else {
                 const { erro } = yield retorno.json();
-                return Promise.resolve({ error: erro });
+                console.log(erro);
             }
+            (_b = document.querySelector("#loading")) === null || _b === void 0 ? void 0 : _b.setAttribute("hidden", "");
         }
         catch (error) {
             console.log(error);
         }
-        return;
     });
 }
 function excluir_tarefa(id) {
-    var _a;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
-        (_a = document.querySelector("#loading")) === null || _a === void 0 ? void 0 : _a.removeAttribute("hidden");
-        yield fetch("http://localhost:3000/tarefas", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token, id }),
-        }).then((retorno) => __awaiter(this, void 0, void 0, function* () {
+        try {
+            (_a = document.querySelector("#loading")) === null || _a === void 0 ? void 0 : _a.removeAttribute("hidden");
+            const retorno = yield fetch("http://localhost:3000/tarefas", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ token, id }),
+            });
             if (retorno.status === 204) {
+                console.log("Tarefa excluída");
                 Carregar_Tarefas();
             }
             else {
                 const { erro } = yield retorno.json();
-                return Promise.resolve({ error: erro });
+                console.log(erro);
             }
-        })).finally(() => {
-            var _a;
-            (_a = document.querySelector("#loading")) === null || _a === void 0 ? void 0 : _a.setAttribute("hidden", "");
-        });
+            (_b = document.querySelector("#loading")) === null || _b === void 0 ? void 0 : _b.setAttribute("hidden", "");
+        }
+        catch (error) {
+            console.log(error);
+        }
     });
 }
 function concluir_tarefa(id) {
-    var _a;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         (_a = document.querySelector("#loading")) === null || _a === void 0 ? void 0 : _a.removeAttribute("hidden");
-        yield fetch("http://localhost:3000/tarefas/concluir", {
+        const retorno = yield fetch("http://localhost:3000/tarefas/concluir", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ token, id }),
-        }).then((retorno) => __awaiter(this, void 0, void 0, function* () {
-            if (retorno.status === 200) {
-                Carregar_Tarefas();
-            }
-            else {
-                const { erro } = yield retorno.json();
-                return Promise.resolve({ error: erro });
-            }
-        })).finally(() => {
-            var _a;
-            (_a = document.querySelector("#loading")) === null || _a === void 0 ? void 0 : _a.setAttribute("hidden", "");
         });
+        console.log(retorno);
+        (_b = document.querySelector("#loading")) === null || _b === void 0 ? void 0 : _b.setAttribute("hidden", "");
+        if (retorno.status === 200) {
+            console.log("Tarefa marcada como concluída");
+            Carregar_Tarefas();
+        }
+        else {
+            const { erro } = yield retorno.json();
+            return Promise.resolve({ error: erro });
+        }
+    });
+}
+function desmarcar_tarefa_como_concluida(id) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        (_a = document.querySelector("#loading")) === null || _a === void 0 ? void 0 : _a.removeAttribute("hidden");
+        const retorno = yield fetch("http://localhost:3000/tarefas/desconcluir", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token, id }),
+        });
+        console.log(retorno);
+        (_b = document.querySelector("#loading")) === null || _b === void 0 ? void 0 : _b.setAttribute("hidden", "");
+        if (retorno.status === 200) {
+            console.log("Tarefa desmarcada como concluída");
+            Carregar_Tarefas();
+        }
+        else {
+            const { erro } = yield retorno.json();
+            console.log(erro);
+        }
     });
 }
 function append_tarefa(tarefa) {
@@ -110,7 +158,7 @@ function append_tarefa(tarefa) {
     const status_tarefa = clone.querySelector("#status_tarefa");
     const btn_editar_tarefa = clone.querySelector("#botoes_tarefa #editar_tarefa_bnt");
     const btn_excluir_tarefa = clone.querySelector("#botoes_tarefa #excluir_tarefa_bnt");
-    const concluir_tarefa = clone.querySelector("#concluir_tarefa_checkbox");
+    const concluir_tarefa_bnt = clone.querySelector("#concluir_tarefa_checkbox");
     titulo.innerText = tarefa.titulo;
     descricao.innerText = tarefa.descricao;
     data_tarefa.innerText = `Data Conclusão: ${tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data"}`;
@@ -128,8 +176,18 @@ function append_tarefa(tarefa) {
     }
     status_tarefa.innerText = `Status: ${status}`;
     if (tarefa.status === "C") {
-        concluir_tarefa.setAttribute("checked", "");
+        concluir_tarefa_bnt.setAttribute("checked", "");
     }
+    concluir_tarefa_bnt.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+        if (concluir_tarefa_bnt.checked) {
+            console.log("Tarefa concluída");
+            yield concluir_tarefa(tarefa.id);
+        }
+        else {
+            console.log("Tarefa desmarcada como concluída");
+            yield desmarcar_tarefa_como_concluida(tarefa.id);
+        }
+    }));
     btn_editar_tarefa.addEventListener("click", () => {
         const div_editar_tarefa = document.querySelector("#edit_tarefa");
         if (!div_editar_tarefa) {
@@ -141,7 +199,8 @@ function append_tarefa(tarefa) {
             console.log("Elemento não encontrado");
             return;
         }
-        section_tarefa.setAttribute("id", tarefa.id);
+        const input_id = div_editar_tarefa.querySelector("#id_tarefa");
+        input_id.value = tarefa.id;
         const titulo_editar_tarefa = div_editar_tarefa.querySelector("#edit-titulo_tarefa");
         const descricao_editar_tarefa = div_editar_tarefa.querySelector("#edit-descricao_tarefa");
         const data_editar_tarefa = div_editar_tarefa.querySelector("#edit-data_tarefa");
@@ -157,7 +216,7 @@ function append_tarefa(tarefa) {
             div_editar_tarefa.setAttribute("hidden", "");
         });
         salvar_editar_tarefa.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
-            editar_tarefa(tarefa.id, titulo_editar_tarefa.value, descricao_editar_tarefa.value, prioridade_editar_tarefa.value, data_editar_tarefa.value);
+            editar_tarefa(input_id.value, titulo_editar_tarefa.value, descricao_editar_tarefa.value, prioridade_editar_tarefa.value, data_editar_tarefa.value);
         }));
     });
     btn_excluir_tarefa.addEventListener("click", () => {
@@ -433,11 +492,9 @@ function atualizar_paginas() {
             return;
         }
         pagina_atual.innerText = `${pagina + 1}`;
-        if (pagina + 2 > total) {
-            pagina_seguinte.setAttribute("hidden", "");
-            return;
-        }
-        pagina_seguinte.innerText = `${pagina + 2}`;
+        pagina + 2 > total ?
+            pagina_seguinte.setAttribute("hidden", "") :
+            pagina_seguinte.innerText = `${pagina + 2}`;
         Carregar_Tarefas();
         atualizar_paginas();
     });
@@ -450,6 +507,110 @@ function atualizar_paginas() {
         pagina_seguinte.innerText = `${pagina}`;
         Carregar_Tarefas();
         atualizar_paginas();
+    });
+}
+function editar_dados_usuario() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const div_dados_usuario = document.querySelector("#dados_perfil");
+        const div_nome = div_dados_usuario.querySelector("#nome-perfil");
+        const div_email = div_dados_usuario.querySelector("#email-perfil");
+        const div_senha = div_dados_usuario.querySelector("#senha-perfil");
+        const nome_ancora = div_nome.querySelector("#nome-ancora");
+        const email_ancora = div_email.querySelector("#email-ancora");
+        const senha_ancora = div_senha.querySelector("#senha-ancora");
+        const input_nome = div_nome.querySelector("#nome_usuario");
+        const input_email = div_email.querySelector("#email_usuario");
+        const input_senha = div_senha.querySelector("#senha_usuario");
+        const retorno = yield fetch("http://localhost:3000/usuario", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                token: token,
+                nome_usuario: input_nome.value == "" ? null : input_nome.value,
+                email_usuario: input_email.value == "" ? null : input_email.value,
+                senha_usuario: input_senha.value == "" ? null : input_senha.value,
+            }),
+        });
+        if (retorno.status === 200) {
+            get_dados_usuario();
+        }
+        else {
+            const { error } = yield retorno.json();
+            console.log(error);
+        }
+    });
+}
+function append_dados(nome, email, senha, metodo_login) {
+    const div_dados_usuario = document.querySelector("#dados_perfil");
+    const div_nome = div_dados_usuario.querySelector("#nome-perfil");
+    const div_email = div_dados_usuario.querySelector("#email-perfil");
+    const div_senha = div_dados_usuario.querySelector("#senha-perfil");
+    const cancelar_alteracoes_perfil = div_dados_usuario.querySelector("#cancelar_perfil_bnt");
+    const salvar_alteracoes_perfil = div_dados_usuario.querySelector("#salvar_perfil_bnt");
+    cancelar_alteracoes_perfil.addEventListener("click", function () {
+        div_dados_usuario.setAttribute("hidden", "");
+    });
+    const nome_ancora = div_nome.querySelector("#nome");
+    const email_ancora = div_email.querySelector("#email");
+    const senha_ancora = div_senha.querySelector("#senha");
+    nome_ancora.innerText = nome;
+    email_ancora.innerText = email;
+    console.log(nome, email, senha, metodo_login);
+    if (metodo_login == "2") {
+        senha_ancora.innerText = "*".repeat(senha.length);
+    }
+    else {
+        senha_ancora.innerText = "Não cadastrada";
+    }
+    if (metodo_login == "2") {
+        nome_ancora.addEventListener("click", function () {
+            const input_nome = div_nome.querySelector("#nome_usuario");
+            input_nome.value = nome;
+            input_nome.removeAttribute("hidden");
+            nome_ancora.setAttribute("hidden", "");
+        });
+        email_ancora.addEventListener("click", function () {
+            const input_email = div_email.querySelector("#email_usuario");
+            input_email.value = email;
+            input_email.removeAttribute("hidden");
+            email_ancora.setAttribute("hidden", "");
+        });
+        senha_ancora.addEventListener("click", function () {
+            const input_senha = div_senha.querySelector("#senha_usuario");
+            input_senha.value = senha;
+            input_senha.removeAttribute("hidden");
+            senha_ancora.setAttribute("hidden", "");
+        });
+        salvar_alteracoes_perfil.addEventListener("click", function () {
+            return __awaiter(this, void 0, void 0, function* () {
+                editar_dados_usuario();
+            });
+        });
+    }
+    else {
+        salvar_alteracoes_perfil.setAttribute("hidden", "");
+    }
+}
+function get_dados_usuario() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const retorno = yield fetch("http://localhost:3000/usuario/get", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: token }),
+        });
+        if (retorno.status === 200) {
+            const result = yield retorno.json();
+            const { nome_usuario, email_usuario, senha_usuario, id_metodo_login_usuario } = result.data;
+            append_dados(nome_usuario, email_usuario, senha_usuario, id_metodo_login_usuario);
+        }
+        else {
+            const { error } = yield retorno.json();
+            console.log(error);
+        }
     });
 }
 window.onload = function () {
@@ -476,6 +637,7 @@ window.onload = function () {
         const pesquisa = document.querySelector("#conf_usuario #search_input");
         const bnt_pesquisa = document.querySelector("#conf_usuario #search_bnt");
         yield Carregar_Tarefas();
+        yield get_dados_usuario();
         if (!cancelar_alteracoes_usuario || !salvar_alteracoes_usuario
             || !configuracoes || !select_ordenacao || !bnt_salvar_conf || !bnt_cancelar_conf
             || !menu_usuario || !bnt_visualizar_perfil || !bnt_new_tarefa || !bnt_add_tarefa

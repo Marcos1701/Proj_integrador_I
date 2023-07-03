@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/home.css">
     <link rel="stylesheet" href="../css/loader.css">
 
+    <script src="../javascript/usuario.js"></script>
     <script src="../javascript/home.js"></script>
 
 </head>
@@ -108,8 +109,9 @@
 
                 <div class="background-blur" id="edit_tarefa" hidden>
                     <section class="editar_tarefa">
+                        <input type="hidden" id="id_tarefa">
                         <h3>EDITAR TAREFA</h3>
-
+                        <p id="msg-erro_edit"></p>
                         <form action="" id="edit-form_tarefa">
                             <div id="titulo-tarefa">
                                 <label for="edit-titulo_tarefa">Novo Título: </label>

@@ -11,8 +11,9 @@ const validastring = (...id: string[]) => {
     return true
 }
 
-async function get_email(token: string): Promise<string> {
+export async function get_email(token: string): Promise<string> {
     const retorno = await client.query(`SELECT email FROM usuario WHERE token = $1`, [token]);
+    console.log(retorno.rows[0]);
     const email = retorno.rows[0].email;
     if (email === undefined || email === null) {
         return "";
@@ -23,7 +24,7 @@ async function get_email(token: string): Promise<string> {
 
 async function adicionar_tarefa(req: Request, res: Response) {
     const { token, titulo, descricao, data, prioridade } = req.body;
-    if (!validastring(token, titulo, descricao, data, prioridade)) {
+    if (!validastring(token, titulo, descricao, prioridade)) {
         return res.status(400).json({ erro: "Dados inválidos" });
     }
     const email: string = await get_email(token)
@@ -39,7 +40,6 @@ async function adicionar_tarefa(req: Request, res: Response) {
 
     const id = uuid();
     if (data === undefined || data === null) {
-
         client.query(`SELECT ADICIONAR_TAREFA($1, $2, $3, $4, $5)`, [id, titulo, descricao, id_usuario, prioridade], (err, result) => {
             if (err) {
                 console.log(err);
@@ -60,7 +60,7 @@ async function adicionar_tarefa(req: Request, res: Response) {
 
 async function editar_tarefa(req: Request, res: Response) {
     const { token, id, titulo, descricao, data, prioridade } = req.body;
-    if (!validastring(token, id, titulo, descricao, data, prioridade)) {
+    if (!validastring(token, id, titulo, descricao, prioridade)) {
         return res.status(400).json({ erro: "Dados inválidos" });
     }
     const email: string = await get_email(token)
@@ -70,8 +70,7 @@ async function editar_tarefa(req: Request, res: Response) {
     const id_usuario = await client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
         return result.rows[0].get_id_usuario;
     }).catch((err) => {
-        console.log(err);
-        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+        return res.status(500).json({ erro: err.message });
     });
 
 
@@ -86,8 +85,7 @@ async function editar_tarefa(req: Request, res: Response) {
     } else {
         client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id_usuario, id, titulo, descricao, data, prioridade], (err, result) => {
             if (err) {
-                console.log(err);
-                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                return res.status(500).json({ erro: err.message });
             }
             return res.status(200).json({ id: id });
         });
@@ -106,16 +104,14 @@ async function excluir_tarefa(req: Request, res: Response) {
     const id_usuario = await client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
         return result.rows[0].get_id_usuario;
     }).catch((err) => {
-        console.log(err);
-        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+        return res.status(500).json({ erro: err.message });
     });
 
     client.query(`SELECT DELETAR_TAREFA($1, $2)`, [id, id_usuario], (err, result) => {
         if (err) {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err.message });
         }
-        return res.status(204);
+        return res.sendStatus(204);
     });
 }
 
@@ -131,15 +127,14 @@ async function get_tarefas(req: Request, res: Response) {
     const id_usuario = await client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
         return result.rows[0].get_id_usuario;
     }).catch((err) => {
-        console.log(err);
-        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+
+        return res.status(500).json({ erro: err.message });
     });
 
     const tarefas = await client.query(`SELECT * FROM TAREFA WHERE ID_USUARIO = $1`, [id_usuario]).then((result) => {
         return result.rows;
     }).catch((err) => {
-        console.log(err);
-        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+        return res.status(500).json({ erro: err.message });
     }) as any[];
 
     if (tarefas === undefined || tarefas === null || tarefas.length === 0) {
@@ -178,7 +173,6 @@ async function get_tarefas(req: Request, res: Response) {
         }
     }
 
-    // console.log(tarefas);
 
     let retorno_tarefas = []; // organiza as tarefas de 3 em 3
     let count = 0;
@@ -198,7 +192,7 @@ async function get_tarefas(req: Request, res: Response) {
         tarefas_aux.push(tarefa_aux);
         count++;
         total++;
-        if (count === 3 || tarefas.length === 1 || (tarefas.length === 2 && count === 1) || total === tarefas.length) {
+        if (count === 3 || tarefas.length === 1 || (tarefas.length === 2 && count === 2) || total === tarefas.length) {
             retorno_tarefas.push(tarefas_aux);
             tarefas_aux = [];
             count = 0;
@@ -244,18 +238,40 @@ async function concluir_tarefa(req: Request, res: Response) {
     const id_usuario = await client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
         return result.rows[0].get_id_usuario;
     }).catch((err) => {
-        console.log(err);
-        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+        return res.status(500).json({ erro: err.message });
     });
 
     client.query(`SELECT CONCLUIR_TAREFA($1, $2)`, [id, id_usuario], (err, result) => {
         if (err) {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err.message });
         }
-        return res.status(200);
+        return res.sendStatus(200);
     });
 }
+
+async function desconcluir_tarefa(req: Request, res: Response) {
+    const { token, id } = req.body;
+    if (!validastring(token, id)) {
+        return res.status(400).json({ erro: "Dados inválidos" });
+    }
+    const email: string = await get_email(token)
+    if (email === "") {
+        return res.status(400).json({ erro: "Token inválido" });
+    }
+    const id_usuario = await client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
+        return result.rows[0].get_id_usuario;
+    }).catch((err) => {
+        return res.status(500).json({ erro: err.message });
+    });
+
+    client.query(`SELECT DESCONCLUIR_TAREFA($1, $2)`, [id, id_usuario], (err, result) => {
+        if (err) {
+            return res.status(500).json({ erro: err.message });
+        }
+        return res.sendStatus(200);
+    });
+}
+
 
 async function get_tarefa(req: Request, res: Response) {
     const { token, id } = req.body;
@@ -269,14 +285,13 @@ async function get_tarefa(req: Request, res: Response) {
     const id_usuario = await client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
         return result.rows[0].get_id_usuario;
     }).catch((err) => {
-        console.log(err);
-        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+        return res.status(500).json({ erro: err.message });
     });
 
     const tarefa: any = await client.query(`SELECT GET_TAREFA($1, $2)`, [id, id_usuario], (err, result) => {
         if (err) {
             console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(500).json({ erro: err });
         }
         return result.rows[0].get_tarefa;
     });
@@ -290,5 +305,15 @@ async function get_tarefa(req: Request, res: Response) {
 
 export {
     adicionar_tarefa, excluir_tarefa, get_tarefas,
-    concluir_tarefa, get_tarefa, editar_tarefa
+    concluir_tarefa, get_tarefa, editar_tarefa, desconcluir_tarefa
 };
+
+setInterval(() => {
+    //atualizar tarefas a cada 24 horas
+    client.query(`SELECT ATUALIZAR_TAREFAS()`, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+    })
+}, 86400000 //24 horas
+)

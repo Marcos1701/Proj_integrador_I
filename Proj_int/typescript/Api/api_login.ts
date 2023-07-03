@@ -12,7 +12,7 @@ const validastring = (...id: string[]) => {
     return true
 }
 
-const gerar_JWT = (email: string, senha: string) => {
+export const gerar_JWT = (email: string, senha: string) => {
     if (!validastring(email, senha)) {
         return null;
     }
