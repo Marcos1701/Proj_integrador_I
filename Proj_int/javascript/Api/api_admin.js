@@ -16,8 +16,8 @@ const validastring = (...id) => {
         if (id[i] === '' || id[i] === undefined || id[i] === null) {
             return false;
         }
-        return true;
     }
+    return true;
 };
 function get_email(token) {
     return __awaiter(this, void 0, void 0, function* () {

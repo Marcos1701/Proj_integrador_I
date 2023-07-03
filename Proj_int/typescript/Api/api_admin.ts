@@ -6,8 +6,8 @@ const validastring = (...id: string[]) => {
         if (id[i] === '' || id[i] === undefined || id[i] === null) {
             return false
         }
-        return true
     }
+    return true
 }
 
 async function get_email(token: string): Promise<string> {

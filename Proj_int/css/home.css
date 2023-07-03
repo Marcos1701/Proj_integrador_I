@@ -49,7 +49,6 @@ header {
     box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.15);
     border: 1px solid #000000;
     gap: 3vh;
-
 }
 
 #perfil_usuario #img-perfil {
@@ -107,7 +106,7 @@ header {
 }
 
 :is(#perfil_usuario #dados_perfil #botoes-perfil,
-    #adicionar_tarefa #form_tarefa #botoes-tarefa, #visualizar_tarefa #botoes-tarefa) button {
+    #adicionar_tarefa #form_tarefa #botoes-tarefa, .visualizar_tarefa #botoes-tarefa, .editar_tarefa #botoes-tarefa) button {
     width: 10vw;
     height: 4vh;
     border: 1px solid #313056;
@@ -119,13 +118,15 @@ header {
 }
 
 :is(#perfil_usuario #dados_perfil #botoes-perfil,
-    #adicionar_tarefa #form_tarefa #botoes-tarefa, #visualizar_tarefa #botoes-tarefa) button:hover {
+    #adicionar_tarefa #form_tarefa #botoes-tarefa, .visualizar_tarefa #botoes-tarefa, .editar_tarefa #botoes-tarefa) button:hover {
     cursor: pointer;
     background: #313056;
     color: #ffffff;
 }
 
-#adicionar_tarefa {
+#adicionar_tarefa,
+.editar_tarefa,
+.visualizar-tarefa {
     position: absolute;
     z-index: 1;
     top: 10vh;
@@ -150,7 +151,12 @@ header {
     color: #313056;
 }
 
-#adicionar_tarefa #titulo_tarefa_input {
+.editar_tarefa {
+    height: 60vh;
+}
+
+#adicionar_tarefa #titulo_tarefa_input,
+.editar_tarefa #edit-titulo_tarefa {
     width: 15vw;
     padding: 1vh;
     padding-left: 1.5vh;
@@ -162,7 +168,39 @@ header {
     color: #313056;
 }
 
-#adicionar_tarefa #titulo_tarefa_input::placeholder {
+.editar_tarefa form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2vh;
+}
+
+.editar_tarefa div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1vh;
+}
+
+.editar_tarefa #botoes-tarefa {
+    flex-direction: row;
+    gap: 5vw;
+}
+
+.editar_tarefa #edit-titulo_tarefa {
+    width: 10vw;
+    padding: .5vh;
+    padding-left: 1.4vw;
+    margin-left: 1vw;
+    border: 1px solid #313056;
+    border-radius: 15px;
+    font-size: 2vh;
+    background: none;
+    color: #313056;
+}
+
+#adicionar_tarefa #titulo_tarefa_input::placeholder,
+.editar_tarefa #edit-titulo_tarefa::placeholder {
     font-size: 1.8vh;
     color: #313056;
 }
@@ -171,14 +209,16 @@ header {
     outline: none;
 }
 
-#adicionar_tarefa #descricao-tarefa {
+#adicionar_tarefa #descricao-tarefa,
+.editar_tarefa #edit-descricao_tarefa {
     display: flex;
     align-items: center;
     gap: 1vw;
     padding: 0;
 }
 
-#adicionar_tarefa #descricao_tarefa_input {
+#adicionar_tarefa #descricao_tarefa_input,
+.editar_tarefa #edit-descricao_tarefa {
     width: 15vw;
     padding: 1vh;
     border: 1px solid #313056;
@@ -247,7 +287,8 @@ header {
     width: 15px;
 }
 
-#adicionar_tarefa #data_tarefa_input {
+#adicionar_tarefa #data_tarefa_input,
+.editar_tarefa #edit-data_tarefa {
     /*input do tipo date*/
 
     width: 12vw;
@@ -261,7 +302,8 @@ header {
     text-align: center;
 }
 
-#adicionar_tarefa #data_tarefa_input:focus {
+#adicionar_tarefa #data_tarefa_input:focus,
+.editar_tarefa #edit-data_tarefa:focus {
     outline: none;
 }
 
@@ -271,7 +313,9 @@ header {
     gap: 2vh;
 }
 
-#adicionar_tarefa #form_tarefa #botoes-tarefa {
+#adicionar_tarefa #form_tarefa #botoes-tarefa,
+.editar_tarefa #botoes-tarefa,
+.visualizar-tarefa #botoes-tarefa {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -632,20 +676,33 @@ a {
     height: 12px;
 }
 
+.visualizar-tarefa {
+    gap: .6vh;
+    height: 50%;
+    width: 25%;
+    align-items: stretch;
+    justify-content: center;
+}
+
 #visualizar_tarefa :is(#titulo-tarefa, #descricao-tarefa, #data_criacao-tarefa, #data-tarefa, #status-tarefa) {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: .6vh;
 }
 
 #visualizar_tarefa #prioridade-tarefa {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: .8vh;
 }
+
+#visualizar_tarefa label {
+    font-size: 2.5vh;
+    font-weight: 600;
+}
+
 
 
 @media(max-width: 950px) {

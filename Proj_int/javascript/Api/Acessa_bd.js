@@ -206,7 +206,8 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION EDITAR_TAREFA(ID_DO_USUARIO VARCHAR, id_tarefa VARCHAR, titulo VARCHAR(150), descricao VARCHAR(300), data_conclusao DATE DEFAULT NULL, prioridade INTEGER DEFAULT NULL)
+
+        CREATE OR REPLACE FUNCTION EDITAR_TAREFA(ID_DO_USUARIO VARCHAR, id_tarefa VARCHAR, titulo_tr VARCHAR(150), descricao_tr VARCHAR(300), prioridade_tr INTEGER DEFAULT NULL, data_conclusao_tr DATE DEFAULT NULL)
         RETURNS VOID AS $$
         BEGIN
             IF (id_tarefa IS NULL) THEN
@@ -218,17 +219,17 @@ client.connect().then(() => {
             END IF;
 
             IF EXISTS (SELECT * FROM TAREFA WHERE id = id_tarefa AND id_usuario = id_do_usuario) THEN
-                IF (titulo IS NOT NULL) THEN
-                    UPDATE TAREFA SET titulo = titulo WHERE id = id_tarefa AND id_usuario = id_do_usuario;
+                IF (titulo_tr IS NOT NULL) THEN
+                    UPDATE TAREFA SET titulo = titulo_tr WHERE id = id_tarefa AND id_usuario = id_do_usuario;
                 END IF;
-                IF (descricao IS NOT NULL) THEN
-                    UPDATE TAREFA SET descricao = descricao WHERE id = id_tarefa AND id_usuario = id_do_usuario;
+                IF (descricao_tr IS NOT NULL) THEN
+                    UPDATE TAREFA SET descricao = descricao_tr WHERE id = id_tarefa AND id_usuario = id_do_usuario;
                 END IF;
-                IF (data_conclusao IS NOT NULL) THEN
-                    UPDATE TAREFA SET data_conclusao = data_conclusao WHERE id = id_tarefa AND id_usuario = id_do_usuario;
+                IF (data_conclusao_tr IS NOT NULL) THEN
+                    UPDATE TAREFA SET data_conclusao = data_conclusao_tr WHERE id = id_tarefa AND id_usuario = id_do_usuario;
                 END IF;
-                IF (prioridade IS NOT NULL) THEN
-                    UPDATE TAREFA SET prioridade = prioridade WHERE id = id_tarefa AND id_usuario = id_do_usuario;
+                IF (prioridade_tr IS NOT NULL) THEN
+                    UPDATE TAREFA SET prioridade = prioridade_tr WHERE id = id_tarefa AND id_usuario = id_do_usuario;
                 END IF;
             ELSE
                 RAISE EXCEPTION 'Tarefa nao cadastrada OU USUARIO NAO TEM PERMISSAO PARA EDITAR ESTA TAREFA';

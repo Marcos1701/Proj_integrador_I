@@ -8,8 +8,8 @@ const validastring = (...id: string[]) => {
         if (id[i] === '' || id[i] === undefined || id[i] === null) {
             return false
         }
-        return true
     }
+    return true
 }
 
 const gerar_JWT = (email: string, senha: string) => {

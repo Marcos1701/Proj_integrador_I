@@ -41,8 +41,8 @@ const validastring = (...id) => {
         if (id[i] === '' || id[i] === undefined || id[i] === null) {
             return false;
         }
-        return true;
     }
+    return true;
 };
 const gerar_JWT = (email, senha) => {
     if (!validastring(email, senha)) {

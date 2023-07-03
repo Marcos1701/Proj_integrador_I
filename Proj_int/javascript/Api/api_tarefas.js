@@ -17,8 +17,8 @@ const validastring = (...id) => {
         if (id[i] === '' || id[i] === undefined || id[i] === null) {
             return false;
         }
-        return true;
     }
+    return true;
 };
 function get_email(token) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -70,8 +70,8 @@ function adicionar_tarefa(req, res) {
 exports.adicionar_tarefa = adicionar_tarefa;
 function editar_tarefa(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { token, id, titulo, descricao, data_final, prioridade } = req.body;
-        if (!validastring(token, id, titulo, descricao, data_final, prioridade)) {
+        const { token, id, titulo, descricao, data, prioridade } = req.body;
+        if (!validastring(token, id, titulo, descricao, data, prioridade)) {
             return res.status(400).json({ erro: "Dados inválidos" });
         }
         const email = yield get_email(token);
@@ -84,13 +84,24 @@ function editar_tarefa(req, res) {
             console.log(err);
             return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
         });
-        Acessa_bd_1.client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id_usuario, id, titulo, descricao, data_final, prioridade], (err, result) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
-            }
-            return res.status(200).json({ id: id });
-        });
+        if (data === undefined || data === null) {
+            Acessa_bd_1.client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, NULL)`, [id_usuario, id, titulo, descricao, prioridade], (err, result) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                }
+                return res.status(200).json({ id: id });
+            });
+        }
+        else {
+            Acessa_bd_1.client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id_usuario, id, titulo, descricao, data, prioridade], (err, result) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+                }
+                return res.status(200).json({ id: id });
+            });
+        }
     });
 }
 exports.editar_tarefa = editar_tarefa;
@@ -167,10 +178,10 @@ function get_tarefas(req, res) {
                 }
             }
         }
-        else if (ordenacao === "criacao") {
+        else if (ordenacao === "criacao") { // ordena por data de criação de forma decrescente (mais recente para mais antiga)
             for (let i = 0; i < tarefas.length; i++) {
                 for (let j = 0; j < tarefas.length; j++) {
-                    if (tarefas[i].data_criacao > tarefas[j].data_criacao) {
+                    if (tarefas[i].data_criacao < tarefas[j].data_criacao) {
                         let aux = tarefas[i];
                         tarefas[i] = tarefas[j];
                         tarefas[j] = aux;
@@ -178,8 +189,10 @@ function get_tarefas(req, res) {
                 }
             }
         }
+        // console.log(tarefas);
         let retorno_tarefas = []; // organiza as tarefas de 3 em 3
         let count = 0;
+        let total = 0;
         let tarefas_aux = [];
         for (let tarefa of tarefas) {
             let tarefa_aux = {
@@ -193,19 +206,14 @@ function get_tarefas(req, res) {
             };
             tarefas_aux.push(tarefa_aux);
             count++;
-            if (count === 3 || tarefas.length === 1) {
-                retorno_tarefas.push(tarefas_aux);
-                tarefas_aux = [];
-                count = 0;
-            }
-            if (tarefas.length === 2 && count === 1) {
+            total++;
+            if (count === 3 || tarefas.length === 1 || (tarefas.length === 2 && count === 1) || total === tarefas.length) {
                 retorno_tarefas.push(tarefas_aux);
                 tarefas_aux = [];
                 count = 0;
             }
         }
-        // console.log(tarefas)
-        // console.log(retorno_tarefas)
+        // console.log(retorno_tarefas);
         return res.status(200).json({ tarefas: retorno_tarefas });
     });
 }
