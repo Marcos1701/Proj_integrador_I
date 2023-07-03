@@ -1,35 +1,36 @@
+const token = localStorage.getItem("token");
+const ordenacao = localStorage.getItem("ordenacao");
 
-const token: string = localStorage.getItem("token") as string;
-const ordenacao: string = localStorage.getItem("ordenacao") as string;
 if (!token) {
     window.location.href = "login.html";
 }
 if (!ordenacao) {
     localStorage.setItem("ordenacao", "criacao");
 }
-//
-async function editar_tarefa(id: string, titulo: string, descricao: string, prioridade: string, data_conclusao: string): Promise<any> {
-    document.querySelector("#loading")?.removeAttribute("hidden");
-    console.log(data_conclusao);
-    const data = data_conclusao ? new Date(data_conclusao) : null;
-    console.log(data);
-    await fetch("http://localhost:3000/tarefas", {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token, id, titulo, descricao, data, prioridade }),
-    }).then(async (retorno) => {
+
+async function editar_tarefa(id: string, titulo: string, descricao: string, prioridade: string, data_conclusao: string) {
+    try {
+        document.querySelector("#loading")?.removeAttribute("hidden");
+        const data = data_conclusao ? new Date(data_conclusao) : null;
+        const retorno = await fetch("http://localhost:3000/tarefas", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token, id, titulo, descricao, data, prioridade }),
+        })
+        document.querySelector("#loading")?.setAttribute("hidden", "");
         if (retorno.status === 200) {
             Carregar_Tarefas();
         }
         else {
             const { erro } = await retorno.json();
-            return { error: erro };
+            return Promise.resolve({ error: erro });
         }
-    }).finally(() => {
-        document.querySelector("#loading")?.setAttribute("hidden", "");
-    });
+    } catch (error) {
+        console.log(error);
+    }
+    return;
 }
 
 async function excluir_tarefa(id: string): Promise<any> {
@@ -46,7 +47,7 @@ async function excluir_tarefa(id: string): Promise<any> {
         }
         else {
             const { erro } = await retorno.json();
-            return { error: erro };
+            return Promise.resolve({ error: erro });
         }
     }).finally(() => {
         document.querySelector("#loading")?.setAttribute("hidden", "");
@@ -68,378 +69,130 @@ async function concluir_tarefa(id: string): Promise<any> {
         }
         else {
             const { erro } = await retorno.json();
-            return { error: erro };
+            return Promise.resolve({ error: erro });
         }
     }).finally(() => {
         document.querySelector("#loading")?.setAttribute("hidden", "");
     });
 }
 
-
-
-async function Carregar_Tarefas(): Promise<any[]> {
-    try {
-        document.querySelector("#loading")?.removeAttribute("hidden");
-
-        const retorno = await fetch("http://localhost:3000/tarefas/get/all", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token, ordenacao }),
-        }).then(async (retorno) => {
-            if (retorno.status === 200) {
-                const { tarefas } = await retorno.json();
-                return tarefas;
-            }
-            else {
-                const { erro } = await retorno.json();
-                return { error: erro };
-            }
-        })
-
-        const tarefas: any[] = retorno
-        console.log(tarefas);
-        const div_tarefas: HTMLDivElement = document.querySelector("#tarefas-conteiner") as HTMLDivElement;
-        if (!div_tarefas) {
-            console.log("Elemento não encontrado");
-            return [];
-        }
-        if (tarefas.length === 0) {
-            div_tarefas.innerHTML = "<h3>Nenhuma tarefa encontrada</h3>";
-            return [];
-        }
-        // console.log(tarefas);
-        div_tarefas.innerHTML = "";
-        const template_tarefas: HTMLTemplateElement = document.querySelector("#template-tarefa") as HTMLTemplateElement;
-        if (!template_tarefas) {
-            console.log("Elemento não encontrado");
-            return [];
-        }
-        const pagina_atual: string = document.getElementById("pagina_atual")?.innerText as string;
-        if (!pagina_atual) {
-            console.log("Pagina atual não encontrada");
-            return [];
-        }
-        const pagina: number = parseInt(pagina_atual) - 1;
-
-        for (let i = 0; i < tarefas[pagina].length; i++) {
-            const tarefa = tarefas[pagina][i];
-            const clone = template_tarefas.content.cloneNode(true) as DocumentFragment;
-            const div_tarefa: HTMLDivElement = clone.querySelector(".tarefa") as HTMLDivElement;
-            div_tarefa.setAttribute("id", tarefa.id);
-            const titulo: HTMLDivElement = clone.querySelector("#titulo_tarefa") as HTMLDivElement;
-            const descricao: HTMLDivElement = clone.querySelector("#descricao_tarefa") as HTMLDivElement;
-            const data_tarefa: HTMLDivElement = clone.querySelector("#data_tarefa") as HTMLDivElement;
-            const data_criacao_tarefa: HTMLDivElement = clone.querySelector("#data_criacao_tarefa") as HTMLDivElement;
-            const prioridade_tarefa: HTMLDivElement = clone.querySelector("#prioridade_tarefa") as HTMLDivElement;
-            const status_tarefa: HTMLDivElement = clone.querySelector("#status_tarefa") as HTMLDivElement;
-            const btn_editar_tarefa: HTMLButtonElement = clone.querySelector("#botoes_tarefa #editar_tarefa_bnt") as HTMLButtonElement;
-            const btn_excluir_tarefa: HTMLButtonElement = clone.querySelector("#botoes_tarefa #excluir_tarefa_bnt") as HTMLButtonElement;
-            const concluir_tarefa: HTMLInputElement = clone.querySelector("#concluir_tarefa_checkbox") as HTMLInputElement;
-
-
-            titulo.innerText = tarefa.titulo;
-            descricao.innerText = tarefa.descricao;
-            data_tarefa.innerText = `Data Conclusão: ${tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data"}`;
-            data_criacao_tarefa.innerText = `Data Criação: ${new Date(tarefa.data_criacao).toLocaleDateString()}`;
-            prioridade_tarefa.innerText = `Prioridade: ${tarefa.prioridade}`;
-            let status: string;
-            if (tarefa.status === "P") {
-                status = "Pendente";
-            } else if (tarefa.status === "C") {
-                status = "Concluida";
-            } else {
-                status = "Atrasada";
-            }
-            status_tarefa.innerText = `Status: ${status}`;
-
-            if (tarefa.status === "C") {
-                concluir_tarefa.setAttribute("checked", "");
-            }
-
-            btn_editar_tarefa.addEventListener("click", () => {
-                const div_editar_tarefa: HTMLDivElement = document.querySelector("#edit_tarefa") as HTMLDivElement;
-                if (!div_editar_tarefa) {
-                    console.log("Elemento não encontrado");
-                    return;
-                }
-                const section_tarefa: HTMLDivElement = div_editar_tarefa.querySelector(".editar_tarefa") as HTMLDivElement;
-                if (!section_tarefa) {
-                    console.log("Elemento não encontrado");
-                    return;
-                }
-
-                section_tarefa.setAttribute("id", tarefa.id);
-                const titulo_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-titulo_tarefa") as HTMLInputElement;
-                const descricao_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-descricao_tarefa") as HTMLInputElement;
-                const data_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-data_tarefa") as HTMLInputElement;
-                const prioridade_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-prioridade_tarefa") as HTMLInputElement;
-                const cancelar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#cancelar_edit-tarefa_bnt") as HTMLButtonElement;
-                const salvar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#salvar_edit-tarefa_bnt") as HTMLButtonElement;
-
-                titulo_editar_tarefa.value = tarefa.titulo;
-                descricao_editar_tarefa.value = tarefa.descricao;
-                data_editar_tarefa.value = tarefa.data ? new Date(tarefa.data).toISOString().split("T")[0] : "";
-                prioridade_editar_tarefa.value = tarefa.prioridade;
-
-                div_editar_tarefa.removeAttribute("hidden");
-
-                cancelar_editar_tarefa.addEventListener("click", () => {
-                    div_editar_tarefa.setAttribute("hidden", "");
-                });
-
-                salvar_editar_tarefa.addEventListener("click", async () => {
-                    editar_tarefa(tarefa.id, titulo_editar_tarefa.value, descricao_editar_tarefa.value, prioridade_editar_tarefa.value, data_editar_tarefa.value);
-                });
-            });
-
-            btn_excluir_tarefa.addEventListener("click", () => {
-                const confirmacao_excluir_tarefa = confirm("Deseja excluir a tarefa?");
-                if (confirmacao_excluir_tarefa) {
-                    excluir_tarefa(tarefa.id);
-                }
-            });
-
-            const tarefa_content: HTMLDivElement = clone.querySelector(".tarefa-content") as HTMLDivElement;
-            if (!tarefa_content) {
-                console.log("Elemento não encontrado");
-                return [];
-            }
-
-            tarefa_content.addEventListener("click", () => {
-                const div_visualizar_tarefa: HTMLDivElement = document.querySelector("#visualizar_tarefa") as HTMLDivElement;
-                if (!div_visualizar_tarefa) {
-                    console.log("Elemento não encontrado");
-                    return;
-                }
-                const section_tarefa: HTMLDivElement = div_visualizar_tarefa.querySelector(".visualizar-tarefa") as HTMLDivElement;
-                if (!section_tarefa) {
-                    console.log("Elemento não encontrado");
-                    return;
-                }
-                section_tarefa.setAttribute("id", tarefa.id);
-                const titulo_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#titulo_tarefa") as HTMLParagraphElement;
-                const descricao_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#descricao_tarefa") as HTMLParagraphElement;
-                const data_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#data_tarefa") as HTMLParagraphElement;
-                const data_criacao_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#data_criacao_tarefa") as HTMLParagraphElement;
-                const prioridade_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#prioridade_tarefa") as HTMLParagraphElement;
-                const status_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#status_tarefa") as HTMLParagraphElement;
-
-
-                titulo_visualizar_tarefa.innerText = tarefa.titulo;
-                descricao_visualizar_tarefa.innerText = tarefa.descricao;
-                data_visualizar_tarefa.innerText = tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data";
-                data_criacao_visualizar_tarefa.innerText = new Date(tarefa.data_criacao).toLocaleDateString();
-                prioridade_visualizar_tarefa.innerText = tarefa.prioridade;
-
-                // console.log(tarefa.status)
-                let status: string = "";
-                if (tarefa.status === "P") {
-                    status = "Pendente";
-                } else if (tarefa.status === "C") {
-                    status = "Concluida";
-                } else {
-                    status = "Atrasada";
-                }
-                status_visualizar_tarefa.innerText = status;
-
-                const sair_visualizar_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#sair_visualizacao_tarefa") as HTMLButtonElement;
-                const btn_editar_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#editar_tarefa_bnt") as HTMLButtonElement;
-                const btn_excluir_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#excluir_tarefa_bnt") as HTMLButtonElement;
-
-                sair_visualizar_tarefa.addEventListener("click", () => {
-                    div_visualizar_tarefa.setAttribute("hidden", "");
-                });
-
-                btn_editar_tarefa.addEventListener("click", () => {
-                    const div_editar_tarefa: HTMLDivElement = document.querySelector("#edit_tarefa") as HTMLDivElement;
-                    if (!div_editar_tarefa) {
-                        console.log("Elemento não encontrado");
-                        return;
-                    }
-                    const section_tarefa: HTMLDivElement = div_editar_tarefa.querySelector(".editar_tarefa") as HTMLDivElement;
-                    if (!section_tarefa) {
-                        console.log("Elemento não encontrado");
-                        return;
-                    }
-
-                    section_tarefa.setAttribute("id", tarefa.id);
-                    const titulo_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-titulo_tarefa") as HTMLInputElement;
-                    const descricao_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-descricao_tarefa") as HTMLInputElement;
-                    const data_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-data_tarefa") as HTMLInputElement;
-                    const prioridade_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-prioridade_tarefa") as HTMLInputElement;
-                    const cancelar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#cancelar_tarefa_bnt") as HTMLButtonElement;
-                    const salvar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#salvar_tarefa_bnt") as HTMLButtonElement;
-
-                    titulo_editar_tarefa.value = tarefa.titulo;
-                    descricao_editar_tarefa.value = tarefa.descricao;
-                    data_editar_tarefa.value = tarefa.data ? new Date(tarefa.data).toISOString().split("T")[0] : "";
-                    prioridade_editar_tarefa.value = tarefa.prioridade;
-
-                    div_editar_tarefa.removeAttribute("hidden");
-
-                    cancelar_editar_tarefa.addEventListener("click", () => {
-                        div_editar_tarefa.setAttribute("hidden", "");
-                    });
-
-                    salvar_editar_tarefa.addEventListener("click", async () => {
-                        editar_tarefa(tarefa.id, titulo_editar_tarefa.value, descricao_editar_tarefa.value, prioridade_editar_tarefa.value, data_editar_tarefa.value);
-                    });
-                });
-
-                btn_excluir_tarefa.addEventListener("click", () => {
-                    const confirmacao_excluir_tarefa = confirm("Deseja excluir a tarefa?");
-                    if (confirmacao_excluir_tarefa) {
-                        excluir_tarefa(tarefa.id);
-                    }
-                });
-                div_visualizar_tarefa.removeAttribute("hidden");
-            });
-            div_tarefas.appendChild(clone);
-        }
-        return tarefas;
-    } catch (error) {
-        console.log(error);
-        return [];
-    } finally {
-        document.querySelector("#loading")?.setAttribute("hidden", "");
-    }
-}
-
-async function adicionar_tarefa() {
-    const token: string = localStorage.getItem("token") as string;
-    const input_titulo: HTMLInputElement = document.querySelector("#titulo_tarefa_input") as HTMLInputElement;
-    const input_descricao: HTMLInputElement = document.querySelector("#descricao_tarefa_input") as HTMLInputElement;
-    const input_data: HTMLInputElement = document.querySelector("#data_tarefa_input") as HTMLInputElement;
-    const input_prioridade: HTMLInputElement = document.querySelector("#prioridade_tarefa_input") as HTMLInputElement;
-
-    const titulo: string = input_titulo.value ? input_titulo.value : "Sem título";
-    const descricao: string = input_descricao.value ? input_descricao.value : "Sem descrição";
-    const data: Date | null = input_data.value ? new Date(input_data.value) : null;
-
-    const prioridade: number = input_prioridade.value ? parseInt(input_prioridade.value) : 0;
-
-    const retorno = await fetch("http://localhost:3000/tarefas", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token, titulo, descricao, data, prioridade }),
-    });
-    const result = await retorno.json();
-    if (result.erro) {
-        console.log(result.erro);
-        return;
-    }
-}
-
-
-
-function atualizar_paginas(tarefas: any[]) {
-    const pagina_atual: HTMLAnchorElement = document.getElementById("pagina_atual") as HTMLAnchorElement;
-    const pagina_seguinte: HTMLAnchorElement = document.getElementById("pagina_seguinte") as HTMLAnchorElement;
-    const total_paginas: HTMLAnchorElement = document.getElementById("total_paginas") as HTMLAnchorElement;
-    const separador: HTMLAnchorElement = document.getElementById("separador") as HTMLAnchorElement;
-    if (!pagina_atual || !pagina_seguinte || !total_paginas || !separador) {
-        console.log("Paginas não encontradas");
-        return;
-    }
-
-    if (tarefas.length < 2) {
-        pagina_atual.innerText = "1";
-        pagina_seguinte.setAttribute("hidden", "");
-        total_paginas.innerText = "1";
-        return;
-    }
-    pagina_seguinte.removeAttribute("hidden");
-    if (parseInt(pagina_atual.innerText) < tarefas.length) {
-        pagina_seguinte.innerText = `${parseInt(pagina_atual.innerText) + 1}`
-    } else {
-        pagina_seguinte.setAttribute("hidden", "");
-    }
-    total_paginas.innerText = tarefas.length.toString();
-
-    separador.addEventListener("click", () => {
-        if (tarefas.length < 3) return;
-        const div_pags = pagina_atual.parentElement as HTMLDivElement;
-        const aux1: HTMLAnchorElement = document.createElement("a") as HTMLAnchorElement;
-        const aux2: HTMLAnchorElement = document.createElement("a") as HTMLAnchorElement;
-        aux1.innerText = `${parseInt(pagina_seguinte.innerText) + 1}`;
-        aux2.innerText = `${parseInt(total_paginas.innerText) - 1}`;
-        div_pags.insertBefore(pagina_seguinte, aux1)
-        div_pags.insertBefore(separador, aux2)
-    })
-
-    const proxima_pagina: HTMLAnchorElement = document.getElementById("proximo_bnt") as HTMLAnchorElement;
-    const pagina_anterior: HTMLAnchorElement = document.getElementById("anterior_bnt") as HTMLAnchorElement;
-    if (!proxima_pagina || !pagina_anterior) {
-        console.log("Paginas não encontradas");
-        return;
-    }
-    proxima_pagina.addEventListener("click", () => {
-        const pagina = parseInt(pagina_atual.innerText);
-        if (pagina >= tarefas.length) {
-            return;
-        }
-        pagina_atual.innerText = `${pagina + 1}`;
-        pagina_seguinte.innerText = `${pagina + 2}`;
-    })
-    pagina_anterior.addEventListener("click", () => {
-        const pagina = parseInt(pagina_atual.innerText);
-        if (pagina <= 1) {
-            return;
-        }
-        pagina_atual.innerText = `${pagina - 1}`;
-        pagina_seguinte.innerText = `${pagina}`;
-    })
-}
-
-function atualizar_tarefas(tarefas: any[]) {
-    const div_tarefas: HTMLDivElement = document.querySelector("#tarefas") as HTMLDivElement;
+function append_tarefa(tarefa: any) {
+    const div_tarefas: HTMLDivElement = document.querySelector("#tarefas-conteiner") as HTMLDivElement;
     if (!div_tarefas) {
-        console.log("Div de tarefas não encontrada");
+        console.log("Elemento não encontrado");
         return;
     }
-    div_tarefas.innerHTML = "";
-    const pagina_atual: HTMLAnchorElement = document.getElementById("pagina_atual") as HTMLAnchorElement;
-    if (!pagina_atual) {
-        console.log("Pagina atual não encontrada");
-        return;
+    const template_tarefas: HTMLTemplateElement = document.querySelector("#template-tarefa") as HTMLTemplateElement;
+
+    const clone = template_tarefas.content.cloneNode(true) as DocumentFragment;
+    const div_tarefa: HTMLDivElement = clone.querySelector(".tarefa") as HTMLDivElement;
+    div_tarefa.setAttribute("id", tarefa.id);
+    const titulo: HTMLDivElement = clone.querySelector("#titulo_tarefa") as HTMLDivElement;
+    const descricao: HTMLDivElement = clone.querySelector("#descricao_tarefa") as HTMLDivElement;
+    const data_tarefa: HTMLDivElement = clone.querySelector("#data_tarefa") as HTMLDivElement;
+    const data_criacao_tarefa: HTMLDivElement = clone.querySelector("#data_criacao_tarefa") as HTMLDivElement;
+    const prioridade_tarefa: HTMLDivElement = clone.querySelector("#prioridade_tarefa") as HTMLDivElement;
+    const status_tarefa: HTMLDivElement = clone.querySelector("#status_tarefa") as HTMLDivElement;
+    const btn_editar_tarefa: HTMLButtonElement = clone.querySelector("#botoes_tarefa #editar_tarefa_bnt") as HTMLButtonElement;
+    const btn_excluir_tarefa: HTMLButtonElement = clone.querySelector("#botoes_tarefa #excluir_tarefa_bnt") as HTMLButtonElement;
+    const concluir_tarefa: HTMLInputElement = clone.querySelector("#concluir_tarefa_checkbox") as HTMLInputElement;
+
+
+    titulo.innerText = tarefa.titulo;
+    descricao.innerText = tarefa.descricao;
+    data_tarefa.innerText = `Data Conclusão: ${tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data"}`;
+    data_criacao_tarefa.innerText = `Data Criação: ${new Date(tarefa.data_criacao).toLocaleDateString()}`;
+    prioridade_tarefa.innerText = `Prioridade: ${tarefa.prioridade}`;
+    let status: string;
+    if (tarefa.status === "P") {
+        status = "Pendente";
+    } else if (tarefa.status === "C") {
+        status = "Concluida";
+    } else {
+        status = "Atrasada";
     }
-    const pagina = parseInt(pagina_atual.innerText);
-    const tarefas_pagina = tarefas[pagina - 1];
-    if (!tarefas_pagina) {
-        console.log("Tarefas da pagina não encontradas");
-        return;
+    status_tarefa.innerText = `Status: ${status}`;
+
+    if (tarefa.status === "C") {
+        concluir_tarefa.setAttribute("checked", "");
     }
-    const template_tarefas: HTMLTemplateElement = document.querySelector("#template_tarefas") as HTMLTemplateElement;
-    if (!template_tarefas) {
-        console.log("Template de tarefas não encontrado");
+
+    btn_editar_tarefa.addEventListener("click", () => {
+        const div_editar_tarefa: HTMLDivElement = document.querySelector("#edit_tarefa") as HTMLDivElement;
+        if (!div_editar_tarefa) {
+            console.log("Elemento não encontrado");
+            return;
+        }
+        const section_tarefa: HTMLDivElement = div_editar_tarefa.querySelector(".editar_tarefa") as HTMLDivElement;
+        if (!section_tarefa) {
+            console.log("Elemento não encontrado");
+            return;
+        }
+
+        section_tarefa.setAttribute("id", tarefa.id);
+        const titulo_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-titulo_tarefa") as HTMLInputElement;
+        const descricao_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-descricao_tarefa") as HTMLInputElement;
+        const data_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-data_tarefa") as HTMLInputElement;
+        const prioridade_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-prioridade_tarefa") as HTMLInputElement;
+        const cancelar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#cancelar_edit-tarefa_bnt") as HTMLButtonElement;
+        const salvar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#salvar_edit-tarefa_bnt") as HTMLButtonElement;
+
+        titulo_editar_tarefa.value = tarefa.titulo;
+        descricao_editar_tarefa.value = tarefa.descricao;
+        data_editar_tarefa.value = tarefa.data ? new Date(tarefa.data).toISOString().split("T")[0] : "";
+        prioridade_editar_tarefa.value = tarefa.prioridade;
+
+        div_editar_tarefa.removeAttribute("hidden");
+
+        cancelar_editar_tarefa.addEventListener("click", () => {
+            div_editar_tarefa.setAttribute("hidden", "");
+        });
+
+        salvar_editar_tarefa.addEventListener("click", async () => {
+            editar_tarefa(tarefa.id, titulo_editar_tarefa.value, descricao_editar_tarefa.value, prioridade_editar_tarefa.value, data_editar_tarefa.value);
+        });
+    });
+
+    btn_excluir_tarefa.addEventListener("click", () => {
+        const confirmacao_excluir_tarefa = confirm("Deseja excluir a tarefa?");
+        if (confirmacao_excluir_tarefa) {
+            excluir_tarefa(tarefa.id);
+        }
+    });
+
+    const tarefa_content: HTMLDivElement = clone.querySelector(".tarefa-content") as HTMLDivElement;
+    if (!tarefa_content) {
+        console.log("Elemento não encontrado");
         return;
     }
 
-    tarefas_pagina.forEach((tarefa: any) => {
+    tarefa_content.addEventListener("click", () => {
+        const div_visualizar_tarefa: HTMLDivElement = document.querySelector("#visualizar_tarefa") as HTMLDivElement;
+        if (!div_visualizar_tarefa) {
+            console.log("Elemento não encontrado");
+            return;
+        }
+        const section_tarefa: HTMLDivElement = div_visualizar_tarefa.querySelector(".visualizar-tarefa") as HTMLDivElement;
+        if (!section_tarefa) {
+            console.log("Elemento não encontrado");
+            return;
+        }
+        section_tarefa.setAttribute("id", tarefa.id);
+        const titulo_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#titulo_tarefa") as HTMLParagraphElement;
+        const descricao_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#descricao_tarefa") as HTMLParagraphElement;
+        const data_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#data_tarefa") as HTMLParagraphElement;
+        const data_criacao_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#data_criacao_tarefa") as HTMLParagraphElement;
+        const prioridade_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#prioridade_tarefa") as HTMLParagraphElement;
+        const status_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#status_tarefa") as HTMLParagraphElement;
 
-        const clone = template_tarefas.content.cloneNode(true) as DocumentFragment;
-        const div_tarefa: HTMLDivElement = clone.querySelector(".tarefa") as HTMLDivElement;
-        div_tarefa.setAttribute("id", tarefa.id);
-        const titulo: HTMLDivElement = clone.querySelector("#titulo_tarefa") as HTMLDivElement;
-        const descricao: HTMLDivElement = clone.querySelector("#descricao_tarefa") as HTMLDivElement;
-        const data_tarefa: HTMLDivElement = clone.querySelector("#data_tarefa") as HTMLDivElement;
-        const data_criacao_tarefa: HTMLDivElement = clone.querySelector("#data_criacao_tarefa") as HTMLDivElement;
-        const prioridade_tarefa: HTMLDivElement = clone.querySelector("#prioridade_tarefa") as HTMLDivElement;
-        const status_tarefa: HTMLDivElement = clone.querySelector("#status_tarefa") as HTMLDivElement;
-        const btn_editar_tarefa: HTMLButtonElement = clone.querySelector("#botoes_tarefa #editar_tarefa_bnt") as HTMLButtonElement;
-        const btn_excluir_tarefa: HTMLButtonElement = clone.querySelector("#botoes_tarefa #excluir_tarefa_bnt") as HTMLButtonElement;
-        const concluir_tarefa: HTMLInputElement = clone.querySelector("#concluir_tarefa_checkbox") as HTMLInputElement;
+
+        titulo_visualizar_tarefa.innerText = tarefa.titulo;
+        descricao_visualizar_tarefa.innerText = tarefa.descricao;
+        data_visualizar_tarefa.innerText = tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data";
+        data_criacao_visualizar_tarefa.innerText = new Date(tarefa.data_criacao).toLocaleDateString();
+        prioridade_visualizar_tarefa.innerText = tarefa.prioridade;
 
 
-        titulo.innerText = tarefa.titulo;
-        descricao.innerText = tarefa.descricao;
-        data_tarefa.innerText = tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data";
-        data_criacao_tarefa.innerText = new Date(tarefa.data_criacao).toLocaleDateString();
-        prioridade_tarefa.innerText = tarefa.prioridade
         let status: string = "";
         if (tarefa.status === "P") {
             status = "Pendente";
@@ -448,12 +201,15 @@ function atualizar_tarefas(tarefas: any[]) {
         } else {
             status = "Atrasada";
         }
-        console.log(tarefa.status)
-        status_tarefa.innerText = status;
+        status_visualizar_tarefa.innerText = status;
 
-        if (tarefa.status === "C") {
-            concluir_tarefa.setAttribute("checked", "");
-        }
+        const sair_visualizar_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#sair_visualizacao_tarefa") as HTMLButtonElement;
+        const btn_editar_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#editar_tarefa_bnt") as HTMLButtonElement;
+        const btn_excluir_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#excluir_tarefa_bnt") as HTMLButtonElement;
+
+        sair_visualizar_tarefa.addEventListener("click", () => {
+            div_visualizar_tarefa.setAttribute("hidden", "");
+        });
 
         btn_editar_tarefa.addEventListener("click", () => {
             const div_editar_tarefa: HTMLDivElement = document.querySelector("#edit_tarefa") as HTMLDivElement;
@@ -487,7 +243,7 @@ function atualizar_tarefas(tarefas: any[]) {
             });
 
             salvar_editar_tarefa.addEventListener("click", async () => {
-                editar_tarefa(tarefa.id, titulo_editar_tarefa.value, descricao_editar_tarefa.value, data_editar_tarefa.value, prioridade_editar_tarefa.value);
+                editar_tarefa(section_tarefa.id, titulo_editar_tarefa.value, descricao_editar_tarefa.value, prioridade_editar_tarefa.value, data_editar_tarefa.value);
             });
         });
 
@@ -497,99 +253,219 @@ function atualizar_tarefas(tarefas: any[]) {
                 excluir_tarefa(tarefa.id);
             }
         });
+        div_visualizar_tarefa.removeAttribute("hidden");
+    });
+    div_tarefas.appendChild(clone);
+}
 
-        const tarefa_content: HTMLDivElement = clone.querySelector(".tarefa-content") as HTMLDivElement;
-        if (!tarefa_content) {
-            console.log("Elemento não encontrado");
-            return [];
+
+async function Carregar_Tarefas(pesquisa: string | null = null): Promise<void> {
+    try {
+        document.querySelector("#loading")?.removeAttribute("hidden");
+        if (!ordenacao) {
+            console.log("Ordenação não definida");
+            return;
+        }
+        const pagina_atual: HTMLAnchorElement = document.getElementById("pagina_atual") as HTMLAnchorElement;
+        if (!pagina_atual) {
+            console.log("Pagina atual não encontrada");
+            return;
+        }
+        let pagina: number = parseInt(pagina_atual.innerText);
+        if (!pagina || pagina < 1 || isNaN(pagina)) {
+            pagina_atual.innerText = "1";
+            pagina = 1;
         }
 
-        tarefa_content.addEventListener("click", () => {
-            const div_visualizar_tarefa: HTMLDivElement = document.querySelector("#visualizar_tarefa") as HTMLDivElement;
-            if (!div_visualizar_tarefa) {
-                console.log("Elemento não encontrado");
-                return;
-            }
-            const section_tarefa: HTMLDivElement = div_visualizar_tarefa.querySelector(".visualizar-tarefa") as HTMLDivElement;
-            if (!section_tarefa) {
-                console.log("Elemento não encontrado");
-                return;
-            }
-            section_tarefa.setAttribute("id", tarefa.id);
-            const titulo_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#titulo_tarefa") as HTMLParagraphElement;
-            const descricao_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#descricao_tarefa") as HTMLParagraphElement;
-            const data_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#data_tarefa") as HTMLParagraphElement;
-            const data_criacao_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#data_criacao_tarefa") as HTMLParagraphElement;
-            const prioridade_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#prioridade_tarefa") as HTMLParagraphElement;
-            const status_visualizar_tarefa: HTMLParagraphElement = div_visualizar_tarefa.querySelector("#status_tarefa") as HTMLParagraphElement;
+
+        let json;
+        if (pesquisa && pesquisa.length > 0) {
+            console.log("Pesquisa: " + pesquisa);
+            json = { token, ordenacao, pagina, pesquisa: pesquisa };
+        } else {
+            json = { token, ordenacao, pagina };
+        }
+
+        const retorno = await fetch("http://localhost:3000/tarefas/get/all", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(json),
+        })
+
+        let total: number = 0;
+        let tarefas: any[] = [];
+        let erro: string = "";
+
+        if (retorno.status === 200) {
+            const result = await retorno.json();
+            tarefas = result.tarefas;
+            total = result.total;
+        }
+        else {
+            const result = await retorno.json();
+            erro = result.erro;
+        }
+        if (erro.length > 0) {
+            console.log(erro);
+            return;
+        }
+
+        const div_tarefas: HTMLDivElement = document.querySelector("#tarefas-conteiner") as HTMLDivElement;
+        if (!div_tarefas) {
+            console.log("Div tarefas não encontrada");
+            return;
+        }
+        if (tarefas.length === 0) {
+            div_tarefas.innerHTML = "<h3>Nenhuma tarefa encontrada</h3>";
+            return;
+        }
+        div_tarefas.innerHTML = "";
+
+        for (const tarefa of tarefas) {
+            append_tarefa(tarefa);
+        }
+        const total_paginas: HTMLAnchorElement = document.querySelector("#total_paginas") as HTMLAnchorElement;
+        total_paginas.innerText = `${total}`
+
+    } catch (error) {
+        console.log(error);
+        return;
+    } finally {
+        document.querySelector("#loading")?.setAttribute("hidden", "");
+    }
+}
+
+async function adicionar_tarefa() {
+    const token: string = localStorage.getItem("token") as string;
+    const input_titulo: HTMLInputElement = document.querySelector("#titulo_tarefa_input") as HTMLInputElement;
+    const input_descricao: HTMLInputElement = document.querySelector("#descricao_tarefa_input") as HTMLInputElement;
+    const input_data: HTMLInputElement = document.querySelector("#data_tarefa_input") as HTMLInputElement;
+    const input_prioridade: HTMLInputElement = document.querySelector("#prioridade_tarefa_input") as HTMLInputElement;
+
+    const titulo: string = input_titulo.value ? input_titulo.value : "Sem título";
+    const descricao: string = input_descricao.value ? input_descricao.value : "Sem descrição";
+    const data: Date | null = input_data.value ? new Date(input_data.value) : null;
+
+    const prioridade: number = input_prioridade.value ? parseInt(input_prioridade.value) : 0;
+
+    const retorno = await fetch("http://localhost:3000/tarefas", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, titulo, descricao, data, prioridade }),
+    });
+    const result = await retorno.json();
+    if (result.erro) {
+        console.log(result.erro);
+        return;
+    }
+}
 
 
-            titulo_visualizar_tarefa.innerText = tarefa.titulo;
-            descricao_visualizar_tarefa.innerText = tarefa.descricao;
-            data_visualizar_tarefa.innerText = `Data Conclusão: ${tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data"}`;
-            data_criacao_visualizar_tarefa.innerText = `Data Criação: ${new Date(tarefa.data_criacao).toLocaleDateString()}`;
-            prioridade_visualizar_tarefa.innerText = `Prioridade: ${tarefa.prioridade}`;
-            status_visualizar_tarefa.innerText = `Status: ${tarefa.status === "P" ? "Pendente" : tarefa.status === "C" ? "Concluida" : "Atrasada"}`;
+function atualizar_paginas() {
+    const pagina_atual: HTMLAnchorElement = document.getElementById("pagina_atual") as HTMLAnchorElement;
+    const pagina_seguinte: HTMLAnchorElement = document.getElementById("pagina_seguinte") as HTMLAnchorElement;
+    const total_paginas: HTMLAnchorElement = document.getElementById("total_paginas") as HTMLAnchorElement;
+    const separador: HTMLAnchorElement = document.getElementById("separador") as HTMLAnchorElement;
+    if (!pagina_atual || !pagina_seguinte || !total_paginas || !separador) {
+        console.log("Paginas não encontradas");
+        return;
+    }
+    const total: number = parseInt(total_paginas.innerText);
 
-            const sair_visualizar_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#sair_visualizacao_tarefa") as HTMLButtonElement;
-            const btn_editar_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#editar_tarefa_bnt") as HTMLButtonElement;
-            const btn_excluir_tarefa: HTMLButtonElement = div_visualizar_tarefa.querySelector("#excluir_tarefa_bnt") as HTMLButtonElement;
+    if (total < 2) {
+        pagina_atual.innerText = "1";
+        pagina_seguinte.setAttribute("hidden", "");
+        total_paginas.innerText = "1";
+        return;
+    }
+    pagina_seguinte.removeAttribute("hidden");
+    if (parseInt(pagina_atual.innerText) < total) {
+        pagina_seguinte.innerText = `${parseInt(pagina_atual.innerText) + 1}`
+    } else {
+        pagina_seguinte.setAttribute("hidden", "");
+    }
+    total_paginas.innerText = total.toString();
 
-            sair_visualizar_tarefa.addEventListener("click", () => {
-                div_visualizar_tarefa.setAttribute("hidden", "");
-            });
+    pagina_seguinte.addEventListener("click", () => {
+        if (total < 2) return;
+        if (parseInt(pagina_atual.innerText) >= total) return;
+        pagina_atual.innerText = `${parseInt(pagina_atual.innerText) + 1}`
+        if (parseInt(pagina_atual.innerText) < total) {
+            pagina_seguinte.innerText = `${parseInt(pagina_seguinte.innerText) + 1}`
+        } else {
+            pagina_seguinte.setAttribute("hidden", "");
+        }
+        atualizar_paginas();
+        Carregar_Tarefas();
+    })
 
-            btn_editar_tarefa.addEventListener("click", () => {
-                const div_editar_tarefa: HTMLDivElement = document.querySelector("#edit_tarefa") as HTMLDivElement;
-                if (!div_editar_tarefa) {
-                    console.log("Elemento não encontrado");
-                    return;
-                }
-                const section_tarefa: HTMLDivElement = div_editar_tarefa.querySelector(".editar_tarefa") as HTMLDivElement;
-                if (!section_tarefa) {
-                    console.log("Elemento não encontrado");
-                    return;
-                }
+    separador.addEventListener("click", () => {
+        if (total < 3) return;
+        const div_pags = pagina_atual.parentElement as HTMLDivElement;
+        const aux1: HTMLAnchorElement = document.createElement("a") as HTMLAnchorElement;
+        const aux2: HTMLAnchorElement = document.createElement("a") as HTMLAnchorElement;
+        if (!aux1 || !aux2) return;
+        if (parseInt(pagina_atual.innerText) >= total) return;
+        if (parseInt(pagina_atual.innerText) - (total / 2) > 1) {
+            aux1.innerText = `${parseInt(pagina_seguinte.innerText) + 1}`;
+        }
+        if ((total / 2) - parseInt(pagina_atual.innerText) > 1) {
+            aux2.innerText = `${parseInt(pagina_atual.innerText) + 1}`;
+        }
+        if (aux1.innerText) {
+            div_pags.insertBefore(pagina_seguinte, aux1)
+        }
+        if (aux2.innerText) {
+            div_pags.insertBefore(separador, aux2)
+        }
+    })
 
-                section_tarefa.setAttribute("id", tarefa.id);
-                const titulo_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-titulo_tarefa") as HTMLInputElement;
-                const descricao_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-descricao_tarefa") as HTMLInputElement;
-                const data_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-data_tarefa") as HTMLInputElement;
-                const prioridade_editar_tarefa: HTMLInputElement = div_editar_tarefa.querySelector("#edit-prioridade_tarefa") as HTMLInputElement;
-                const cancelar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#cancelar_tarefa_bnt") as HTMLButtonElement;
-                const salvar_editar_tarefa: HTMLButtonElement = div_editar_tarefa.querySelector("#salvar_tarefa_bnt") as HTMLButtonElement;
+    total_paginas.addEventListener("click", () => {
+        if (total < 2) return;
+        pagina_atual.innerText = total.toString();
+        pagina_seguinte.setAttribute("hidden", "");
+        atualizar_paginas();
+        Carregar_Tarefas();
+    });
 
-                titulo_editar_tarefa.value = tarefa.titulo;
-                descricao_editar_tarefa.value = tarefa.descricao;
-                data_editar_tarefa.value = tarefa.data ? new Date(tarefa.data).toISOString().split("T")[0] : "";
-                prioridade_editar_tarefa.value = tarefa.prioridade;
-
-                div_editar_tarefa.removeAttribute("hidden");
-
-                cancelar_editar_tarefa.addEventListener("click", () => {
-                    div_editar_tarefa.setAttribute("hidden", "");
-                });
-
-                salvar_editar_tarefa.addEventListener("click", async () => {
-                    editar_tarefa(tarefa.id, titulo_editar_tarefa.value, descricao_editar_tarefa.value, data_editar_tarefa.value, prioridade_editar_tarefa.value);
-                });
-            });
-
-            btn_excluir_tarefa.addEventListener("click", () => {
-                const confirmacao_excluir_tarefa = confirm("Deseja excluir a tarefa?");
-                if (confirmacao_excluir_tarefa) {
-                    excluir_tarefa(tarefa.id);
-                }
-            });
-            div_visualizar_tarefa.removeAttribute("hidden");
-        });
-        div_tarefas.appendChild(clone);
+    const proxima_pagina: HTMLAnchorElement = document.getElementById("proximo_bnt") as HTMLAnchorElement;
+    const pagina_anterior: HTMLAnchorElement = document.getElementById("anterior_bnt") as HTMLAnchorElement;
+    if (!proxima_pagina || !pagina_anterior) {
+        console.log("Paginas não encontradas");
+        return;
+    }
+    proxima_pagina.addEventListener("click", () => {
+        const pagina = parseInt(pagina_atual.innerText);
+        if (pagina >= total) {
+            return;
+        }
+        pagina_atual.innerText = `${pagina + 1}`;
+        if (pagina + 2 > total) {
+            pagina_seguinte.setAttribute("hidden", "");
+            return;
+        }
+        pagina_seguinte.innerText = `${pagina + 2}`;
+        Carregar_Tarefas();
+        atualizar_paginas();
+    })
+    pagina_anterior.addEventListener("click", () => {
+        const pagina = parseInt(pagina_atual.innerText);
+        if (pagina <= 1) {
+            return;
+        }
+        pagina_atual.innerText = `${pagina - 1}`;
+        pagina_seguinte.innerText = `${pagina}`;
+        Carregar_Tarefas();
+        atualizar_paginas();
     })
 }
 
 
 window.onload = async function () {
-    let tarefas: any[] = await Carregar_Tarefas();
     // referentes a tarefas
     const bnt_new_tarefa: HTMLButtonElement = document.querySelector("#nova_tarefa_bnt") as HTMLButtonElement;
     const bnt_add_tarefa: HTMLButtonElement = document.querySelector("#salvar_tarefa_bnt") as HTMLButtonElement;
@@ -607,27 +483,21 @@ window.onload = async function () {
     const select_ordenacao: HTMLSelectElement = document.querySelector("#select-filtros") as HTMLSelectElement;
     const bnt_salvar_conf: HTMLButtonElement = document.querySelector("#salvar_conf_bnt") as HTMLButtonElement;
     const bnt_cancelar_conf: HTMLButtonElement = document.querySelector("#cancelar_conf_bnt") as HTMLButtonElement;
+    // pesquisa
+    const pesquisa: HTMLInputElement = document.querySelector("#conf_usuario #search_input") as HTMLInputElement;
+    const bnt_pesquisa: HTMLAnchorElement = document.querySelector("#conf_usuario #search_bnt") as HTMLAnchorElement;
+    await Carregar_Tarefas();
 
-    const div_pags: HTMLDivElement = document.querySelector("#paginas") as HTMLDivElement;
+
     if (!cancelar_alteracoes_usuario || !salvar_alteracoes_usuario
         || !configuracoes || !select_ordenacao || !bnt_salvar_conf || !bnt_cancelar_conf
-        || !menu_usuario || !bnt_visualizar_perfil || !bnt_new_tarefa || !bnt_add_tarefa) {
+        || !menu_usuario || !bnt_visualizar_perfil || !bnt_new_tarefa || !bnt_add_tarefa
+        || !bnt_cancelar_tarefa || !add_date || !visualizar_tarefa || !sair_visualizar_tarefa
+        || !pesquisa || !bnt_pesquisa) {
         console.log("Elemento não encontrado");
         return;
     }
-    atualizar_paginas(tarefas);
-
-    div_pags.childNodes.forEach((child: any) => {
-        if (child.if != undefined && child.id != "separador" && child.id != "pagina_atual") {
-            child.addEventListener("click", () => {
-                const pagina = parseInt(child.innerText);
-                const pagina_atual: HTMLAnchorElement = document.getElementById("pagina_atual") as HTMLAnchorElement;
-                pagina_atual.innerText = `${pagina}`;
-                atualizar_paginas(tarefas);
-                atualizar_tarefas(tarefas);
-            })
-        }
-    })
+    atualizar_paginas();
 
     cancelar_alteracoes_usuario.addEventListener("click", function () {
         document.querySelector("#perfil_usuario")?.setAttribute("hidden", "");
@@ -635,15 +505,6 @@ window.onload = async function () {
     salvar_alteracoes_usuario.addEventListener("click", function () {
         document.querySelector("#perfil_usuario")?.setAttribute("hidden", "");
     });
-
-
-    if (!bnt_new_tarefa || !bnt_add_tarefa || !bnt_cancelar_tarefa
-        || !add_date || !menu_usuario || !bnt_visualizar_perfil ||
-        !configuracoes || !select_ordenacao || !bnt_salvar_conf || !bnt_cancelar_conf
-        || !visualizar_tarefa || !sair_visualizar_tarefa || !div_pags) {
-        console.log("Elemento não encontrado");
-        return;
-    }
 
     bnt_visualizar_perfil.addEventListener("click", function () {
         document.querySelector("#perfil_usuario")?.removeAttribute("hidden");
@@ -671,7 +532,7 @@ window.onload = async function () {
 
     bnt_add_tarefa.addEventListener("click", async function () {
         adicionar_tarefa();
-        tarefas = await Carregar_Tarefas();
+        await Carregar_Tarefas();
         document.querySelector("#add_tarefa")?.setAttribute("hidden", "");
     });
 
@@ -727,6 +588,27 @@ window.onload = async function () {
         visualizar_tarefa.setAttribute("hidden", "");
     });
 
+    bnt_pesquisa.addEventListener("click", function () {
+        const pesquisa_txt: string = pesquisa.value;
+        if (pesquisa_txt === "") {
+            Carregar_Tarefas();
+            return;
+        }
+        Carregar_Tarefas(pesquisa_txt);
+    });
+
+    pesquisa.addEventListener("keyup", function (event) {
+        console.log(event.key);
+        if (event.key === "Enter") {
+            const pesquisa_txt: string = pesquisa.value;
+            if (pesquisa_txt === "") {
+                Carregar_Tarefas();
+                return;
+            }
+            Carregar_Tarefas(pesquisa_txt);
+        }
+    });
+
 
     const log_out: HTMLAnchorElement = document.querySelector("#sair_bnt") as HTMLAnchorElement;
     if (!log_out) {
@@ -742,6 +624,4 @@ window.onload = async function () {
             element.setAttribute("hidden", "");
         });
     });
-
-
 }

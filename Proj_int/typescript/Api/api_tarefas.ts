@@ -120,8 +120,8 @@ async function excluir_tarefa(req: Request, res: Response) {
 }
 
 async function get_tarefas(req: Request, res: Response) {
-    const { token, ordenacao } = req.body;
-    if (!validastring(token, ordenacao)) {
+    const { token, ordenacao, pagina, pesquisa } = req.body;
+    if (!validastring(token, ordenacao, pagina)) {
         return res.status(400).json({ erro: "Dados inválidos" });
     }
     const email: string = await get_email(token)
@@ -204,8 +204,32 @@ async function get_tarefas(req: Request, res: Response) {
             count = 0;
         }
     }
+
+    let p = parseInt(pagina) - 1;
+    if (p > retorno_tarefas.length || isNaN(p)) {
+        return res.status(200).json({ tarefas: [] });
+    }
+
+    if (validastring(pesquisa)) {
+        let tarefas_aux = [];
+        let retorno_tarefas_aux = [];
+        for (let tarefas of retorno_tarefas) {
+            for (let tarefa of tarefas) {
+                if (tarefa.titulo.includes(pesquisa) || tarefa.descricao.includes(pesquisa)) {
+                    tarefas_aux.push(tarefa);
+                }
+            }
+            if (tarefas_aux.length > 0) {
+                retorno_tarefas_aux.push(tarefas_aux);
+            }
+            tarefas_aux = [];
+        }
+        retorno_tarefas = retorno_tarefas_aux;
+    }
+
+
     // console.log(retorno_tarefas);
-    return res.status(200).json({ tarefas: retorno_tarefas });
+    return res.status(200).json({ tarefas: retorno_tarefas[p], total: retorno_tarefas.length });
 }
 
 async function concluir_tarefa(req: Request, res: Response) {
