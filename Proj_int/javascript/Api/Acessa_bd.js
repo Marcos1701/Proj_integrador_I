@@ -142,7 +142,7 @@ client.connect().then(() => {
         $$ LANGUAGE PLPGSQL;
 
         CREATE OR REPLACE FUNCTION GET_DATA(token_user VARCHAR(255))
-        RETURNS TABLE (id_usuario varchar, nome_usuario VARCHAR(255), email_usuario VARCHAR(255), senha_usuario VARCHAR(255), id_metodo_login INTEGER, token_usuario varchar) AS $$
+        RETURNS TABLE (id_usuario varchar, nome_usuario VARCHAR(255), email_usuario VARCHAR(255), senha_usuario VARCHAR(255), id_metodo_login_usuario INTEGER, token_usuario varchar) AS $$
         BEGIN
 
             IF (token_user IS NULL) THEN

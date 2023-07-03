@@ -154,12 +154,12 @@ function get_data(req, res) {
         if (!token) {
             return res.status(500).json({ error: "Token inválido" });
         }
-        Acessa_bd_1.client.query("SELECT GET_DATA($1)", [token], (err, result) => {
+        Acessa_bd_1.client.query("SELECT * FROM GET_DATA($1)", [token], (err, result) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
             }
-            return res.status(200).json({ data: result.rows[0].get_data });
+            return res.status(200).json({ data: result.rows[0] });
         });
     });
 }
