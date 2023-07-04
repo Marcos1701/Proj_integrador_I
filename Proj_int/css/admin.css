@@ -18,7 +18,7 @@
     display: none;
 }
 
-.selecionado{
+.selecionado {
     background: #ffffffa4;
     width: 50vw;
     height: 100%
@@ -63,6 +63,7 @@
     background: #ffffffa4;
     margin: 1vh 0;
     font-size: 1.2vw;
+    overflow: hidden;
 }
 
 #dados {
@@ -79,7 +80,8 @@
 
 #nome-div,
 #email-div,
-#login-div {
+#login-div,
+#status {
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -121,7 +123,7 @@
     cursor: pointer;
     background: #ffffff;
     transition: .5s;
-    height: 18vh;
+    height: 22vh;
 
     #tornar-adm {
         display: flex;
@@ -132,6 +134,20 @@
     cursor: pointer;
     background: #ffffff;
     transition: .5s;
+    height: 18vh;
+}
+
+#status {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1vw;
+}
+
+#status p {
+    margin: 0;
+    color: #000;
+    font-size: 1.2vw;
 }
 
 #dados {
@@ -149,18 +165,37 @@
     margin: .5vw;
 }
 
-#dados #total_tarefas {
+#dados-tarefas {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    font-size: 1.2vw;
+    font-weight: 550;
+    margin: .5vw;
+}
+
+#dados-tarefas #total_tarefas {
     color: #000;
 }
 
-#dados #tarefas_concluidas {
+#dados-tarefas #tarefas_concluidas {
     color: #508904;
 }
 
-#dados #tarefas_pendentes {
+#dados-tarefas #tarefas_pendentes {
     color: #7a410c;
 }
 
-#dados #tarefas_atrasadas {
+#dados-tarefas #tarefas_atrasadas {
     color: #f90909;
+}
+
+#sair{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6vw;
+    height: 3vh;
+    background: #d7d4d4a4;
+    border-top: 1px solid #020202;
 }

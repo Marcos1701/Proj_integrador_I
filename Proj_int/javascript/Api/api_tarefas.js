@@ -22,11 +22,12 @@ const validastring = (...id) => {
 };
 function get_email(token) {
     return __awaiter(this, void 0, void 0, function* () {
-        const retorno = yield Acessa_bd_1.client.query(`SELECT email FROM usuario WHERE token = $1`, [token]);
-        const email = retorno.rows[0].email;
-        if (email === undefined || email === null) {
+        const retorno = yield Acessa_bd_1.client.query(`SELECT * FROM usuario WHERE token = $1`, [token]);
+        if (retorno.rowCount === 0 || !retorno.rows[0].email) {
+            console.log(retorno.rows[0]);
             return "";
         }
+        const email = retorno.rows[0].email;
         return email;
     });
 }
@@ -58,7 +59,7 @@ function adicionar_tarefa(req, res) {
             });
         }
         else {
-            Acessa_bd_1.client.query(`SELECT ADICIONAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id, titulo, descricao, id_usuario, data, prioridade], (err, result) => {
+            Acessa_bd_1.client.query(`SELECT ADICIONAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id, titulo, descricao, id_usuario, prioridade, new Date(data)], (err, result) => {
                 if (err) {
                     console.log(err);
                     return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
@@ -94,7 +95,7 @@ function editar_tarefa(req, res) {
             });
         }
         else {
-            Acessa_bd_1.client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id_usuario, id, titulo, descricao, data, prioridade], (err, result) => {
+            Acessa_bd_1.client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id_usuario, id, titulo, descricao, prioridade, data], (err, result) => {
                 if (err) {
                     return res.status(500).json({ erro: err.message });
                 }
@@ -226,6 +227,9 @@ function get_tarefas(req, res) {
                 tarefas_aux = [];
             }
             retorno_tarefas = retorno_tarefas_aux;
+        }
+        if (p > retorno_tarefas.length || isNaN(p)) {
+            return res.status(200).json({ tarefas: [] });
         }
         // console.log(retorno_tarefas);
         return res.status(200).json({ tarefas: retorno_tarefas[p], total: retorno_tarefas.length });

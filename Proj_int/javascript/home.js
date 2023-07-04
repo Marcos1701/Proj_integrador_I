@@ -250,7 +250,7 @@ function append_tarefa(tarefa) {
         const status_visualizar_tarefa = div_visualizar_tarefa.querySelector("#status_tarefa");
         titulo_visualizar_tarefa.innerText = tarefa.titulo;
         descricao_visualizar_tarefa.innerText = tarefa.descricao;
-        data_visualizar_tarefa.innerText = tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data";
+        data_visualizar_tarefa.innerText = tarefa.data_conclusao ? new Date(tarefa.data_conclusao).toLocaleDateString() : "Sem data";
         data_criacao_visualizar_tarefa.innerText = new Date(tarefa.data_criacao).toLocaleDateString();
         prioridade_visualizar_tarefa.innerText = tarefa.prioridade;
         let status = "";
@@ -365,7 +365,7 @@ function Carregar_Tarefas(pesquisa = null) {
                 console.log("Div tarefas não encontrada");
                 return;
             }
-            if (tarefas.length === 0) {
+            if (tarefas === undefined || tarefas.length === 0) {
                 div_tarefas.innerHTML = "<h3>Nenhuma tarefa encontrada</h3>";
                 return;
             }
@@ -665,31 +665,40 @@ function get_dados_usuario() {
 }
 function conferir_adm() {
     return __awaiter(this, void 0, void 0, function* () {
-        const retorno = yield fetch("http://localhost:3000/usuario/conferir", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token: token }),
-        });
-        if (retorno.status === 200) {
-            const result = yield retorno.json();
-            const { adm } = result.data;
-            if (adm) {
-                const op_admin = document.querySelector("#admin_bnt");
-                const li_admin = op_admin.parentElement;
-                op_admin.href = "./admin.html";
-                li_admin.removeAttribute("hidden");
+        try {
+            const retorno = yield fetch("http://localhost:3000/admin/confere", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ token: token }),
+            }).then((res) => res).catch((error) => {
+                console.log(error.message);
+            });
+            if (retorno && retorno.status === 200) {
+                const result = yield retorno.json();
+                const { admin } = result;
+                if (admin) {
+                    const op_admin = document.querySelector("#admin_bnt");
+                    const li_admin = op_admin.parentElement;
+                    op_admin.href = "./admin.html";
+                    li_admin.removeAttribute("hidden");
+                }
             }
             else {
-                const op_admin = document.querySelector("#admin_bnt");
-                const li_admin = op_admin.parentElement;
-                li_admin.remove();
+                if (retorno) {
+                    const { erro } = yield retorno.json();
+                    console.log(erro);
+                }
+                else {
+                    console.log("algo de errado não está certo");
+                }
             }
         }
-        else {
-            const { error } = yield retorno.json();
-            console.log(error);
+        catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            }
         }
     });
 }
@@ -716,7 +725,7 @@ window.onload = function () {
         // pesquisa
         const pesquisa = document.querySelector("#conf_usuario #search_input");
         const bnt_pesquisa = document.querySelector("#conf_usuario #search_bnt");
-        conferir_adm();
+        yield conferir_adm();
         yield Carregar_Tarefas();
         yield get_dados_usuario();
         if (!cancelar_alteracoes_usuario || !salvar_alteracoes_usuario

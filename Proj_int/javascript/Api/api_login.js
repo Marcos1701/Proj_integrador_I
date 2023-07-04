@@ -77,7 +77,7 @@ function Get_Data_Google(token) {
             });
             if (response.status === 200) {
                 const { email, name } = yield response.json();
-                console.log(email, name);
+                // console.log(email, name);
                 retorno = { email: email, name: name, erro: "" };
             }
             else {

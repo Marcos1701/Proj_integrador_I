@@ -12,11 +12,14 @@ const validastring = (...id: string[]) => {
 }
 
 export async function get_email(token: string): Promise<string> {
-    const retorno = await client.query(`SELECT email FROM usuario WHERE token = $1`, [token]);
-    const email = retorno.rows[0].email;
-    if (email === undefined || email === null) {
+    const retorno = await client.query(`SELECT * FROM usuario WHERE token = $1`, [token]);
+
+    if (retorno.rowCount === 0 || !retorno.rows[0].email) {
+        console.log(retorno.rows[0])
         return "";
     }
+
+    const email = retorno.rows[0].email;
     return email;
 }
 
@@ -47,7 +50,7 @@ async function adicionar_tarefa(req: Request, res: Response) {
             return res.status(200).json({ id: id });
         });
     } else {
-        client.query(`SELECT ADICIONAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id, titulo, descricao, id_usuario, data, prioridade], (err, result) => {
+        client.query(`SELECT ADICIONAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id, titulo, descricao, id_usuario, prioridade, new Date(data)], (err, result) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
@@ -82,7 +85,7 @@ async function editar_tarefa(req: Request, res: Response) {
             return res.status(200).json({ id: id });
         });
     } else {
-        client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id_usuario, id, titulo, descricao, data, prioridade], (err, result) => {
+        client.query(`SELECT EDITAR_TAREFA($1, $2, $3, $4, $5, $6)`, [id_usuario, id, titulo, descricao, prioridade, data], (err, result) => {
             if (err) {
                 return res.status(500).json({ erro: err.message });
             }
@@ -220,6 +223,9 @@ async function get_tarefas(req: Request, res: Response) {
         retorno_tarefas = retorno_tarefas_aux;
     }
 
+    if (p > retorno_tarefas.length || isNaN(p)) {
+        return res.status(200).json({ tarefas: [] });
+    }
 
     // console.log(retorno_tarefas);
     return res.status(200).json({ tarefas: retorno_tarefas[p], total: retorno_tarefas.length });

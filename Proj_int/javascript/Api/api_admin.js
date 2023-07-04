@@ -103,30 +103,29 @@ function adicionar_admin(req, res) {
 exports.adicionar_admin = adicionar_admin;
 function confere_admin(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { token } = req.body;
-        if (!validastring(token)) {
-            return res.status(400).json({ erro: "Dados inválidos" });
+        try {
+            const { token } = req.body;
+            if (!validastring(token)) {
+                return res.status(400).json({ erro: "Dados inválidos" });
+            }
+            const email = yield get_email(token);
+            if (email === "") {
+                return res.status(400).json({ erro: "Token inválido" });
+            }
+            const id_admin = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
+                return result.rows[0].get_id_usuario;
+            });
+            const retorno = yield Acessa_bd_1.client.query(`SELECT * FROM CONSULTAR_ADM($1)`, [id_admin]).then((result) => {
+                return result.rows;
+            });
+            if (!retorno || retorno === undefined || retorno.length === undefined || retorno.length === null || retorno.length === 0) {
+                return res.status(200).json({ admin: false });
+            }
+            return res.status(200).json({ admin: true, retorno: retorno[0] });
         }
-        const email = yield get_email(token);
-        if (email === "") {
-            return res.status(400).json({ erro: "Token inválido" });
-        }
-        const id_admin = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
-            return result.rows[0].get_id_usuario;
-        }).catch((err) => {
-            console.log(err);
+        catch (err) {
             return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
-        });
-        const retorno = yield Acessa_bd_1.client.query(`SELECT * FROM CONSULTAR_ADM($1)`, [id_admin]).then((result) => {
-            return result.rows;
-        }).catch((err) => {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
-        });
-        if (!retorno || retorno === undefined || retorno.length === undefined || retorno.length === null || retorno.length === 0) {
-            return res.status(200).json({ admin: false });
         }
-        return res.status(200).json({ admin: true, retorno: retorno[0] });
     });
 }
 exports.confere_admin = confere_admin;
@@ -144,7 +143,7 @@ function get_tarefas_usuario(req, res) {
             return result.rows[0].get_id_usuario;
         }).catch((err) => {
             console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            return res.status(200).json({ erro: "Erro ao acessar o banco de dados" });
         });
         Acessa_bd_1.client.query(`SELECT GET_TAREFAS_USUARIO($1, $2)`, [id_admin, id_usuario], (err, result) => {
             if (err) {

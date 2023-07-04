@@ -56,6 +56,7 @@ function append_usuario(usuario: any) {
     const email: HTMLParagraphElement = clone.querySelector('#email') as HTMLParagraphElement;
     const metodo_login: HTMLParagraphElement = clone.querySelector('#metodo_login') as HTMLParagraphElement;
     const tornar_admin: HTMLAnchorElement = clone.querySelector('#tornar-adm') as HTMLAnchorElement;
+    const status: HTMLParagraphElement = clone.querySelector('#status-user') as HTMLParagraphElement;
 
     nome.innerText = usuario.nome_user;
     email.innerText = usuario.email_user;
@@ -64,9 +65,11 @@ function append_usuario(usuario: any) {
 
 
     if (usuario.adm) {
+        status.innerText = 'Administrador';
         div.className = 'adm'
         tornar_admin.style.display = 'none';
     } else {
+        status.innerText = 'Usuario Comum';
         tornar_admin.addEventListener('click', () => {
             tornar_adm(div.id);
         });
@@ -107,7 +110,7 @@ function append_dados_gerais(tarefas: any) {
 
     const div_dados_gerais: HTMLDivElement = document.getElementById('dados_gerais') as HTMLDivElement;
     // const div_grafico: HTMLDivElement = div_dados_gerais.querySelector("#grafico") as HTMLDivElement;
-    const div_dados: HTMLDivElement = div_dados_gerais.querySelector("#dados") as HTMLDivElement;
+    const div_dados: HTMLDivElement = div_dados_gerais.querySelector("#dados-tarefas") as HTMLDivElement;
 
     let concluidas = 0;
     let pendentes = 0;
@@ -174,7 +177,6 @@ async function get_dados_gerais() {
 
     if (retorno.status === 200) {
         const { tarefas } = result;
-        console.log(tarefas);
         append_dados_gerais(tarefas);
     } else {
         const { error } = await retorno.json();
@@ -191,10 +193,12 @@ window.onload = async () => {
     bnt_lista_usuario.addEventListener('click', () => {
         if (bnt_lista_usuario.className === 'selecionado') return;
         const lista: HTMLDivElement = document.getElementById('lista_usuarios') as HTMLDivElement;
-        lista.className = 'active';
+        lista.className = 'selecionado';
         const dados_gerais: HTMLDivElement = document.getElementById('dados_gerais') as HTMLDivElement;
         dados_gerais.className = 'disabled';
-        bnt_lista_usuario.className = 'selecionado'
+        dados_gerais.setAttribute("hidden", "true")
+        lista.removeAttribute("hidden")
+        bnt_lista_usuario.className = 'active'
     });
 
     bnt_dados_gerais.addEventListener('click', async () => {
@@ -202,8 +206,11 @@ window.onload = async () => {
         const lista: HTMLDivElement = document.getElementById('lista_usuarios') as HTMLDivElement;
         lista.className = 'disabled';
         const dados_gerais: HTMLDivElement = document.getElementById('dados_gerais') as HTMLDivElement;
+        dados_gerais.className = 'selecionado';
+        lista.setAttribute("hidden", "true")
+        dados_gerais.removeAttribute("hidden")
         await get_dados_gerais();
-        bnt_dados_gerais.className = 'selecionado'
+        bnt_dados_gerais.className = 'active'
     });
     const usuarios = await get_usuarios();
     usuarios.forEach((usuario: any) => {

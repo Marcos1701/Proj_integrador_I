@@ -65,15 +65,18 @@ function append_usuario(usuario) {
     const email = clone.querySelector('#email');
     const metodo_login = clone.querySelector('#metodo_login');
     const tornar_admin = clone.querySelector('#tornar-adm');
+    const status = clone.querySelector('#status-user');
     nome.innerText = usuario.nome_user;
     email.innerText = usuario.email_user;
     div.id = usuario.id_user;
     metodo_login.innerText = usuario.metodo_login === 1 ? 'Google' : 'Email e senha';
     if (usuario.adm) {
+        status.innerText = 'Administrador';
         div.className = 'adm';
         tornar_admin.style.display = 'none';
     }
     else {
+        status.innerText = 'Usuario Comum';
         tornar_admin.addEventListener('click', () => {
             tornar_adm(div.id);
         });
@@ -109,7 +112,7 @@ function get_usuarios() {
 function append_dados_gerais(tarefas) {
     const div_dados_gerais = document.getElementById('dados_gerais');
     // const div_grafico: HTMLDivElement = div_dados_gerais.querySelector("#grafico") as HTMLDivElement;
-    const div_dados = div_dados_gerais.querySelector("#dados");
+    const div_dados = div_dados_gerais.querySelector("#dados-tarefas");
     let concluidas = 0;
     let pendentes = 0;
     let atrasadas = 0;
@@ -170,7 +173,6 @@ function get_dados_gerais() {
         }
         if (retorno.status === 200) {
             const { tarefas } = result;
-            console.log(tarefas);
             append_dados_gerais(tarefas);
         }
         else {
@@ -187,10 +189,12 @@ window.onload = () => __awaiter(void 0, void 0, void 0, function* () {
         if (bnt_lista_usuario.className === 'selecionado')
             return;
         const lista = document.getElementById('lista_usuarios');
-        lista.className = 'active';
+        lista.className = 'selecionado';
         const dados_gerais = document.getElementById('dados_gerais');
         dados_gerais.className = 'disabled';
-        bnt_lista_usuario.className = 'selecionado';
+        dados_gerais.setAttribute("hidden", "true");
+        lista.removeAttribute("hidden");
+        bnt_lista_usuario.className = 'active';
     });
     bnt_dados_gerais.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
         if (bnt_dados_gerais.className === 'selecionado')
@@ -198,8 +202,11 @@ window.onload = () => __awaiter(void 0, void 0, void 0, function* () {
         const lista = document.getElementById('lista_usuarios');
         lista.className = 'disabled';
         const dados_gerais = document.getElementById('dados_gerais');
+        dados_gerais.className = 'selecionado';
+        lista.setAttribute("hidden", "true");
+        dados_gerais.removeAttribute("hidden");
         yield get_dados_gerais();
-        bnt_dados_gerais.className = 'selecionado';
+        bnt_dados_gerais.className = 'active';
     }));
     const usuarios = yield get_usuarios();
     usuarios.forEach((usuario) => {

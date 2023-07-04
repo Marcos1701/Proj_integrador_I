@@ -254,7 +254,7 @@ function append_tarefa(tarefa: any) {
 
         titulo_visualizar_tarefa.innerText = tarefa.titulo;
         descricao_visualizar_tarefa.innerText = tarefa.descricao;
-        data_visualizar_tarefa.innerText = tarefa.data ? new Date(tarefa.data).toLocaleDateString() : "Sem data";
+        data_visualizar_tarefa.innerText = tarefa.data_conclusao ? new Date(tarefa.data_conclusao).toLocaleDateString() : "Sem data";
         data_criacao_visualizar_tarefa.innerText = new Date(tarefa.data_criacao).toLocaleDateString();
         prioridade_visualizar_tarefa.innerText = tarefa.prioridade;
 
@@ -385,13 +385,15 @@ async function Carregar_Tarefas(pesquisa: string | null = null): Promise<void> {
             console.log("Div tarefas não encontrada");
             return;
         }
-        if (tarefas.length === 0) {
+
+        if (tarefas === undefined || tarefas.length === 0) {
             div_tarefas.innerHTML = "<h3>Nenhuma tarefa encontrada</h3>";
             return;
         }
         div_tarefas.innerHTML = "";
 
         for (const tarefa of tarefas) {
+
             append_tarefa(tarefa);
         }
         const total_paginas: HTMLAnchorElement = document.querySelector("#total_paginas") as HTMLAnchorElement;
@@ -702,30 +704,39 @@ async function get_dados_usuario() {
 }
 
 async function conferir_adm() {
-    const retorno = await fetch("http://localhost:3000/usuario/conferir", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: token }),
-    });
+    try {
+        const retorno = await fetch("http://localhost:3000/admin/confere", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: token }),
+        }).then((res) => res).catch((error) => {
+            console.log(error.message);
+        });
 
-    if (retorno.status === 200) {
-        const result = await retorno.json();
-        const { adm } = result.data;
-        if (adm) {
-            const op_admin: HTMLAnchorElement = document.querySelector("#admin_bnt") as HTMLAnchorElement;
-            const li_admin: HTMLLIElement = op_admin.parentElement as HTMLLIElement;
-            op_admin.href = "./admin.html";
-            li_admin.removeAttribute("hidden");
+
+        if (retorno && retorno.status === 200) {
+            const result = await retorno.json();
+            const { admin } = result;
+            if (admin) {
+                const op_admin: HTMLAnchorElement = document.querySelector("#admin_bnt") as HTMLAnchorElement;
+                const li_admin: HTMLLIElement = op_admin.parentElement as HTMLLIElement;
+                op_admin.href = "./admin.html";
+                li_admin.removeAttribute("hidden");
+            }
         } else {
-            const op_admin: HTMLAnchorElement = document.querySelector("#admin_bnt") as HTMLAnchorElement;
-            const li_admin: HTMLLIElement = op_admin.parentElement as HTMLLIElement;
-            li_admin.remove();
+            if (retorno) {
+                const { erro } = await retorno.json();
+                console.log(erro);
+            } else {
+                console.log("algo de errado não está certo")
+            }
         }
-    } else {
-        const { error } = await retorno.json();
-        console.log(error);
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(error.message);
+        }
     }
 }
 
@@ -752,7 +763,7 @@ window.onload = async function () {
     // pesquisa
     const pesquisa: HTMLInputElement = document.querySelector("#conf_usuario #search_input") as HTMLInputElement;
     const bnt_pesquisa: HTMLAnchorElement = document.querySelector("#conf_usuario #search_bnt") as HTMLAnchorElement;
-    conferir_adm();
+    await conferir_adm();
     await Carregar_Tarefas();
     await get_dados_usuario();
 

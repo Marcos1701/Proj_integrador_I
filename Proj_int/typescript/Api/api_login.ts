@@ -50,7 +50,7 @@ async function Get_Data_Google(token: string): Promise<{ email: string, name: st
 
         if (response.status === 200) {
             const { email, name } = await response.json();
-            console.log(email, name);
+            // console.log(email, name);
             retorno = { email: email, name: name, erro: "" };
         } else {
             const { error } = await response.json();

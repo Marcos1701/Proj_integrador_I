@@ -140,7 +140,9 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION GET_DATA(token_user VARCHAR(255))
+
+        
+        CREATE OR REPLACE FUNCTION GET_DATA(token_user VARCHAR)
         RETURNS TABLE (id_usuario varchar, nome_usuario VARCHAR(255), email_usuario VARCHAR(255), senha_usuario VARCHAR(255), id_metodo_login_usuario INTEGER, token_usuario varchar) AS $$
         BEGIN
 
@@ -170,7 +172,6 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        DROP FUNCTION IF EXISTS ADICIONAR_ADM;
         CREATE OR REPLACE FUNCTION ADICIONAR_ADM(id_resp VARCHAR, id_user VARCHAR)
         RETURNS VOID AS $$
         BEGIN
@@ -257,7 +258,8 @@ client.connect().then(() => {
         );
     `).catch(err => console.log(`Erro ao criar tabela tarefa: ${err}`));
         client.query(`
-        CREATE OR REPLACE FUNCTION ADICIONAR_TAREFA(id_task varchar, titulo VARCHAR(150), descricao VARCHAR(300), id_usuario VARCHAR, prioridade INTEGER DEFAULT NULL, data_conclusao DATE DEFAULT NULL)
+        DROP FUNCTION IF EXISTS ADICIONAR_TAREFA;
+        CREATE OR REPLACE FUNCTION ADICIONAR_TAREFA(id_task varchar, titulo VARCHAR(150), descricao VARCHAR(300), id_usuario VARCHAR, prioridade INTEGER DEFAULT NULL, data_conclusao TIMESTAMP DEFAULT NULL)
         RETURNS VOID AS $$
         BEGIN
             IF (titulo IS NULL OR descricao IS NULL OR id_usuario IS NULL OR id_task IS NULL) THEN
@@ -280,7 +282,7 @@ client.connect().then(() => {
         $$ LANGUAGE PLPGSQL;
 
 
-        DROP FUNCTION IF EXISTS GET_TAREFAS;
+        
         CREATE OR REPLACE FUNCTION GET_TAREFAS(id_do_usuario VARCHAR)
         RETURNS TABLE (id_tr VARCHAR, titulo_tr VARCHAR(150), descricao_tr VARCHAR(300), data_criacao_tr DATE, data_conclusao_tr DATE, prioridade_tr INTEGER, status_tr CHAR(1)) AS $$
         BEGIN

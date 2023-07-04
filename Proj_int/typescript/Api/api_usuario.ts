@@ -74,7 +74,7 @@ async function editar_usuario(req: Request, res: Response) {
         return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
     }
 
-    
+
     client.query("SELECT EDITAR_USUARIO($1, $2, $3, $4, $5)", [token, novo_token ? novo_token : null, nome, novo_email ? email : null, nova_senha ? senha : null], (err, result) => {
         if (err) {
             console.log(err.message);
@@ -103,6 +103,7 @@ async function get_data(req: Request, res: Response) {
     if (!token) {
         return res.status(500).json({ error: "Token inválido" });
     }
+
     client.query("SELECT * FROM GET_DATA($1)", [token], (err, result) => {
         if (err) {
             console.log(err);
