@@ -45,13 +45,33 @@ function get_usuarios(req, res) {
             console.log(err);
             return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
         });
-        Acessa_bd_1.client.query(`SELECT GET_USUARIOS($1)`, [id_usuario], (err, result) => {
+        const usuarios = yield Acessa_bd_1.client.query(`SELECT * FROM GET_USUARIOS($1)`, [id_usuario], (err, result) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
             }
-            return res.status(200).json({ usuarios: result.rows[0].get_usuarios });
+            return result.rows[0].get_usuarios;
         });
+        const admins = yield Acessa_bd_1.client.query(`SELECT * FROM GET_ADMINS($1)`, [id_usuario], (err, result) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+            }
+            return result.rows[0].get_admins;
+        });
+        if (usuarios === undefined || usuarios === null || admins === undefined || admins === null) {
+            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+        }
+        for (let i = 0; i < usuarios.rowCount; i++) {
+            usuarios[i].adm = false;
+            for (let j = 0; j < admins.rowCount; j++) {
+                if (usuarios[i].id === admins[j].id) {
+                    usuarios[i].adm = true;
+                    break;
+                }
+            }
+        }
+        return res.status(200).json({ usuarios: usuarios });
     });
 }
 exports.get_usuarios = get_usuarios;

@@ -199,21 +199,21 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION CONSULTAR_ADM(id_usuario VARCHAR(255))
-        RETURNS TABLE (id_usuario VARCHAR, id_responsavel VARCHAR) AS $$
+        CREATE OR REPLACE FUNCTION CONSULTAR_ADM(id_adm VARCHAR(255))
+        RETURNS TABLE (id VARCHAR, id_responsavel VARCHAR) AS $$
         BEGIN
-            IF (id_usuario IS NULL) THEN
+            IF (id_adm IS NULL) THEN
                 RAISE EXCEPTION 'Id do usuario invalido';
             END IF;
 
-                IF EXISTS (SELECT * FROM ADM WHERE id_usuario = id_usuario) THEN
-                    RETURN QUERY SELECT id_usuario, id_responsavel FROM ADM WHERE id_usuario = id_usuario;
+                IF EXISTS (SELECT * FROM ADM WHERE id_usuario = id_adm) THEN
+                    RETURN QUERY SELECT id_usuario, id_responsavel FROM ADM WHERE id_usuario = id_adm;
                 ELSE
                     RAISE EXCEPTION 'Usuario nao e um administrador';
                 END IF;
         END;
         $$ LANGUAGE PLPGSQL;
-        
+
     `).catch(err => console.log(`Erro ao criar funcoes: ${err}`));
         client.query(`
         CREATE TABLE IF NOT EXISTS TAREFA (
@@ -400,15 +400,31 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
+
         CREATE OR REPLACE FUNCTION GET_USUARIOS(ID_RESPONSAVEL VARCHAR)
-        RETURNS TABLE (id INTEGER, nome VARCHAR(150), email VARCHAR(150), senha VARCHAR(150), data_criacao DATE) AS $$
+        RETURNS TABLE (id INTEGER, nome VARCHAR(150), email VARCHAR(150), senha VARCHAR(150)) AS $$
         BEGIN
             IF (ID_RESPONSAVEL IS NULL) THEN
                 RAISE EXCEPTION 'Id do responsavel invalido';
             END IF;
 
             IF EXISTS (SELECT * FROM ADM WHERE id_usuario = ID_RESPONSAVEL) THEN
-                RETURN QUERY SELECT id, nome, email, senha, data_criacao FROM USUARIO;
+                RETURN QUERY SELECT id, nome, email, senha FROM USUARIO;
+            ELSE
+                RAISE EXCEPTION 'Usuario nao possui permissao para acessar essa funcao';
+            END IF;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
+        CREATE OR REPLACE FUNCTION GET_ADMINS(ID_RESPONSAVEL VARCHAR)
+        RETURNS TABLE (id INTEGER, nome VARCHAR(150), email VARCHAR(150), senha VARCHAR(150)) AS $$
+        BEGIN
+            IF (ID_RESPONSAVEL IS NULL) THEN
+                RAISE EXCEPTION 'Id do responsavel invalido';
+            END IF;
+
+            IF EXISTS (SELECT * FROM ADM WHERE id_usuario = ID_RESPONSAVEL) THEN
+                RETURN QUERY SELECT id, nome, email, senha FROM ADM JOIN USUARIO ON id_usuario = id;
             ELSE
                 RAISE EXCEPTION 'Usuario nao possui permissao para acessar essa funcao';
             END IF;
