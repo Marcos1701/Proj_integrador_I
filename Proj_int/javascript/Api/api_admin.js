@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_tarefas_atrasadas = exports.get_tarefas_concluidas = exports.get_tarefas_pendentes = exports.get_tarefas_usuario = exports.get_all_tarefas = exports.adicionar_admin = exports.get_usuarios = void 0;
+exports.confere_admin = exports.get_tarefas_atrasadas = exports.get_tarefas_concluidas = exports.get_tarefas_pendentes = exports.get_tarefas_usuario = exports.get_all_tarefas = exports.adicionar_admin = exports.get_usuarios = void 0;
 const Acessa_bd_1 = require("./Acessa_bd");
 const validastring = (...id) => {
     for (let i = 0; i < id.length; i++) {
@@ -81,6 +81,37 @@ function adicionar_admin(req, res) {
     });
 }
 exports.adicionar_admin = adicionar_admin;
+function confere_admin(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { token } = req.body;
+        if (!validastring(token)) {
+            return res.status(400).json({ erro: "Dados inválidos" });
+        }
+        const email = yield get_email(token);
+        if (email === "") {
+            return res.status(400).json({ erro: "Token inválido" });
+        }
+        const id_admin = yield Acessa_bd_1.client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
+            return result.rows[0].get_id_usuario;
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+        });
+        const retorno = yield Acessa_bd_1.client.query(`SELECT CONSULTAR_ADM($1)`, [id_admin]).then((result) => {
+            return result.rows[0].consultar_adm;
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+        });
+        if (retorno.rowCount === 0) {
+            return res.status(200).json({ admin: false });
+        }
+        else {
+            return res.status(200).json({ admin: true, retorno: retorno.rows[0] });
+        }
+    });
+}
+exports.confere_admin = confere_admin;
 function get_tarefas_usuario(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { token, id_usuario } = req.body;

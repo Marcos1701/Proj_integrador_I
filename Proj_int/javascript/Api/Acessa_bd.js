@@ -89,10 +89,9 @@ client.connect().then(() => {
             END IF;
 
             IF (novo_token IS NOT NULL) THEN
-                IF EXISTS (SELECT * FROM USUARIO WHERE token = novo_token) THEN
-                    RAISE EXCEPTION 'Token ja cadastrado';
+                IF NOT EXISTS (SELECT * FROM USUARIO WHERE token = novo_token) THEN
+                    UPDATE USUARIO SET token = novo_token WHERE token = token_usuario;
                 END IF;
-                UPDATE USUARIO SET token = novo_token WHERE token = token_usuario;
             END IF;
 
             IF (email_usuario IS NOT NULL) THEN
@@ -199,6 +198,22 @@ client.connect().then(() => {
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
+
+        CREATE OR REPLACE FUNCTION CONSULTAR_ADM(id_usuario VARCHAR(255))
+        RETURNS TABLE (id_usuario VARCHAR, id_responsavel VARCHAR) AS $$
+        BEGIN
+            IF (id_usuario IS NULL) THEN
+                RAISE EXCEPTION 'Id do usuario invalido';
+            END IF;
+
+                IF EXISTS (SELECT * FROM ADM WHERE id_usuario = id_usuario) THEN
+                    RETURN QUERY SELECT id_usuario, id_responsavel FROM ADM WHERE id_usuario = id_usuario;
+                ELSE
+                    RAISE EXCEPTION 'Usuario nao e um administrador';
+                END IF;
+        END;
+        $$ LANGUAGE PLPGSQL;
+        
     `).catch(err => console.log(`Erro ao criar funcoes: ${err}`));
         client.query(`
         CREATE TABLE IF NOT EXISTS TAREFA (

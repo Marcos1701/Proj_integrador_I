@@ -21,6 +21,7 @@ exports.router.post('/tarefas/desconcluir', api_tarefas_js_1.desconcluir_tarefa)
 exports.router.post('/tarefas/get', api_tarefas_js_1.get_tarefa);
 exports.router.post('/tarefas/get/all', api_tarefas_js_1.get_tarefas);
 exports.router.post('/admin', api_admin_js_1.adicionar_admin);
+exports.router.post('/admin/confere', api_admin_js_1.confere_admin);
 exports.router.post('/admin/get', api_admin_js_1.get_usuarios);
 exports.router.post('/admin/get/all', api_admin_js_1.get_all_tarefas);
 exports.router.post('/admin/get/tarefas', api_admin_js_1.get_tarefas_usuario);
@@ -30,3 +31,4 @@ exports.router.post('/admin/get/tarefas/atrasadas', api_admin_js_1.get_tarefas_a
 exports.router.put('/usuario', api_usuario_js_1.editar_usuario);
 exports.router.delete('/usuario', api_usuario_js_1.excluir_usuario);
 exports.router.post('/usuario/get', api_usuario_js_1.get_data);
+exports.router.post('/usuario/token', api_usuario_js_1.confere_token);

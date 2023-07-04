@@ -9,13 +9,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_data = exports.excluir_usuario = exports.editar_usuario = void 0;
+exports.confere_token = exports.get_data = exports.excluir_usuario = exports.editar_usuario = void 0;
 const Acessa_bd_1 = require("./Acessa_bd");
 const api_login_js_1 = require("./api_login.js");
 const api_tarefas_js_1 = require("./api_tarefas.js");
+function confere_token(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { token } = req.body;
+        if (!token) {
+            return res.status(500).json({ error: "Token inválido" });
+        }
+        const email = yield (0, api_tarefas_js_1.get_email)(token);
+        if (!email) {
+            return res.status(500).json({ error: "Token inválido" });
+        }
+        return res.status(200).json({ token: token });
+    });
+}
+exports.confere_token = confere_token;
+function get_name(token) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const name = yield Acessa_bd_1.client.query(`SELECT nome FROM usuario WHERE token = '${token}'`).then((result) => {
+            return result.rows[0].nome;
+        }).catch((err) => {
+            console.log(err);
+            return null;
+        });
+        return name;
+    });
+}
 function get_senha(token) {
     return __awaiter(this, void 0, void 0, function* () {
-        const senha = yield Acessa_bd_1.client.query(`SELECT senha FROM usuarios WHERE token = '${token}'`).then((result) => {
+        const senha = yield Acessa_bd_1.client.query(`SELECT senha FROM usuario WHERE token = '${token}'`).then((result) => {
             return result.rows[0].senha;
         }).catch((err) => {
             console.log(err);
@@ -30,7 +55,7 @@ function editar_usuario(req, res) {
         if (!token) {
             return res.status(500).json({ error: "Token inválido" });
         }
-        const email = (0, api_tarefas_js_1.get_email)(token);
+        let email = yield (0, api_tarefas_js_1.get_email)(token);
         if (!email) {
             return res.status(500).json({ error: "Token inválido" });
         }
@@ -38,97 +63,34 @@ function editar_usuario(req, res) {
             novo_nome === "" && novo_email === "" && nova_senha === "") {
             return res.status(500).json({ error: "Dados inválidos" });
         }
-        if (novo_nome && novo_email && nova_senha) {
-            const new_token = (0, api_login_js_1.gerar_JWT)(novo_email, nova_senha);
-            if (!new_token) {
-                return res.status(500).json({ error: "Erro ao gerar o token" });
-            }
-            Acessa_bd_1.client.query("SELECT EDITAR_USUARIO($1, $2, $3, $4, $5)", [token, new_token, novo_nome, novo_email, nova_senha], (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-                }
-                return res.status(200).json({ token: new_token });
-            });
+        let senha = yield get_senha(token);
+        if (!senha) {
+            return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
         }
-        else if (novo_nome && novo_email) {
-            const senha = yield get_senha(token);
-            if (!senha) {
+        let novo_token = email && email !== novo_email
+            && senha && senha !== nova_senha ?
+            (0, api_login_js_1.gerar_JWT)(novo_email, nova_senha) : token;
+        email = novo_email ?
+            novo_email !== email ? novo_email : null
+            : email;
+        senha = nova_senha ? nova_senha : senha;
+        if (novo_email && !nova_senha && senha) {
+            novo_token = (0, api_login_js_1.gerar_JWT)(novo_email, senha);
+        }
+        else if (!novo_email && nova_senha && email) {
+            novo_token = (0, api_login_js_1.gerar_JWT)(email, nova_senha);
+        }
+        const nome = novo_nome ? novo_nome : yield get_name(token);
+        if (!nome) {
+            return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
+        }
+        Acessa_bd_1.client.query("SELECT EDITAR_USUARIO($1, $2, $3, $4, $5)", [token, novo_token ? novo_token : null, nome, novo_email ? email : null, nova_senha ? senha : null], (err, result) => {
+            if (err) {
+                console.log(err.message);
                 return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
             }
-            const new_token = (0, api_login_js_1.gerar_JWT)(novo_email, senha);
-            Acessa_bd_1.client.query("SELECT EDITAR_USUARIO($1, $2, $3, $4, DEFAULT)", [token, new_token, novo_nome, novo_email], (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-                }
-                return res.status(200).json({ token: new_token });
-            });
-        }
-        else if (novo_nome && nova_senha) {
-            const email = yield (0, api_tarefas_js_1.get_email)(token);
-            if (!email) {
-                return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-            }
-            const new_token = (0, api_login_js_1.gerar_JWT)(email, nova_senha);
-            Acessa_bd_1.client.query("SELECT EDITAR_USUARIO($1, $2, $3,DEFAULT, $4)", [token, new_token, novo_nome, nova_senha], (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-                }
-                return res.status(200).json({ token: new_token });
-            });
-        }
-        else if (novo_email && nova_senha) {
-            const new_token = (0, api_login_js_1.gerar_JWT)(novo_email, nova_senha);
-            if (!new_token) {
-                return res.status(500).json({ error: "Erro ao gerar o token" });
-            }
-            Acessa_bd_1.client.query("SELECT EDITAR_USUARIO($1, $2, DEFAULT, $3, $4)", [token, new_token, novo_email, nova_senha], (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-                }
-                return res.status(200).json({ token: new_token });
-            });
-        }
-        else if (novo_nome) {
-            Acessa_bd_1.client.query("SELECT EDITAR_USUARIO($1, $2, $3, DEFAULT, DEFAULT)", [token, token, novo_nome], (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-                }
-                return res.status(200).json({ token: token });
-            });
-        }
-        else if (novo_email) {
-            const senha = yield get_senha(token);
-            if (!senha) {
-                return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-            }
-            const new_token = (0, api_login_js_1.gerar_JWT)(novo_email, senha);
-            Acessa_bd_1.client.query("SELECT EDITAR_USUARIO($1, $2, DEFAULT, $3, DEFAULT)", [token, new_token, novo_email], (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-                }
-                return res.status(200).json({ token: new_token });
-            });
-        }
-        else {
-            const email = yield (0, api_tarefas_js_1.get_email)(token);
-            if (!email) {
-                return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-            }
-            const new_token = (0, api_login_js_1.gerar_JWT)(email, nova_senha);
-            Acessa_bd_1.client.query("SELECT EDITAR_USUARIO($1, $2, DEFAULT, DEFAULT, $3)", [token, new_token, nova_senha], (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Erro ao acessar o banco de dados" });
-                }
-                return res.status(200).json({ token: new_token });
-            });
-        }
+            return res.status(200).json({ token: novo_token ? novo_token : token });
+        });
     });
 }
 exports.editar_usuario = editar_usuario;
