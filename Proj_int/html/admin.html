@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações de Administrador</title>
+    <link rel="stylesheet" href="../css/loader.css">
+    <link rel="stylesheet" href="../css/background.css">
+    <link rel="stylesheet" href="../css/admin.css">
+
+    <script src="../javascript/admin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="circulos">
+            <div id="circulo4"></div>
+            <div id="circulo3"></div>
+            <div id="circulo2"></div>
+            <div id="circulo1"></div>
+        </div>
+
+        <div class="conteiner_dados" id="habilitado">
+            <main>
+                <h1>Configurações de Administrador</h1>
+
+                <section id="opcoes">
+                    <div id="opcoes_adm">
+                        <a href="#" id="lista_user-bnt">Lista Usuarios</a>
+                        <a href="#" id="dados_gerais-bnt">Dados Gerais</a>
+                    </div>
+
+                    <div class="retorno">
+
+                        <div class="selecionado" id="lista_usuarios">
+                            <h1>Lista de Usuarios</h1>
+                        </div>
+
+                        <div class="disabled" id="dados_gerais" hidden>
+
+                            <div id="dados">
+                                <p id="total_tarefas"></p>
+                                <p id="tarefas_concluidas"></p>
+                                <p id="tarefas_pendentes"></p>
+                                <p id="tarefas_atrasadas"></p>
+                            </div>
+
+                        </div>
+
+                        <template id="template-usuario">
+                            <div class="usuario">
+                                <div id="dados">
+                                    <div id="nome-div">
+                                        <label for="nome">Nome: </label>
+                                        <p id="nome">Nome do Usuario</p>
+                                    </div>
+                                    <div id="email-div">
+                                        <label for="email">Email: </label>
+                                        <p id="email">Email do Usuario</p>
+                                    </div>
+
+
+                                    <div id="login-div">
+                                        <label for="metodo_login">Logado Via </label>
+                                        <p id="metodo_login">Metodo de Login</p>
+                                    </div>
+                                </div>
+                                <!-- <a href="#">excluir usuario</a> -->
+                                <a href="#" id="tornar-adm">tornar administrador</a>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

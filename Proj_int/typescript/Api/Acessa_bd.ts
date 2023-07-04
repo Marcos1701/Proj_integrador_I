@@ -79,10 +79,9 @@ client.connect().then(() => {
             END IF;
 
             IF (novo_token IS NOT NULL) THEN
-                IF EXISTS (SELECT * FROM USUARIO WHERE token = novo_token) THEN
-                    RAISE EXCEPTION 'Token ja cadastrado';
+                IF NOT EXISTS (SELECT * FROM USUARIO WHERE token = novo_token) THEN
+                    UPDATE USUARIO SET token = novo_token WHERE token = token_usuario;
                 END IF;
-                UPDATE USUARIO SET token = novo_token WHERE token = token_usuario;
             END IF;
 
             IF (email_usuario IS NOT NULL) THEN
@@ -161,26 +160,27 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION ADICIONAR_ADM(id_responsavel INTEGER, id_usuario INTEGER)
+        DROP FUNCTION IF EXISTS ADICIONAR_ADM;
+        CREATE OR REPLACE FUNCTION ADICIONAR_ADM(id_resp VARCHAR, id_user VARCHAR)
         RETURNS VOID AS $$
         BEGIN
-            IF (id_usuario IS NULL) THEN
+            IF (id_user IS NULL) THEN
                 RAISE EXCEPTION 'Id do usuario invalido';
             END IF;
-            IF (id_responsavel IS NULL) THEN
+            IF (id_resp IS NULL) THEN
                 RAISE EXCEPTION 'Id do responsavel invalido';
             END IF;
 
-            IF EXISTS (SELECT * FROM USUARIO WHERE id = id_usuario) THEN
-                IF EXISTS (SELECT * FROM ADM WHERE id_usuario = id_usuario) THEN
+            IF EXISTS (SELECT * FROM USUARIO WHERE id = id_user) THEN
+                IF EXISTS (SELECT * FROM ADM WHERE id_usuario = id_user) THEN
                     RAISE EXCEPTION 'Usuario ja e um administrador';
                 END IF;
 
-                IF EXISTS (SELECT * FROM USUARIO WHERE id = id_responsavel) THEN
-                    IF NOT EXISTS (SELECT * FROM ADM WHERE id_usuario = id_responsavel) THEN
+                IF EXISTS (SELECT * FROM USUARIO WHERE id = id_resp) THEN
+                    IF NOT EXISTS (SELECT * FROM ADM WHERE id_usuario = id_resp) THEN
                         RAISE EXCEPTION 'Responsavel nao e um administrador';
                     END IF;
-                    INSERT INTO ADM (id_usuario, id_responsavel) VALUES (id_usuario, id_responsavel);
+                    INSERT INTO ADM (id_usuario, id_responsavel) VALUES (id_user, id_resp);
                 ELSE
                     RAISE EXCEPTION 'Responsavel nao cadastrado';
                 END IF;
@@ -189,6 +189,49 @@ client.connect().then(() => {
             END IF;
         END;
         $$ LANGUAGE PLPGSQL;
+
+        DROP FUNCTION IF EXISTS CONSULTAR_ADM;
+        CREATE OR REPLACE FUNCTION CONSULTAR_ADM(id_adm VARCHAR(255))
+        RETURNS TABLE (id VARCHAR, id_resp VARCHAR) AS $$
+        BEGIN
+            IF (id_adm IS NULL) THEN
+                RAISE EXCEPTION 'Id do usuario invalido';
+            END IF;
+
+                IF EXISTS (SELECT * FROM ADM WHERE id_usuario = id_adm) THEN
+                    RETURN QUERY SELECT id_usuario, id_responsavel id_resp FROM ADM WHERE id_usuario = id_adm;
+                ELSE
+                    RAISE EXCEPTION 'Usuario nao e um administrador';
+                END IF;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
+        CREATE OR REPLACE FUNCTION ADM_EXCLUIR_USUARIO(id_adm VARCHAR(255), id_user VARCHAR(255))
+        RETURNS VOID AS $$
+        BEGIN
+            IF (id_adm IS NULL) THEN
+                RAISE EXCEPTION 'Id do usuario invalido';
+            END IF;
+
+            IF (id_user IS NULL) THEN
+                RAISE EXCEPTION 'Id do usuario invalido';
+            END IF;
+
+            IF EXISTS (SELECT * FROM ADM WHERE id_usuario = id_adm) THEN
+                IF EXISTS (SELECT * FROM USUARIO WHERE id = id_user) THEN
+                    IF EXISTS (SELECT * FROM ADM WHERE id_usuario = id_user) THEN
+                        RAISE EXCEPTION 'Usuario e um administrador';
+                    END IF;
+                    DELETE FROM USUARIO WHERE id = id_user;
+                ELSE
+                    RAISE EXCEPTION 'Usuario nao cadastrado';
+                END IF;
+            ELSE
+                RAISE EXCEPTION 'Usuario nao e um administrador';
+            END IF;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
     `).catch(err => console.log(`Erro ao criar funcoes: ${err}`));
 
         client.query(`
@@ -196,8 +239,8 @@ client.connect().then(() => {
             id VARCHAR PRIMARY KEY,
             titulo VARCHAR(150) NOT NULL,
             descricao VARCHAR(300) NOT NULL,
-            data_criacao DATE DEFAULT CURRENT_DATE NOT NULL,
-            DATA_CONCLUSAO DATE DEFAULT NULL,
+            data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            DATA_CONCLUSAO TIMESTAMP DEFAULT NULL,
             PRIORIDADE INTEGER DEFAULT 0 NOT NULL,
             STATUS CHAR(1) DEFAULT 'P' NOT NULL, -- P = Pendente, C = Concluida, A = Atrasada
             id_usuario VARCHAR NOT NULL,
@@ -377,15 +420,35 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION GET_USUARIOS(ID_RESPONSAVEL VARCHAR)
-        RETURNS TABLE (id INTEGER, nome VARCHAR(150), email VARCHAR(150), senha VARCHAR(150), data_criacao DATE) AS $$
+
+        
+        
+        CREATE OR REPLACE FUNCTION GET_USUARIOS(ID_ADM VARCHAR)
+        RETURNS TABLE (id_user VARCHAR, nome_user VARCHAR(150), email_user VARCHAR(150), metodo_login INTEGER) AS $$
         BEGIN
-            IF (ID_RESPONSAVEL IS NULL) THEN
+            IF (ID_ADM IS NULL) THEN
                 RAISE EXCEPTION 'Id do responsavel invalido';
             END IF;
 
-            IF EXISTS (SELECT * FROM ADM WHERE id_usuario = ID_RESPONSAVEL) THEN
-                RETURN QUERY SELECT id, nome, email, senha, data_criacao FROM USUARIO;
+            IF EXISTS (SELECT * FROM ADM WHERE id_usuario = ID_ADM) THEN
+                RETURN QUERY SELECT id id_user, nome nome_user, email email_user, id_metodo_login metodo_login FROM USUARIO;
+            ELSE
+                RAISE EXCEPTION 'Usuario nao possui permissao para acessar essa funcao';
+            END IF;
+        END;
+        $$ LANGUAGE PLPGSQL;
+
+        
+        
+        CREATE OR REPLACE FUNCTION GET_ADMINS(ID_ADM VARCHAR)
+        RETURNS TABLE (id_user VARCHAR, nome_user VARCHAR(150), email_user VARCHAR(150), metodo_login INTEGER) AS $$
+        BEGIN
+            IF (ID_ADM IS NULL) THEN
+                RAISE EXCEPTION 'Id do responsavel invalido';
+            END IF;
+
+            IF EXISTS (SELECT * FROM ADM WHERE id_usuario = ID_ADM) THEN
+                RETURN QUERY SELECT id id_user, nome nome_user, email email_user, id_metodo_login metodo_login FROM ADM JOIN USUARIO ON id_usuario = id;
             ELSE
                 RAISE EXCEPTION 'Usuario nao possui permissao para acessar essa funcao';
             END IF;
@@ -411,15 +474,18 @@ client.connect().then(() => {
         END;
         $$ LANGUAGE PLPGSQL;
 
-        CREATE OR REPLACE FUNCTION GET_ALL_TAREFAS(ID_RESPONSAVEL INTEGER)
-        RETURNS TABLE (id VARCHAR, titulo VARCHAR(150), descricao VARCHAR(300), data_criacao DATE, data_conclusao DATE, prioridade INTEGER) AS $$
+        
+        
+        DROP FUNCTION IF EXISTS GET_ALL_TAREFAS;
+        CREATE OR REPLACE FUNCTION GET_STATUS_ALL_TAREFAS(ID_RESP VARCHAR)
+        RETURNS TABLE (status_tr char(1)) AS $$
         BEGIN
-            IF (ID_RESPONSAVEL IS NULL) THEN
+            IF (ID_RESP IS NULL) THEN
                 RAISE EXCEPTION 'Id do responsavel invalido';
             END IF;
 
-            IF EXISTS (SELECT * FROM ADM WHERE id_usuario = ID_RESPONSAVEL) THEN
-                RETURN QUERY SELECT id, titulo, descricao, data_criacao, data_conclusao, prioridade FROM TAREFA;
+            IF EXISTS (SELECT * FROM ADM WHERE id_usuario = ID_RESP) THEN
+                RETURN QUERY SELECT status status_tr FROM TAREFA;
             ELSE
                 RAISE EXCEPTION 'Usuario nao possui permissao para acessar essa funcao';
             END IF;

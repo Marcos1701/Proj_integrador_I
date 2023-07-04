@@ -11,8 +11,10 @@ const validastring = (...id: string[]) => {
 }
 
 async function get_email(token: string): Promise<string> {
-    const retorno = await client.query(`SELECT email FROM usuarios WHERE token = $1`, [token]);
-    const email = retorno.rows[0].email;
+    const retorno = await client.query(`SELECT email FROM usuario WHERE token = $1`, [token]).then((result) => {
+        return result;
+    });
+    const { email } = retorno.rows[0];
     if (email === undefined || email === null) {
         return "";
     }
@@ -35,13 +37,35 @@ async function get_usuarios(req: Request, res: Response) {
         return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
     });
 
-    client.query(`SELECT GET_USUARIOS($1)`, [id_usuario], (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+    const usuarios: any[] = await client.query(`SELECT * FROM GET_USUARIOS($1)`, [id_usuario]).then((result) => {
+        return result.rows
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({ erro: "Erro ao acessar o banco de dados 1" });
+    }) as any[];
+
+    const admins: any[] = await client.query(`SELECT * FROM GET_ADMINS($1)`, [id_usuario]).then((result) => {
+        return result.rows;
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({ erro: "Erro ao acessar o banco de dados 2" });
+    }) as any[];
+
+    if (usuarios === undefined || usuarios === null || admins === undefined || admins === null) {
+        return res.status(500).json({ erro: "Erro ao acessar o banco de dados 3" });
+    }
+
+    for (let i = 0; i < usuarios.length; i++) {
+        usuarios[i].adm = false;
+        for (let j = 0; j < admins.length; j++) {
+            if (usuarios[i].id_user === admins[j].id_user) {
+                usuarios[i].adm = true;
+                break;
+            }
         }
-        return res.status(200).json({ usuarios: result.rows[0].get_usuarios });
-    });
+    }
+
+    return res.status(200).json({ usuarios: usuarios });
 }
 
 async function adicionar_admin(req: Request, res: Response) {
@@ -60,6 +84,7 @@ async function adicionar_admin(req: Request, res: Response) {
         return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
     });
 
+
     client.query(`SELECT ADICIONAR_ADM($1, $2)`, [id_admin, id_usuario], (err, result) => {
         if (err) {
             console.log(err);
@@ -67,6 +92,37 @@ async function adicionar_admin(req: Request, res: Response) {
         }
         return res.status(200);
     });
+}
+
+async function confere_admin(req: Request, res: Response) {
+    const { token } = req.body;
+    if (!validastring(token)) {
+        return res.status(400).json({ erro: "Dados inválidos" });
+    }
+    const email: string = await get_email(token)
+    if (email === "") {
+        return res.status(400).json({ erro: "Token inválido" });
+    }
+
+    const id_admin = await client.query(`SELECT GET_ID_USUARIO($1)`, [email]).then((result) => {
+        return result.rows[0].get_id_usuario;
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+    });
+
+    const retorno = await client.query(`SELECT * FROM CONSULTAR_ADM($1)`, [id_admin]).then((result) => {
+        return result.rows;
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
+    }) as any[];
+
+    if (!retorno || retorno === undefined || retorno.length === undefined || retorno.length === null || retorno.length === 0) {
+        return res.status(200).json({ admin: false });
+    }
+
+    return res.status(200).json({ admin: true, retorno: retorno[0] });
 }
 
 async function get_tarefas_usuario(req: Request, res: Response) {
@@ -110,12 +166,12 @@ async function get_all_tarefas(req: Request, res: Response) {
         return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
     });
 
-    client.query(`SELECT GET_ALL_TAREFAS($1)`, [id_admin], (err, result) => {
+    client.query(`SELECT * FROM GET_STATUS_ALL_TAREFAS($1)`, [id_admin], (err, result) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ erro: "Erro ao acessar o banco de dados" });
         }
-        return res.status(200).json({ tarefas: result.rows[0].get_all_tarefas });
+        return res.status(200).json({ tarefas: result.rows });
     });
 }
 
@@ -203,5 +259,6 @@ async function get_tarefas_atrasadas(req: Request, res: Response) {
 export {
     get_usuarios, adicionar_admin, get_all_tarefas,
     get_tarefas_usuario, get_tarefas_pendentes,
-    get_tarefas_concluidas, get_tarefas_atrasadas
+    get_tarefas_concluidas, get_tarefas_atrasadas,
+    confere_admin
 };

@@ -1,0 +1,166 @@
+.conteiner_dados#habilitado {
+    width: 90%;
+    height: 90%;
+}
+
+.conteiner_dados#habilitado,
+#opcoes_adm,
+#lista_usuarios {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 1vh;
+}
+
+.disabled,
+.disabled div {
+    display: none;
+}
+
+.selecionado{
+    background: #ffffffa4;
+    width: 50vw;
+    height: 100%
+}
+
+#opcoes_adm {
+    /* background: #fff; */
+    width: 15vw;
+    height: 65vh;
+    justify-content: center;
+    gap: 3vh;
+}
+
+#opcoes_adm a {
+    text-decoration: none;
+    color: #000;
+    font-size: 1.5vw;
+    font-weight: bold;
+    text-align: center;
+    background: #7a7171;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 1vh;
+}
+
+#opcoes {
+    display: flex;
+    height: 100%;
+
+}
+
+.usuario,
+.adm {
+    height: 10vh;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.5vh;
+    padding-left: 2.5vw;
+    gap: 1.4vw;
+    border-bottom: 1px solid #000;
+    background: #ffffffa4;
+    margin: 1vh 0;
+    font-size: 1.2vw;
+}
+
+#dados {
+    display: flex;
+    gap: 1.5vw;
+}
+
+
+.retorno {
+    background: #ffffffa4;
+    width: 50vw;
+    height: 100%
+}
+
+#nome-div,
+#email-div,
+#login-div {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+:is(#nome-div, #email-div, #login-div) label {
+    font-size: 1.2vw;
+    font-weight: bold;
+}
+
+:is(#nome-div, #email-div, #login-div) p {
+    font-size: 1.2vw;
+    font-weight: 500;
+    margin: .5vw;
+}
+
+#tornar-adm {
+    /* ancora*/
+    display: none;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.3vw;
+    font-weight: bold;
+    text-align: center;
+    background: #7a7171;
+    border: 1px solid #000;
+    width: fit-content;
+    padding: .4vw;
+    border-radius: 10px;
+}
+
+#tornar-adm:hover {
+    cursor: pointer;
+    background: #ffffff;
+    transition: .5s;
+}
+
+.usuario:hover {
+    cursor: pointer;
+    background: #ffffff;
+    transition: .5s;
+    height: 18vh;
+
+    #tornar-adm {
+        display: flex;
+    }
+}
+
+.adm:hover {
+    cursor: pointer;
+    background: #ffffff;
+    transition: .5s;
+}
+
+#dados {
+    display: flex;
+    gap: 1.5vw;
+    background: #ffffffa4;
+}
+
+#dados p {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    font-size: 1.2vw;
+    font-weight: 550;
+    margin: .5vw;
+}
+
+#dados #total_tarefas {
+    color: #000;
+}
+
+#dados #tarefas_concluidas {
+    color: #508904;
+}
+
+#dados #tarefas_pendentes {
+    color: #7a410c;
+}
+
+#dados #tarefas_atrasadas {
+    color: #f90909;
+}

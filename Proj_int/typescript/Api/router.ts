@@ -13,10 +13,11 @@ import {
 import {
     adicionar_admin, get_usuarios, get_all_tarefas,
     get_tarefas_usuario, get_tarefas_pendentes,
-    get_tarefas_concluidas, get_tarefas_atrasadas
+    get_tarefas_concluidas, get_tarefas_atrasadas,
+    confere_admin
 } from './api_admin.js'
 
-import { editar_usuario, excluir_usuario, get_data } from './api_usuario.js'
+import { editar_usuario, excluir_usuario, get_data, confere_token } from './api_usuario.js'
 
 export const router: Router = express.Router();
 
@@ -31,6 +32,7 @@ router.post('/tarefas/desconcluir', desconcluir_tarefa);
 router.post('/tarefas/get', get_tarefa);
 router.post('/tarefas/get/all', get_tarefas);
 router.post('/admin', adicionar_admin);
+router.post('/admin/confere', confere_admin);
 router.post('/admin/get', get_usuarios);
 router.post('/admin/get/all', get_all_tarefas);
 router.post('/admin/get/tarefas', get_tarefas_usuario);
@@ -40,3 +42,4 @@ router.post('/admin/get/tarefas/atrasadas', get_tarefas_atrasadas);
 router.put('/usuario', editar_usuario);
 router.delete('/usuario', excluir_usuario);
 router.post('/usuario/get', get_data);
+router.post('/usuario/token', confere_token);

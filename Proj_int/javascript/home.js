@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const token = localStorage.getItem("token");
+let token = localStorage.getItem("token");
 const ordenacao = localStorage.getItem("ordenacao");
 if (!token) {
     window.location.href = "login.html";
@@ -509,35 +509,71 @@ function atualizar_paginas() {
         atualizar_paginas();
     });
 }
-function editar_dados_usuario() {
+function conferir_token() {
     return __awaiter(this, void 0, void 0, function* () {
-        const div_dados_usuario = document.querySelector("#dados_perfil");
-        const div_nome = div_dados_usuario.querySelector("#nome-perfil");
-        const div_email = div_dados_usuario.querySelector("#email-perfil");
-        const div_senha = div_dados_usuario.querySelector("#senha-perfil");
-        const nome_ancora = div_nome.querySelector("#nome-ancora");
-        const email_ancora = div_email.querySelector("#email-ancora");
-        const senha_ancora = div_senha.querySelector("#senha-ancora");
-        const input_nome = div_nome.querySelector("#nome_usuario");
-        const input_email = div_email.querySelector("#email_usuario");
-        const input_senha = div_senha.querySelector("#senha_usuario");
-        const retorno = yield fetch("http://localhost:3000/usuario", {
-            method: "PUT",
+        yield fetch("http://localhost:3000/usuario/token", {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                token: token,
-                nome_usuario: input_nome.value == "" ? null : input_nome.value,
-                email_usuario: input_email.value == "" ? null : input_email.value,
-                senha_usuario: input_senha.value == "" ? null : input_senha.value,
-            }),
+            body: JSON.stringify({ token }),
+        }).then((retorno) => {
+            if (retorno.status == 500) {
+                console.log(token);
+                localStorage.removeItem("token");
+                window.location.href = "login.html";
+            }
         });
-        if (retorno.status === 200) {
-            get_dados_usuario();
+    });
+}
+function editar_dados_usuario() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const div_dados_usuario = document.querySelector("#dados_perfil");
+            const div_nome = div_dados_usuario.querySelector("#nome-perfil");
+            const div_email = div_dados_usuario.querySelector("#email-perfil");
+            const div_senha = div_dados_usuario.querySelector("#senha-perfil");
+            const nome_ancora = div_nome.querySelector("#nome");
+            const email_ancora = div_email.querySelector("#email");
+            const senha_ancora = div_senha.querySelector("#senha");
+            const input_nome = div_nome.querySelector("#nome_usuario");
+            const input_email = div_email.querySelector("#email_perfil_input");
+            const input_senha = div_senha.querySelector("#senha_perfil_input");
+            if (!nome_ancora || !email_ancora || !senha_ancora || !input_nome || !input_email || !input_senha) {
+                console.log("Elementos não encontrados");
+                return;
+            }
+            console.log(nome_ancora.innerText, email_ancora.innerText, senha_ancora.innerText);
+            console.log(input_nome.value, input_email.value, input_senha.value);
+            if (input_email.value.length === 0 && input_nome.value.length === 0 && input_senha.value.length === 0) {
+                return { status: false, msg: "Nenhum dado foi alterado" };
+            }
+            const retorno = yield fetch("http://localhost:3000/usuario", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    token: token,
+                    novo_nome: input_nome.value.length === 0 || input_nome.value === nome_ancora.innerText ? null : input_nome.value,
+                    novo_email: input_email.value.length === 0 || input_email.value === email_ancora.innerText ? null : input_email.value,
+                    nova_senha: input_senha.value.length === 0 || input_senha.value === senha_ancora.innerText ? null : input_senha.value,
+                }),
+            });
+            if (retorno.status === 200) {
+                const result = yield retorno.json();
+                // console.log(result)
+                const novo_token = result.token;
+                localStorage.setItem("token", novo_token);
+                token = novo_token;
+                return { status: true, msg: "Dados alterados com sucesso" };
+            }
+            else {
+                const { error } = yield retorno.json();
+                return { status: false, msg: error };
+            }
         }
-        else {
-            const { error } = yield retorno.json();
+        catch (error) {
             console.log(error);
         }
     });
@@ -557,39 +593,53 @@ function append_dados(nome, email, senha, metodo_login) {
     const senha_ancora = div_senha.querySelector("#senha");
     nome_ancora.innerText = nome;
     email_ancora.innerText = email;
-    console.log(nome, email, senha, metodo_login);
     if (metodo_login == "2") {
         senha_ancora.innerText = "*".repeat(senha.length);
-    }
-    else {
-        senha_ancora.innerText = "Não cadastrada";
-    }
-    if (metodo_login == "2") {
+        const input_nome = div_nome.querySelector("#nome_usuario");
+        const input_email = div_email.querySelector("#email_perfil_input");
+        const input_senha = div_senha.querySelector("#senha_perfil_input");
         nome_ancora.addEventListener("click", function () {
-            const input_nome = div_nome.querySelector("#nome_usuario");
             input_nome.value = nome;
             input_nome.removeAttribute("hidden");
             nome_ancora.setAttribute("hidden", "");
         });
         email_ancora.addEventListener("click", function () {
-            const input_email = div_email.querySelector("#email_usuario");
             input_email.value = email;
             input_email.removeAttribute("hidden");
             email_ancora.setAttribute("hidden", "");
         });
         senha_ancora.addEventListener("click", function () {
-            const input_senha = div_senha.querySelector("#senha_usuario");
             input_senha.value = senha;
             input_senha.removeAttribute("hidden");
             senha_ancora.setAttribute("hidden", "");
         });
         salvar_alteracoes_perfil.addEventListener("click", function () {
             return __awaiter(this, void 0, void 0, function* () {
-                editar_dados_usuario();
+                const retorno = yield editar_dados_usuario();
+                if (!retorno) {
+                    console.log("Erro ao editar dados");
+                    return;
+                }
+                if (retorno.status) {
+                    input_email.setAttribute("hidden", "");
+                    input_nome.setAttribute("hidden", "");
+                    input_senha.setAttribute("hidden", "");
+                    nome_ancora.innerText = input_nome.value;
+                    email_ancora.innerText = input_email.value;
+                    senha_ancora.innerText = input_senha.value;
+                    nome_ancora.removeAttribute("hidden");
+                    email_ancora.removeAttribute("hidden");
+                    senha_ancora.removeAttribute("hidden");
+                    div_dados_usuario.setAttribute("hidden", "");
+                    conferir_token();
+                    get_dados_usuario();
+                }
+                console.log(retorno.msg);
             });
         });
     }
     else {
+        senha_ancora.innerText = "Não cadastrada";
         salvar_alteracoes_perfil.setAttribute("hidden", "");
     }
 }
@@ -606,6 +656,36 @@ function get_dados_usuario() {
             const result = yield retorno.json();
             const { nome_usuario, email_usuario, senha_usuario, id_metodo_login_usuario } = result.data;
             append_dados(nome_usuario, email_usuario, senha_usuario, id_metodo_login_usuario);
+        }
+        else {
+            const { error } = yield retorno.json();
+            console.log(error);
+        }
+    });
+}
+function conferir_adm() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const retorno = yield fetch("http://localhost:3000/usuario/conferir", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: token }),
+        });
+        if (retorno.status === 200) {
+            const result = yield retorno.json();
+            const { adm } = result.data;
+            if (adm) {
+                const op_admin = document.querySelector("#admin_bnt");
+                const li_admin = op_admin.parentElement;
+                op_admin.href = "./admin.html";
+                li_admin.removeAttribute("hidden");
+            }
+            else {
+                const op_admin = document.querySelector("#admin_bnt");
+                const li_admin = op_admin.parentElement;
+                li_admin.remove();
+            }
         }
         else {
             const { error } = yield retorno.json();
@@ -636,6 +716,7 @@ window.onload = function () {
         // pesquisa
         const pesquisa = document.querySelector("#conf_usuario #search_input");
         const bnt_pesquisa = document.querySelector("#conf_usuario #search_bnt");
+        conferir_adm();
         yield Carregar_Tarefas();
         yield get_dados_usuario();
         if (!cancelar_alteracoes_usuario || !salvar_alteracoes_usuario

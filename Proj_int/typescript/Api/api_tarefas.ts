@@ -13,7 +13,6 @@ const validastring = (...id: string[]) => {
 
 export async function get_email(token: string): Promise<string> {
     const retorno = await client.query(`SELECT email FROM usuario WHERE token = $1`, [token]);
-    console.log(retorno.rows[0]);
     const email = retorno.rows[0].email;
     if (email === undefined || email === null) {
         return "";

@@ -1,4 +1,4 @@
-const token = localStorage.getItem("token");
+let token = localStorage.getItem("token");
 const ordenacao = localStorage.getItem("ordenacao");
 
 if (!token) {
@@ -531,39 +531,77 @@ function atualizar_paginas() {
     })
 }
 
-
-async function editar_dados_usuario() {
-    const div_dados_usuario: HTMLDivElement = document.querySelector("#dados_perfil") as HTMLDivElement;
-    const div_nome: HTMLDivElement = div_dados_usuario.querySelector("#nome-perfil") as HTMLDivElement;
-    const div_email: HTMLDivElement = div_dados_usuario.querySelector("#email-perfil") as HTMLDivElement;
-    const div_senha: HTMLDivElement = div_dados_usuario.querySelector("#senha-perfil") as HTMLDivElement;
-
-    const nome_ancora: HTMLAnchorElement = div_nome.querySelector("#nome-ancora") as HTMLAnchorElement;
-    const email_ancora: HTMLAnchorElement = div_email.querySelector("#email-ancora") as HTMLAnchorElement;
-    const senha_ancora: HTMLAnchorElement = div_senha.querySelector("#senha-ancora") as HTMLAnchorElement;
-
-    const input_nome: HTMLInputElement = div_nome.querySelector("#nome_usuario") as HTMLInputElement;
-    const input_email: HTMLInputElement = div_email.querySelector("#email_usuario") as HTMLInputElement;
-    const input_senha: HTMLInputElement = div_senha.querySelector("#senha_usuario") as HTMLInputElement;
-
-    const retorno = await fetch("http://localhost:3000/usuario", {
-        method: "PUT",
+async function conferir_token() {
+    await fetch("http://localhost:3000/usuario/token", {
+        method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            token: token,
-            nome_usuario: input_nome.value == "" ? null : input_nome.value,
-            email_usuario: input_email.value == "" ? null : input_email.value,
-            senha_usuario: input_senha.value == "" ? null : input_senha.value,
-        }),
+        body: JSON.stringify({ token }),
+    }).then((retorno) => {
+        if (retorno.status == 500) {
+            console.log(token)
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
+        }
     });
 
-    if (retorno.status === 200) {
-        get_dados_usuario();
-    } else {
-        const { error } = await retorno.json();
-        console.log(error);
+}
+
+
+async function editar_dados_usuario() {
+    try {
+        const div_dados_usuario: HTMLDivElement = document.querySelector("#dados_perfil") as HTMLDivElement;
+        const div_nome: HTMLDivElement = div_dados_usuario.querySelector("#nome-perfil") as HTMLDivElement;
+        const div_email: HTMLDivElement = div_dados_usuario.querySelector("#email-perfil") as HTMLDivElement;
+        const div_senha: HTMLDivElement = div_dados_usuario.querySelector("#senha-perfil") as HTMLDivElement;
+
+        const nome_ancora: HTMLAnchorElement = div_nome.querySelector("#nome") as HTMLAnchorElement;
+        const email_ancora: HTMLAnchorElement = div_email.querySelector("#email") as HTMLAnchorElement;
+        const senha_ancora: HTMLAnchorElement = div_senha.querySelector("#senha") as HTMLAnchorElement;
+
+        const input_nome: HTMLInputElement = div_nome.querySelector("#nome_usuario") as HTMLInputElement;
+        const input_email: HTMLInputElement = div_email.querySelector("#email_perfil_input") as HTMLInputElement;
+        const input_senha: HTMLInputElement = div_senha.querySelector("#senha_perfil_input") as HTMLInputElement;
+
+        if (!nome_ancora || !email_ancora || !senha_ancora || !input_nome || !input_email || !input_senha) {
+            console.log("Elementos não encontrados");
+            return;
+        }
+
+        console.log(nome_ancora.innerText, email_ancora.innerText, senha_ancora.innerText);
+        console.log(input_nome.value, input_email.value, input_senha.value);
+
+        if (input_email.value.length === 0 && input_nome.value.length === 0 && input_senha.value.length === 0) {
+            return { status: false, msg: "Nenhum dado foi alterado" }
+        }
+
+        const retorno = await fetch("http://localhost:3000/usuario", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                token: token,
+                novo_nome: input_nome.value.length === 0 || input_nome.value === nome_ancora.innerText ? null : input_nome.value,
+                novo_email: input_email.value.length === 0 || input_email.value === email_ancora.innerText ? null : input_email.value,
+                nova_senha: input_senha.value.length === 0 || input_senha.value === senha_ancora.innerText ? null : input_senha.value,
+            }),
+        });
+
+        if (retorno.status === 200) {
+            const result = await retorno.json();
+            // console.log(result)
+            const novo_token: string = result.token;
+            localStorage.setItem("token", novo_token);
+            token = novo_token;
+            return { status: true, msg: "Dados alterados com sucesso" }
+        } else {
+            const { error } = await retorno.json();
+            return { status: false, msg: error }
+        }
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -585,37 +623,60 @@ function append_dados(nome: string, email: string, senha: string, metodo_login: 
 
     nome_ancora.innerText = nome;
     email_ancora.innerText = email;
-    console.log(nome, email, senha, metodo_login)
+
     if (metodo_login == "2") {
         senha_ancora.innerText = "*".repeat(senha.length);
-    } else {
-        senha_ancora.innerText = "Não cadastrada";
-    }
-    if (metodo_login == "2") {
+        const input_nome: HTMLInputElement = div_nome.querySelector("#nome_usuario") as HTMLInputElement;
+        const input_email: HTMLInputElement = div_email.querySelector("#email_perfil_input") as HTMLInputElement;
+        const input_senha: HTMLInputElement = div_senha.querySelector("#senha_perfil_input") as HTMLInputElement;
+
         nome_ancora.addEventListener("click", function () {
-            const input_nome: HTMLInputElement = div_nome.querySelector("#nome_usuario") as HTMLInputElement;
             input_nome.value = nome;
             input_nome.removeAttribute("hidden");
             nome_ancora.setAttribute("hidden", "");
         });
+
         email_ancora.addEventListener("click", function () {
-            const input_email: HTMLInputElement = div_email.querySelector("#email_usuario") as HTMLInputElement;
             input_email.value = email;
             input_email.removeAttribute("hidden");
             email_ancora.setAttribute("hidden", "");
         });
 
         senha_ancora.addEventListener("click", function () {
-            const input_senha: HTMLInputElement = div_senha.querySelector("#senha_usuario") as HTMLInputElement;
             input_senha.value = senha;
             input_senha.removeAttribute("hidden");
             senha_ancora.setAttribute("hidden", "");
         });
 
         salvar_alteracoes_perfil.addEventListener("click", async function () {
-            editar_dados_usuario();
+            const retorno = await editar_dados_usuario();
+            if (!retorno) {
+                console.log("Erro ao editar dados")
+                return;
+            }
+            if (retorno.status) {
+
+                input_email.setAttribute("hidden", "");
+                input_nome.setAttribute("hidden", "");
+                input_senha.setAttribute("hidden", "");
+
+                nome_ancora.innerText = input_nome.value;
+                email_ancora.innerText = input_email.value;
+                senha_ancora.innerText = input_senha.value;
+
+                nome_ancora.removeAttribute("hidden");
+                email_ancora.removeAttribute("hidden");
+                senha_ancora.removeAttribute("hidden");
+
+                div_dados_usuario.setAttribute("hidden", "");
+                conferir_token();
+                get_dados_usuario();
+            }
+            console.log(retorno.msg);
+
         });
     } else {
+        senha_ancora.innerText = "Não cadastrada";
         salvar_alteracoes_perfil.setAttribute("hidden", "");
     }
 }
@@ -634,6 +695,34 @@ async function get_dados_usuario() {
         const result = await retorno.json();
         const { nome_usuario, email_usuario, senha_usuario, id_metodo_login_usuario } = result.data;
         append_dados(nome_usuario, email_usuario, senha_usuario, id_metodo_login_usuario);
+    } else {
+        const { error } = await retorno.json();
+        console.log(error);
+    }
+}
+
+async function conferir_adm() {
+    const retorno = await fetch("http://localhost:3000/usuario/conferir", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: token }),
+    });
+
+    if (retorno.status === 200) {
+        const result = await retorno.json();
+        const { adm } = result.data;
+        if (adm) {
+            const op_admin: HTMLAnchorElement = document.querySelector("#admin_bnt") as HTMLAnchorElement;
+            const li_admin: HTMLLIElement = op_admin.parentElement as HTMLLIElement;
+            op_admin.href = "./admin.html";
+            li_admin.removeAttribute("hidden");
+        } else {
+            const op_admin: HTMLAnchorElement = document.querySelector("#admin_bnt") as HTMLAnchorElement;
+            const li_admin: HTMLLIElement = op_admin.parentElement as HTMLLIElement;
+            li_admin.remove();
+        }
     } else {
         const { error } = await retorno.json();
         console.log(error);
@@ -663,6 +752,7 @@ window.onload = async function () {
     // pesquisa
     const pesquisa: HTMLInputElement = document.querySelector("#conf_usuario #search_input") as HTMLInputElement;
     const bnt_pesquisa: HTMLAnchorElement = document.querySelector("#conf_usuario #search_bnt") as HTMLAnchorElement;
+    conferir_adm();
     await Carregar_Tarefas();
     await get_dados_usuario();
 
